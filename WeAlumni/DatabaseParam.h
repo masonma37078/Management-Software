@@ -17,6 +17,6 @@
 #define DB_NAME "data.db"
 #define DB_PATH "Data Source=" + DB_NAME
 
-#define CREATE_ADMIN_TBL "CREATE TABLE IF NOT EXISTS Admin ( Password TEXT );"
+#define CREATE_ADMIN_TBL "CREATE TABLE IF NOT EXISTS Admin ( Username INT UNIQUE, Password INT );"
 
 #endif

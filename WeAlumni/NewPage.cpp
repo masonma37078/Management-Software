@@ -19,14 +19,14 @@ using namespace System;
  * @return bool true if inputPassword matches the database record
  *              false if otherwise
  */
-bool WeAlumni::NewPage::VerifyPassword(String^ inputPassword) {
-    String^ targetPassword = "DEFAULT : NOT_A_PASSWORD";
-    String^ command = "SELECT * FROM Admin;";
+bool WeAlumni::NewPage::VerifyPassword(String^ username, String^ inputPassword) {
+    int targetPassword = -1;
+    String^ command = "SELECT Password FROM Admin WHERE Username = " + encryption->Encrypt(username) + ";";
     if (database->ReadData(command) > 0) {
-        targetPassword = database->dataReader->GetString(0);
+        targetPassword = database->dataReader->GetInt32(0);        
     }
-
-    return targetPassword == inputPassword;
+    
+    return targetPassword == encryption->Encrypt(inputPassword);
 }
 
 /*
@@ -36,14 +36,17 @@ bool WeAlumni::NewPage::VerifyPassword(String^ inputPassword) {
  * @return bool true if insertion is successful
  *              false if otherwise
  */
-bool WeAlumni::NewPage::SetPassword(String^ newPassword) {
+bool WeAlumni::NewPage::SetPassword(String^ username, String^ newPassword) {
     bool status = false;
     String^ command;
 
     if (DBHasPassword)
-        command = "UPDATE Admin SET Password = '" + newPassword + "';";
+        command = "UPDATE Admin " + 
+                  "SET Password = " + encryption->Encrypt(newPassword) + " " +
+                  "WHERE Username = " + encryption->Encrypt(username) + ";";
     else
-        command = "INSERT INTO Admin VALUES ('" + newPassword + "');";
+        command = "INSERT INTO Admin VALUES (" + encryption->Encrypt(username) + ", "
+                                               + encryption->Encrypt(newPassword) + ");";
 
     if (database->UpdateData(command) > 0) {
         status = true;
@@ -65,7 +68,7 @@ Void WeAlumni::NewPage::btn_SetPassword_Click(System::Object^ sender, System::Ev
         return;
     }
     
-    if (SetPassword(txt_password->Text)) {
+    if (SetPassword(txt_username->Text, txt_password->Text)) {
         lbl_passwordVerify->ForeColor = Color::Green;
         lbl_passwordVerify->Text = "设置密码：成功";
         UpdateDataGridView();
@@ -87,7 +90,7 @@ Void WeAlumni::NewPage::btn_VerifyPassword_Click(System::Object^ sender, System:
     if (txt_password->TextLength == 0) {
         lbl_passwordVerify->Text = "请输入密码（不少于6位）";
     }
-    else if (VerifyPassword(txt_password->Text)) {
+    else if (VerifyPassword(txt_username->Text, txt_password->Text)) {
         lbl_passwordVerify->ForeColor = Color::Green;
         lbl_passwordVerify->Text = "密码正确";
     }
@@ -103,7 +106,7 @@ Void WeAlumni::NewPage::btn_VerifyPassword_Click(System::Object^ sender, System:
  * @return None
  */
 Void WeAlumni::NewPage::UpdateDataGridView() {
-    String^ command = "SELECT Password AS '密码' FROM Admin;";
+    String^ command = "SELECT Username AS '用户名', Password AS '密码' FROM Admin;";
     BindingSource^ bSource = gcnew BindingSource();
     int status = database->ReadDataAdapter(command);
     if (status == -1) {

@@ -36,6 +36,9 @@
     <ClCompile Include="StarterPage.cpp">
       <Filter>Source Files\Demo</Filter>
     </ClCompile>
+    <ClCompile Include="DataEncrptionInterface.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StarterPage.h">
@@ -48,6 +51,9 @@
       <Filter>Header Files\System</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseParam.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DataEncryptionInterface.h">
       <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>

@@ -127,12 +127,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DatabaseInterface.cpp" />
+    <ClCompile Include="DataEncrptionInterface.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="NewPage.cpp" />
     <ClCompile Include="StarterPage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DatabaseInterface.h" />
+    <ClInclude Include="DataEncryptionInterface.h" />
     <ClInclude Include="NewPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>

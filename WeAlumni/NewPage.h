@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include "DatabaseInterface.h"
+#include "DataEncryptionInterface.h"
 
 /*
  * NewPage.h
@@ -59,6 +60,9 @@ namespace WeAlumni {
 	private: System::Windows::Forms::DataGridView^ dgv_ShowPassword;
 	private: System::Windows::Forms::Button^ btn_SetPassword;
 	private: System::Windows::Forms::Label^ lbl_DBError;
+	private: System::Windows::Forms::Label^ lbl_prompt_username;
+	private: System::Windows::Forms::Label^ lbl_prompt_password;
+	private: System::Windows::Forms::TextBox^ txt_username;
 
 	private:
 		/// <summary>
@@ -79,6 +83,9 @@ namespace WeAlumni {
 			this->dgv_ShowPassword = (gcnew System::Windows::Forms::DataGridView());
 			this->btn_SetPassword = (gcnew System::Windows::Forms::Button());
 			this->lbl_DBError = (gcnew System::Windows::Forms::Label());
+			this->lbl_prompt_username = (gcnew System::Windows::Forms::Label());
+			this->lbl_prompt_password = (gcnew System::Windows::Forms::Label());
+			this->txt_username = (gcnew System::Windows::Forms::TextBox());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_ShowPassword))->BeginInit();
 			this->SuspendLayout();
 			// 
@@ -132,7 +139,7 @@ namespace WeAlumni {
 			this->btn_SetPassword->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->btn_SetPassword->Font = (gcnew System::Drawing::Font(L"SimSun", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(134)));
-			this->btn_SetPassword->Location = System::Drawing::Point(402, 96);
+			this->btn_SetPassword->Location = System::Drawing::Point(386, 81);
 			this->btn_SetPassword->Name = L"btn_SetPassword";
 			this->btn_SetPassword->Size = System::Drawing::Size(113, 47);
 			this->btn_SetPassword->TabIndex = 4;
@@ -152,11 +159,39 @@ namespace WeAlumni {
 			this->lbl_DBError->Text = L"Êý¾Ý¿â´íÎó£¬´íÎóÂë£º";
 			this->lbl_DBError->Visible = false;
 			// 
+			// lbl_prompt_username
+			// 
+			this->lbl_prompt_username->AutoSize = true;
+			this->lbl_prompt_username->Location = System::Drawing::Point(38, 69);
+			this->lbl_prompt_username->Name = L"lbl_prompt_username";
+			this->lbl_prompt_username->Size = System::Drawing::Size(52, 15);
+			this->lbl_prompt_username->TabIndex = 6;
+			this->lbl_prompt_username->Text = L"ÓÃ»§Ãû";
+			// 
+			// lbl_prompt_password
+			// 
+			this->lbl_prompt_password->AutoSize = true;
+			this->lbl_prompt_password->Location = System::Drawing::Point(38, 113);
+			this->lbl_prompt_password->Name = L"lbl_prompt_password";
+			this->lbl_prompt_password->Size = System::Drawing::Size(37, 15);
+			this->lbl_prompt_password->TabIndex = 7;
+			this->lbl_prompt_password->Text = L"ÃÜÂë";
+			// 
+			// txt_username
+			// 
+			this->txt_username->Location = System::Drawing::Point(122, 66);
+			this->txt_username->Name = L"txt_username";
+			this->txt_username->Size = System::Drawing::Size(177, 25);
+			this->txt_username->TabIndex = 8;
+			// 
 			// NewPage
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 15);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(635, 462);
+			this->Controls->Add(this->txt_username);
+			this->Controls->Add(this->lbl_prompt_password);
+			this->Controls->Add(this->lbl_prompt_username);
 			this->Controls->Add(this->lbl_DBError);
 			this->Controls->Add(this->btn_SetPassword);
 			this->Controls->Add(this->dgv_ShowPassword);
@@ -175,8 +210,9 @@ namespace WeAlumni {
 	private:
 		bool DBHasPassword;
 		DatabaseInterface^ database;
-		bool VerifyPassword(String^ inputPassword);
-		bool SetPassword(String^ newPassword);
+		DataEncryption^ encryption;
+		bool VerifyPassword(String^ username, String^ inputPassword);
+		bool SetPassword(String^ username, String^ newPassword);
 		Void btn_SetPassword_Click(System::Object^ sender, System::EventArgs^ e);
 		Void btn_VerifyPassword_Click(System::Object^ sender, System::EventArgs^ e);
 		Void UpdateDataGridView();
