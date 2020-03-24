@@ -2,15 +2,12 @@
 #include "DatabaseParam.h"
 
 /*
- * DatabaseInterface.h
+ * Database.h
  *
- * This file defined all Database interfaces, include:
- *   Read
- *   Write
- *   Update
+ * This file defined all Database interfaces.
  *
  * @author: Hang Yuan
- * Revised: 3/21/20
+ * Revised: 3/23/20
  *
  */
 
@@ -19,24 +16,30 @@ namespace WeAlumni {
     using namespace System::Data;
     using namespace System::Data::SQLite;
 
-    public ref class DatabaseInterface
+    public ref class Database
     {
     public:
-        DatabaseInterface(void)
+        enum class DatabaseType {
+            Admin,
+            Data,
+            Treasury
+        };
+
+        Database(DatabaseType type)
         {
-            try {
-                database = gcnew SQLiteConnection(DB_PATH);
-                database->Open();
-                command = database->CreateCommand();
-                UpdateData(CREATE_ADMIN_TBL);
-            }
-            catch (SQLiteException^ exception) {
-                throw exception;
-            }
+            _databaseType = type;
+            Initialize();
+        }
+
+        Database(DatabaseType type, bool readOnly)
+        {
+            _databaseType = type;
+            _readOnly = readOnly;
+            Initialize();
         }
 
     protected:
-        ~DatabaseInterface()
+        ~Database()
         {
             if (dataReader) dataReader->Close();
             if (database) database->Close();
@@ -51,10 +54,18 @@ namespace WeAlumni {
         DataTable^ dataTable;
 
     private:
+        DatabaseType _databaseType;
+        bool _readOnly = false;
         SQLiteConnection^ database;
         SQLiteCommand^ command;
+        String^ GetDatabasePassword();
+        String^ GetDatabaseName();
+        bool CheckDatabaseFileExistence();
+        String^ GetConnectionString();
 
     public:
+        bool CreateDatabaseFile();
+        void Initialize();
         int ReadData(String^ cmd);
         int ReadDataAdapter(String^ cmd);
         int InsertData(String^ cmd);

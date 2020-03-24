@@ -19,15 +19,15 @@
     <Filter Include="Source Files\Demo">
       <UniqueIdentifier>{cee675bf-cdf9-448d-a29c-de5da689b047}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\System">
-      <UniqueIdentifier>{0f41a753-e694-46ea-a22f-f6ed8f1858d0}</UniqueIdentifier>
+    <Filter Include="Source Files\Database">
+      <UniqueIdentifier>{711efa7f-3803-4f78-9471-78e4bb396d23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Database">
+      <UniqueIdentifier>{8d0dd403-d579-46aa-bbec-5a7ceb124f93}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files\System</Filter>
-    </ClCompile>
-    <ClCompile Include="DatabaseInterface.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="NewPage.cpp">
@@ -37,7 +37,10 @@
       <Filter>Source Files\Demo</Filter>
     </ClCompile>
     <ClCompile Include="DataEncrptionInterface.cpp">
-      <Filter>Source Files\System</Filter>
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="Database.cpp">
+      <Filter>Source Files\Database</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -47,14 +50,14 @@
     <ClInclude Include="NewPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DatabaseInterface.h">
-      <Filter>Header Files\System</Filter>
-    </ClInclude>
     <ClInclude Include="DatabaseParam.h">
-      <Filter>Header Files\System</Filter>
+      <Filter>Header Files\Database</Filter>
     </ClInclude>
     <ClInclude Include="DataEncryptionInterface.h">
-      <Filter>Header Files\System</Filter>
+      <Filter>Header Files\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="Database.h">
+      <Filter>Header Files\Database</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

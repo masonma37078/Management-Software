@@ -15,8 +15,15 @@
 #ifndef DB_PARAM
 #define DB_PARAM
 
-#define DB_NAME "data.db"
-#define DB_PATH "Data Source=" + DB_NAME
+#define DB_ADMIN_NAME "admin.db"
+#define DB_DATA_NAME "data.db"
+#define DB_TREASURY_NAME "treasury.db"
+
+#define DB_PATH "Data Source = data.db" // NEED TO BE REMOVED
+
+#define DB_ADMIN_PASSWORD ""
+#define DB_DATA_PASSWORD ""
+#define DB_TREASURY_PASSWORD ""
 
 #define CREATE_ADMIN_TBL "CREATE TABLE IF NOT EXISTS Admin ( Username INT UNIQUE, Password INT, Email INT, Auth INT );"
 #define CREATE_MEMBER_TBL "CREATE TABLE IF NOT EXISTS Member( Id TEXT PRIMARY KEY, Status TEXT, Type TEXT, Name TEXT, Gender TEXT, Birth TEXT, Email TEXT, Phone TEXT, Wechat TEXT, Country TEXT, Address1 TEXT, Address2 TEXT, City TEXT, Postal TEXT, StdId TEXT, Program TEXT, EndDate TEXT, Degree TEXT, Major1 TEXT, Major2 TEXT, Career TEXT, Company TEXT, Position TEXT, SearchAuth TEXT );"

@@ -126,14 +126,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DatabaseInterface.cpp" />
+    <ClCompile Include="Database.cpp" />
     <ClCompile Include="DataEncrptionInterface.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="NewPage.cpp" />
     <ClCompile Include="StarterPage.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DatabaseInterface.h" />
+    <ClInclude Include="Database.h" />
     <ClInclude Include="DataEncryptionInterface.h" />
     <ClInclude Include="NewPage.h">
       <FileType>CppForm</FileType>
