@@ -29,7 +29,7 @@ System::String^ WeAlumni::Database::GetDatabasePassword() {
 }
 
 /*
- * SetPassword
+ * GetDatabaseName
  * This method will offer the name of database file by DatabaseType
  * @param None
  * @return String^ the name of current database
