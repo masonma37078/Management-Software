@@ -19,11 +19,16 @@ namespace WeAlumni {
     public ref class Database
     {
     public:
-        enum class DatabaseType {
+        enum class DatabaseType
+        {
             Admin,
             Data,
             Treasury
         };
+
+        Database(void) {
+
+        }
 
         Database(DatabaseType type)
         {
@@ -58,14 +63,17 @@ namespace WeAlumni {
         bool _readOnly = false;
         SQLiteConnection^ database;
         SQLiteCommand^ command;
+
+    private:
         String^ GetDatabasePassword();
         String^ GetDatabaseName();
-        bool CheckDatabaseFileExistence();
         String^ GetConnectionString();
+        void Initialize();
 
     public:
+        void SetDatabaseType(DatabaseType type) { _databaseType = type; };
         bool CreateDatabaseFile();
-        void Initialize();
+        bool CheckDatabaseFileExistence();
         int ReadData(String^ cmd);
         int ReadDataAdapter(String^ cmd);
         int InsertData(String^ cmd);

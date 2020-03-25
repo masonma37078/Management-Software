@@ -1,7 +1,7 @@
 #include "Database.h"
 
 /*
- * Database.h
+ * Database.cpp
  *
  * This file implements all Database interfaces.
  *
@@ -54,11 +54,7 @@ System::String^ WeAlumni::Database::GetDatabaseName() {
  *              false if not
  */
 bool WeAlumni::Database::CheckDatabaseFileExistence() {
-    bool existence = false;
-    if (System::IO::File::Exists(GetDatabaseName())) {
-        existence = true;
-    }
-    return existence;
+    return System::IO::File::Exists(GetDatabaseName());
 }
 
 /*
@@ -72,27 +68,6 @@ System::String^ WeAlumni::Database::GetConnectionString() {
                                "Password = " + GetDatabasePassword() + "; " +
                                "Read Only = " + _readOnly;
     return connectionString;
-}
-
-/*
- * CreateDatabaseFile
- * This method will create a new Database file, with password set in.
- * @param None
- * @return bool true if successfully create the file
- *              false if not
- */
-bool WeAlumni::Database::CreateDatabaseFile() {
-    bool success = false;
-    try {
-        String^ databaseName = GetDatabaseName();
-        SQLiteConnection::CreateFile(databaseName);
-        database = gcnew SQLiteConnection("Data Source = " + databaseName);
-        database->SetPassword(GetDatabasePassword());
-    }
-    catch (SQLiteException^) {
-        // Leave empty
-    }
-    return success;
 }
 
 /*
@@ -118,11 +93,53 @@ void WeAlumni::Database::Initialize() {
 }
 
 /*
+ * CreateDatabaseFile
+ * This method will create a new Database file, with password set in.
+ * @param None
+ * @return bool true if successfully create the file
+ *              false if not
+ */
+bool WeAlumni::Database::CreateDatabaseFile() {
+    bool success = false;
+    try {
+        String^ databaseName = GetDatabaseName();
+        SQLiteConnection::CreateFile(databaseName);
+        database = gcnew SQLiteConnection("Data Source = " + databaseName);
+        database->SetPassword(GetDatabasePassword());
+        database->Open();
+        command = database->CreateCommand();
+        if (_databaseType == DatabaseType::Admin) {
+            command->CommandText = CREATE_ADMIN_TBL;
+            command->ExecuteNonQuery();
+        }
+        else if (_databaseType == DatabaseType::Data) {
+            command->CommandText = CREATE_MEMBER_TBL + 
+                                   CREATE_STAFF_TBL +
+                                   CREATE_RECORD_TBL +
+                                   CREATE_OPT_TBL;
+            command->ExecuteNonQuery();
+        }
+        else {
+            command->CommandText = CREATE_TREASURY_TBL;
+            command->ExecuteNonQuery();
+        }
+        success = true;
+    }
+    catch (SQLiteException^) {
+        // Leave empty
+    }
+    finally {
+        delete database;
+    }
+    return success;
+}
+
+/*
  * ReadData
  * This method will try to read the Database as the command given.
  * @param String^ command that will be executed
                   "SELECT [* or COLUMN_NAME] FROM [TABLE_NAME] WHERE [CONDITION(s)];"
-                  "SELECT [COLUMN_NAME] AS [NEW_NAME] FROM [TABLE_NAME] WHERE [CONDITION(s)];"
+                  "SELECT [COLUMN_NAME] AS '[NEW_NAME]' FROM [TABLE_NAME] WHERE [CONDITION(s)];"
  * @return int -1 if nothing is read or catch an exception
  *             # of rows read if the execution is successful
  */
@@ -147,7 +164,7 @@ int WeAlumni::Database::ReadData(String^ cmd) {
  * This method will try to read the Database as the command given.
  * @param String^ command that will be executed
  *                "SELECT [* or COLUMN_NAME] FROM [TABLE_NAME] WHERE [CONDITION(s)];"
- *                "SELECT [COLUMN_NAME] AS [NEW_NAME] FROM [TABLE_NAME] WHERE [CONDITION(s)];"
+ *                "SELECT [COLUMN_NAME] AS '[NEW_NAME]' FROM [TABLE_NAME] WHERE [CONDITION(s)];"
  * @return int -1 if catch an exception
  *             # of rows read if the execution is successful
  */
@@ -191,8 +208,8 @@ int WeAlumni::Database::InsertData(String^ cmd) {
 }
 
 /*
- * InsertData
- * This method will try to insert data into the Database as the command given.
+ * UpdateData
+ * This method will try to update data into the Database as the command given.
  * @param String^ command that will be executed
  *                "UPDATE [TABLE_NAME] SET [COLUMN_NAME] = [DATA], [COLUMN_NAME] = [DATA}, ... WHERE [CONDITION];"
  * @return int -1 if catch an exception
