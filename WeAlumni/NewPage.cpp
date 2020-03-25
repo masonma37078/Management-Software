@@ -46,7 +46,7 @@ bool WeAlumni::NewPage::SetPassword(String^ username, String^ newPassword) {
                   "WHERE Username = " + encryption->Encrypt(username) + ";";
     else
         command = "INSERT INTO Admin VALUES (" + encryption->Encrypt(username) + ", "
-                                               + encryption->Encrypt(newPassword) + ");";
+                                               + encryption->Encrypt(newPassword) + ", 116, 3);";
 
     if (database->UpdateData(command) > 0) {
         status = true;
@@ -106,7 +106,7 @@ Void WeAlumni::NewPage::btn_VerifyPassword_Click(System::Object^ sender, System:
  * @return None
  */
 Void WeAlumni::NewPage::UpdateDataGridView() {
-    String^ command = "SELECT Username AS '用户名', Password AS '密码' FROM Admin;";
+    String^ command = "SELECT Username AS '用户名', Password AS '密码', Email, Auth AS '授权' FROM Admin;";
     BindingSource^ bSource = gcnew BindingSource();
     int status = database->ReadDataAdapter(command);
     if (status == -1) {
