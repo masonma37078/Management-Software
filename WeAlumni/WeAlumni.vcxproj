@@ -129,12 +129,16 @@
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseEncryptionAndDecryption.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="NewPage.cpp" />
     <ClCompile Include="StarterPage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseEncryptionAndDecryption.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="NewPage.h">
