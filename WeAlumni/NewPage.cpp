@@ -20,13 +20,12 @@ using namespace System;
  *              false if otherwise
  */
 bool WeAlumni::NewPage::VerifyPassword(String^ username, String^ inputPassword) {
-    int targetPassword = -1;
-    String^ command = "SELECT Password FROM Admin WHERE Username = " + encryption->Encrypt(username) + ";";
+    String^ command = "SELECT Password FROM Admin WHERE Username = " + username + ";";
     if (database->ReadData(command) > 0) {
-        targetPassword = database->dataReader->GetInt32(0);        
+        return inputPassword == database->dataReader->GetString(0);
     }
     
-    return targetPassword == encryption->Encrypt(inputPassword);
+    return false;
 }
 
 /*
@@ -42,11 +41,11 @@ bool WeAlumni::NewPage::SetPassword(String^ username, String^ newPassword) {
 
     if (DBHasPassword)
         command = "UPDATE Admin " + 
-                  "SET Password = " + encryption->Encrypt(newPassword) + " " +
-                  "WHERE Username = " + encryption->Encrypt(username) + ";";
+                  "SET Password = '" + newPassword + "' " +
+                  "WHERE Username = '" + username + "';";
     else
-        command = "INSERT INTO Admin VALUES (" + encryption->Encrypt(username) + ", "
-                                               + encryption->Encrypt(newPassword) + ", 116, 3);";
+        command = "INSERT INTO Admin VALUES ('" + username + "', '"
+                                                + newPassword + "', 'example@ucsc.edu', 'Level-1');";
 
     if (database->UpdateData(command) > 0) {
         status = true;

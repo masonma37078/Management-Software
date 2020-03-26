@@ -116,7 +116,10 @@ bool WeAlumni::Database::CreateDatabaseFile() {
             command->CommandText = CREATE_MEMBER_TBL + 
                                    CREATE_STAFF_TBL +
                                    CREATE_RECORD_TBL +
-                                   CREATE_OPT_TBL;
+                                   CREATE_OPT_TBL + 
+                                   CREATE_LOG_TBL + 
+                                   CREATE_ITEM_TBL + 
+                                   CREATE_ORDERS_TBL;
             command->ExecuteNonQuery();
         }
         else {

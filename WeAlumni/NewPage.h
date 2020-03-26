@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
 #include "Database.h"
-#include "DataEncryptionInterface.h"
 
 /*
  * NewPage.h
@@ -210,7 +209,6 @@ namespace WeAlumni {
 	private:
 		bool DBHasPassword;
 		Database^ database;
-		DataEncryption^ encryption;
 		bool VerifyPassword(String^ username, String^ inputPassword);
 		bool SetPassword(String^ username, String^ newPassword);
 		Void btn_SetPassword_Click(System::Object^ sender, System::EventArgs^ e);

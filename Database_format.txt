@@ -65,9 +65,40 @@ CREATE TABLE IF NOT EXISTS OPT (
   FOREIGN KEY(StfId) REFERENCES Staff(Id)
 );
 
+CREATE TABLE IF NOT EXISTS Log (
+  Id TEXT PRIMARY KEY,
+  Time TEXT,
+  StfId TEXT,
+  Action TEXT,
+  FOREIGN KEY(StfId) REFERENCES Staff(Id)
+);
+
+CREATE TABLE IF NOT EXISTS Item (
+  Id TEXT PRIMARY KEY,
+  Status TEXT,
+  Name TEXT,
+  Comment TEXT，
+  Price TEXT
+);
+
+CREATE TABLE IF NOT EXISTS Orders (
+  Id TEXT PRIMARY KEY,
+  Status TEXT,
+  Time TEXT,
+  MemId TEXT,
+  StfId TEXT,
+  Item TEXT,
+  Amount INT,
+  Price TEXT,
+  Comment TEXT,
+  FOREIGN KEY(MemId) REFERENCES Member(Id),
+  FOREIGN KEY(StfId) REFERENCES Staff(Id)
+);
+
 CREATE TABLE IF NOT EXISTS Treasury (
   Id TEXT PRIMARY KEY,
   StfId TEXT NOT NULL,
+  Time TEXT,
   Type TEXT,
   Amount INT,
   Comment TEXT
