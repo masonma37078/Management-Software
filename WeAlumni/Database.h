@@ -78,5 +78,6 @@ namespace WeAlumni {
         int ReadDataAdapter(String^ cmd);
         int InsertData(String^ cmd);
         int UpdateData(String^ cmd);
+        int DeleteData(String^ cmd);
     };
 }

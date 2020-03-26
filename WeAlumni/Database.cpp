@@ -143,7 +143,7 @@ bool WeAlumni::Database::CreateDatabaseFile() {
  * @param String^ command that will be executed
                   "SELECT [* or COLUMN_NAME] FROM [TABLE_NAME] WHERE [CONDITION(s)];"
                   "SELECT [COLUMN_NAME] AS '[NEW_NAME]' FROM [TABLE_NAME] WHERE [CONDITION(s)];"
- * @return int -1 if nothing is read or catch an exception
+ * @return int -1 if catch an exception
  *             # of rows read if the execution is successful
  */
 int WeAlumni::Database::ReadData(String^ cmd) {
@@ -198,7 +198,6 @@ int WeAlumni::Database::ReadDataAdapter(String^ cmd) {
  *             # of rows that are successfully inserted 
  */
 int WeAlumni::Database::InsertData(String^ cmd) {
-    if (dataReader && !dataReader->IsClosed) dataReader->Close();
     int rowInserted = -1;
     try {
         command->CommandText = cmd;
@@ -219,14 +218,33 @@ int WeAlumni::Database::InsertData(String^ cmd) {
  *             # of rows that are successfully updated 
  */
 int WeAlumni::Database::UpdateData(String^ cmd) {
-    if (dataReader && !dataReader->IsClosed) dataReader->Close();
-    int rowupdated = -1;
+    int rowUpdated = -1;
     try {
         command->CommandText = cmd;
-        rowupdated = command->ExecuteNonQuery();
+        rowUpdated = command->ExecuteNonQuery();
     }
     catch (SQLiteException^) {
         // Leave empty
     }
-    return rowupdated;
+    return rowUpdated;
+}
+
+/*
+ * DeleteDataData
+ * This method will try to remove data from the Database as the command given.
+ * @param String^ command that will be executed
+ *                "DELETE FROM [TABLE_NAME] WHERE [CONDITION];"
+ * @return int -1 if catch an exception
+ *             # of rows that are successfully deleted
+ */
+int WeAlumni::Database::DeleteData(String^ cmd) {
+    int rowDeleted = -1;
+    try {
+        command->CommandText = cmd;
+        rowDeleted = command->ExecuteNonQuery();
+    }
+    catch (SQLiteException^) {
+        // Leave empty
+    }
+    return rowDeleted;
 }

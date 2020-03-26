@@ -25,6 +25,9 @@
     <Filter Include="Header Files\Database">
       <UniqueIdentifier>{8d0dd403-d579-46aa-bbec-5a7ceb124f93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Demo">
+      <UniqueIdentifier>{70cc6ad4-6431-4238-84b0-2cbae4e94978}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -42,16 +45,13 @@
     <ClCompile Include="DatabaseEncryptionAndDecryption.cpp">
       <Filter>Source Files\Database</Filter>
     </ClCompile>
-    <ClCompile Include="MyForm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StarterPage.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Demo</Filter>
     </ClInclude>
     <ClInclude Include="NewPage.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Demo</Filter>
     </ClInclude>
     <ClInclude Include="DatabaseParam.h">
       <Filter>Header Files\Database</Filter>
@@ -61,9 +61,6 @@
     </ClInclude>
     <ClInclude Include="DatabaseEncryptionAndDecryption.h">
       <Filter>Header Files\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="MyForm.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
