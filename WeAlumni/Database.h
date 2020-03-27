@@ -88,6 +88,7 @@ namespace WeAlumni {
         bool CreateDatabaseFile();
         bool CheckDatabaseFileExistence();
         int GetNextId(DatabaseTable tableName);
+        String^ GetCurrentTime();
         int ReadData(String^ cmd);
         int ReadDataAdapter(String^ cmd);
         int InsertData(String^ cmd);

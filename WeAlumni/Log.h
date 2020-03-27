@@ -30,7 +30,6 @@ namespace WeAlumni {
     private:
         Database^ _database;
         void Initialize();
-        String^ GetCurrentTime();
 
     public:
         bool AddLog(String^ stfId, String^ action);

@@ -29,18 +29,6 @@ void WeAlumni::Log::Initialize() {
 }
 
 /*
- * GetCurrentTime
- * This method will offer the current time of system
- * @param None
- * @return String^ current system time
- */
-String^ WeAlumni::Log::GetCurrentTime() {
-    DateTime^ curTime = gcnew DateTime();
-    curTime = curTime->Now;
-    return curTime->ToString();
-}
-
-/*
  * AddLog
  * This method will trigger a InsertData method to add new Log into the Log table
  * @param None
@@ -49,7 +37,7 @@ String^ WeAlumni::Log::GetCurrentTime() {
  */
 bool WeAlumni::Log::AddLog(String^ stfId, String^ action) {
     String^ command = "INSERT INTO Log VALUES(" + _database->GetNextId(Database::DatabaseTable::Log) + ", " + 
-                                                  GetCurrentTime() + ", " + 
+                                                  _database->GetCurrentTime() + ", " + 
                                                   stfId + ", " +
                                                   action + ");";
     if (-1 == _database->InsertData(command)) {
