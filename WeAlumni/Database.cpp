@@ -256,6 +256,7 @@ int WeAlumni::Database::ReadDataAdapter(String^ cmd) {
  *             # of rows that are successfully inserted 
  */
 int WeAlumni::Database::InsertData(String^ cmd) {
+    if (dataReader && !dataReader->IsClosed) dataReader->Close();
     int rowInserted = -1;
     try {
         command->CommandText = cmd;
@@ -276,6 +277,7 @@ int WeAlumni::Database::InsertData(String^ cmd) {
  *             # of rows that are successfully updated 
  */
 int WeAlumni::Database::UpdateData(String^ cmd) {
+    if (dataReader && !dataReader->IsClosed) dataReader->Close(); 
     int rowUpdated = -1;
     try {
         command->CommandText = cmd;
@@ -296,6 +298,7 @@ int WeAlumni::Database::UpdateData(String^ cmd) {
  *             # of rows that are successfully deleted
  */
 int WeAlumni::Database::DeleteData(String^ cmd) {
+    if (dataReader && !dataReader->IsClosed) dataReader->Close(); 
     int rowDeleted = -1;
     try {
         command->CommandText = cmd;
