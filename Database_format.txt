@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Member (
 
 CREATE TABLE IF NOT EXISTS Staff (
   Id INT PRIMARY KEY,
-  MemId TEXT,
+  MemId INT,
   Dept TEXT,
   Position TEXT,
   Auth TEXT,
@@ -43,8 +43,8 @@ CREATE TABLE IF NOT EXISTS Staff (
 
 CREATE TABLE IF NOT EXISTS Record (
   Id INT PRIMARY KEY,
-  StfId TEXT,
-  MemId TEXT,
+  StfId INT,
+  MemId INT,
   Time TEXT,
   Action TEXT,
   FOREIGN KEY(MemId) REFERENCES Member(Id),
@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS Record (
 CREATE TABLE IF NOT EXISTS OPT (
   Id INT PRIMARY KEY,
   Status TEXT,
-  MemId TEXT,
-  StfId TEXT,
+  MemId INT,
+  StfId INT,
   StartDate TEXT,
   EndData TEXT,
   Title TEXT,
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS OPT (
 CREATE TABLE IF NOT EXISTS Log (
   Id INT PRIMARY KEY,
   Time TEXT,
-  StfId TEXT,
+  StfId INT,
   Action TEXT,
   FOREIGN KEY(StfId) REFERENCES Staff(Id)
 );
@@ -87,8 +87,8 @@ CREATE TABLE IF NOT EXISTS Orders (
   Id INT PRIMARY KEY,
   Status TEXT,
   Time TEXT,
-  MemId TEXT,
-  StfId TEXT,
+  MemId INT,
+  StfId INT,
   Item TEXT,
   Amount INT,
   Price TEXT,
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS Orders (
 
 CREATE TABLE IF NOT EXISTS Treasury (
   Id INT PRIMARY KEY,
-  StfId TEXT NOT NULL,
+  StfId INT NOT NULL,
   Time TEXT,
   Type TEXT,
   Amount INT,
