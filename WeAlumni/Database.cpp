@@ -184,12 +184,12 @@ int WeAlumni::Database::GetNextId(DatabaseTable tableName) {
 }
 
 /*
- * GetCurrentTime
+ * GetSystemTime
  * This method will offer the current time of system
  * @param None
  * @return String^ current system time
  */
-System::String^ WeAlumni::Database::GetCurrentTime() {
+System::String^ WeAlumni::Database::GetSystemTime() {
     DateTime^ curTime = gcnew DateTime();
     curTime = curTime->Now;
     return curTime->ToString();

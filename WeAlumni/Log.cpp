@@ -37,7 +37,7 @@ void WeAlumni::Log::Initialize() {
  */
 bool WeAlumni::Log::AddLog(String^ stfId, String^ action) {
     String^ command = "INSERT INTO Log VALUES(" + _database->GetNextId(Database::DatabaseTable::Log) + ", " + 
-                                                  _database->GetCurrentTime() + ", " + 
+                                                  _database->GetSystemTime() + ", " +
                                                   stfId + ", " +
                                                   action + ");";
     if (-1 == _database->InsertData(command)) {
