@@ -93,6 +93,35 @@ void WeAlumni::Database::Initialize() {
 }
 
 /*
+ * GetTableName
+ * This method will offer the corrsponding table name by the given DatabaseTable
+ * @param DatabaseTable type of the database table
+ * @return String^ table name
+ */
+System::String^ WeAlumni::Database::GetTableName(DatabaseTable tableType) {
+    String^ tableName;
+    switch (tableType) {
+    case DatabaseTable::Member:
+        tableName = "Member"; break;
+    case DatabaseTable::Staff:
+        tableName = "Staff"; break;
+    case DatabaseTable::Record:
+        tableName = "Record"; break;
+    case DatabaseTable::OPT:
+        tableName = "OPT"; break;
+    case DatabaseTable::Log:
+        tableName = "Log"; break;
+    case DatabaseTable::Item:
+        tableName = "Item"; break;
+    case DatabaseTable::Orders:
+        tableName = "Orders"; break;
+    case DatabaseTable::Treasury:
+        tableName = "Treasury"; break;
+    }
+    return tableName;
+}
+
+/*
  * CreateDatabaseFile
  * This method will create a new Database file, with password set in.
  * @param None
@@ -135,6 +164,23 @@ bool WeAlumni::Database::CreateDatabaseFile() {
         delete database;
     }
     return success;
+}
+
+/*
+ * GetNextId
+ * This method will offer you the next available Id value to be inserted
+ * @param DatabaseTable
+ * @return int next available Id in the corresponding database table
+ */
+int WeAlumni::Database::GetNextId(DatabaseTable tableName) {
+    String^ command = "SELECT MAX(Id) FROM " + GetTableName(tableName) + ";";
+    ReadData(command);
+    String^ nextId = dataReader[0]->ToString();
+    dataReader->Close();
+    if (nextId == "" || nextId == "NULL") {
+        return 0;
+    }
+    return Int32::Parse(nextId) + 1;
 }
 
 /*
