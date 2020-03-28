@@ -201,8 +201,8 @@ System::String^ WeAlumni::Database::GetSystemTime() {
  * @param String^ command that will be executed
                   "SELECT [* or COLUMN_NAME] FROM [TABLE_NAME] WHERE [CONDITION(s)];"
                   "SELECT [COLUMN_NAME] AS '[NEW_NAME]' FROM [TABLE_NAME] WHERE [CONDITION(s)];"
- * @return int -1 if catch an exception
- *             # of rows read if the execution is successful
+ * @return int # of rows read if the execution is successful, -1 as default
+ * @exception SQLiteException if catch any exception
  */
 int WeAlumni::Database::ReadData(String^ cmd) {
     if (dataReader && !dataReader->IsClosed) dataReader->Close();
@@ -214,8 +214,8 @@ int WeAlumni::Database::ReadData(String^ cmd) {
             rowRead = dataReader->StepCount;
         }
     }
-    catch (SQLiteException^) {
-        // Leave empty
+    catch (SQLiteException^ exception) {
+        throw exception;
     }
     return rowRead;
 }
@@ -226,8 +226,8 @@ int WeAlumni::Database::ReadData(String^ cmd) {
  * @param String^ command that will be executed
  *                "SELECT [* or COLUMN_NAME] FROM [TABLE_NAME] WHERE [CONDITION(s)];"
  *                "SELECT [COLUMN_NAME] AS '[NEW_NAME]' FROM [TABLE_NAME] WHERE [CONDITION(s)];"
- * @return int -1 if catch an exception
- *             # of rows read if the execution is successful
+ * @return int # of rows read if the execution is successful, -1 as default
+ * @exception SQLiteException if catch any exception
  */
 int WeAlumni::Database::ReadDataAdapter(String^ cmd) {
     if (dataReader && !dataReader->IsClosed) dataReader->Close();
@@ -240,8 +240,8 @@ int WeAlumni::Database::ReadDataAdapter(String^ cmd) {
 		dataAdapter->Fill(dataTable);
         rowRead = dataTable->Rows->Count;
 	}
-	catch (SQLiteException^) {
-        // Leave empty
+	catch (SQLiteException^ exception) {
+        throw exception;
 	}
     return rowRead;
 }
@@ -252,8 +252,8 @@ int WeAlumni::Database::ReadDataAdapter(String^ cmd) {
  * @param String^ command that will be executed
  *                "INSERT INTO [TABLE_NAME] VALUES ([DATA],[DATA],...);"
  *                "INSERT INTO [TABLE_NAME]([COLUMN_NAME], [COLUMN_NAME],...) VALUES ([DATA],[DATA],...);"
- * @return int -1 if catch an exception
- *             # of rows that are successfully inserted 
+ * @return int # of rows that are successfully inserted, -1 as default
+ * @exception SQLiteException if catch any exception
  */
 int WeAlumni::Database::InsertData(String^ cmd) {
     if (dataReader && !dataReader->IsClosed) dataReader->Close();
@@ -262,8 +262,8 @@ int WeAlumni::Database::InsertData(String^ cmd) {
         command->CommandText = cmd;
         rowInserted = command->ExecuteNonQuery();
     }
-    catch (SQLiteException^) {
-        // Leave empty
+    catch (SQLiteException^ exception) {
+        throw exception;
     }
     return rowInserted;
 }
@@ -273,8 +273,8 @@ int WeAlumni::Database::InsertData(String^ cmd) {
  * This method will try to update data into the Database as the command given.
  * @param String^ command that will be executed
  *                "UPDATE [TABLE_NAME] SET [COLUMN_NAME] = [DATA], [COLUMN_NAME] = [DATA}, ... WHERE [CONDITION];"
- * @return int -1 if catch an exception
- *             # of rows that are successfully updated 
+ * @return int # of rows that are successfully updated, -1 as default
+ * @exception SQLiteException if catch any exception
  */
 int WeAlumni::Database::UpdateData(String^ cmd) {
     if (dataReader && !dataReader->IsClosed) dataReader->Close(); 
@@ -283,8 +283,8 @@ int WeAlumni::Database::UpdateData(String^ cmd) {
         command->CommandText = cmd;
         rowUpdated = command->ExecuteNonQuery();
     }
-    catch (SQLiteException^) {
-        // Leave empty
+    catch (SQLiteException^ exception) {
+        throw exception;
     }
     return rowUpdated;
 }
@@ -295,7 +295,8 @@ int WeAlumni::Database::UpdateData(String^ cmd) {
  * @param String^ command that will be executed
  *                "DELETE FROM [TABLE_NAME] WHERE [CONDITION];"
  * @return int -1 if catch an exception
- *             # of rows that are successfully deleted
+ *             # of rows that are successfully deleted, -1 as default
+ * @exception SQLiteException if catch any exception
  */
 int WeAlumni::Database::DeleteData(String^ cmd) {
     if (dataReader && !dataReader->IsClosed) dataReader->Close(); 
@@ -304,8 +305,8 @@ int WeAlumni::Database::DeleteData(String^ cmd) {
         command->CommandText = cmd;
         rowDeleted = command->ExecuteNonQuery();
     }
-    catch (SQLiteException^) {
-        // Leave empty
+    catch (SQLiteException^ exception) {
+        throw exception;
     }
     return rowDeleted;
 }
