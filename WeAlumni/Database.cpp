@@ -79,7 +79,7 @@ System::String^ WeAlumni::Database::GetConnectionString() {
  */
 void WeAlumni::Database::Initialize() {
     if (!CheckDatabaseFileExistence()) {
-        throw gcnew Exception("此数据库不存在或不在指定位置：" + GetDatabaseName());
+        throw gcnew Exception("This database doesn't exist or locate in the targeted location" + GetDatabaseName());
     }
 
     try {
@@ -231,18 +231,18 @@ int WeAlumni::Database::ReadData(String^ cmd) {
  */
 int WeAlumni::Database::ReadDataAdapter(String^ cmd) {
     if (dataReader && !dataReader->IsClosed) dataReader->Close();
-	command->CommandText = cmd;
+    command->CommandText = cmd;
     int rowRead = -1;
-	try {
-		dataAdapter = gcnew SQLiteDataAdapter();
-		dataAdapter->SelectCommand = command;
-		dataTable = gcnew DataTable();
-		dataAdapter->Fill(dataTable);
+    try {
+        dataAdapter = gcnew SQLiteDataAdapter();
+        dataAdapter->SelectCommand = command;
+        dataTable = gcnew DataTable();
+        dataAdapter->Fill(dataTable);
         rowRead = dataTable->Rows->Count;
-	}
-	catch (SQLiteException^ exception) {
+    }
+    catch (SQLiteException^ exception) {
         throw exception;
-	}
+    }
     return rowRead;
 }
 

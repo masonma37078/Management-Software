@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{E4E7FB70-F1A4-4284-BF74-DB50BFD77982}</ProjectGuid>
+    <ProjectGuid>{C88457EB-D765-4EF6-BDDD-919C0BC036FD}</ProjectGuid>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Keyword>ManagedCProj</Keyword>
     <RootNamespace>WeAlumni</RootNamespace>
@@ -116,53 +116,72 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>D:\software\ManagementSoftware\System.Data.SQLite.dll</HintPath>
+      <HintPath>System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.SQLite.Linq">
-      <HintPath>D:\software\ManagementSoftware\System.Data.SQLite.Linq.dll</HintPath>
+      <HintPath>System.Data.SQLite.Linq.dll</HintPath>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Database.cpp" />
-    <ClCompile Include="DatabaseEncryptionAndDecryption.cpp" />
-    <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="NewPage.cpp" />
-    <ClCompile Include="StarterPage.cpp" />
+    <ClCompile Include="MemAddPage.cpp" />
+    <ClCompile Include="MemInfoPage.cpp" />
+    <ClCompile Include="OPTAddPage.cpp" />
+    <ClCompile Include="OPTInfoPage.cpp" />
+    <ClCompile Include="OrdInfoPage.cpp" />
+    <ClCompile Include="RecInfoPage.cpp" />
+    <ClCompile Include="StartPage.cpp" />
+    <ClCompile Include="StfAddPage.cpp" />
+    <ClCompile Include="StfInfoPage.cpp" />
+    <ClCompile Include="TreAddPage.cpp" />
+    <ClCompile Include="TreInfoPage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Database.h" />
-    <ClInclude Include="DatabaseEncryptionAndDecryption.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="MainWindow.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
-    <ClInclude Include="NewPage.h">
-      <FileType>CppForm</FileType>
-    </ClInclude>
+    <ClInclude Include="DatabaseEncryptionAndDecryption.h" />
     <ClInclude Include="DatabaseParam.h" />
-    <ClInclude Include="StarterPage.h">
+    <ClInclude Include="MemAddPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="MemInfoPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="OPTAddPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="OPTInfoPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="OrdInfoPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="RecInfoPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="StartPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="StfAddPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="StfInfoPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="TreAddPage.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
+    <ClInclude Include="TreInfoPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DatabaseEncryptionAndDecryption.resx">
-      <DependentUpon>DatabaseEncryptionAndDecryption.h</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainWindow.resx">
-      <DependentUpon>MainWindow.h</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewPage.resx">
-      <DependentUpon>NewPage.h</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StarterPage.resx">
-      <DependentUpon>StarterPage.h</DependentUpon>
+    <EmbeddedResource Include="StartPage.resx">
+      <DependentUpon>StartPage.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

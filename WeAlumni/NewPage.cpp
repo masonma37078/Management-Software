@@ -63,17 +63,17 @@ Void WeAlumni::NewPage::btn_SetPassword_Click(System::Object^ sender, System::Ev
     lbl_passwordVerify->Visible = true;
     lbl_passwordVerify->ForeColor = Color::Red;
     if (txt_password->TextLength < 6) {
-        lbl_passwordVerify->Text = "设置密码：失败, 不足6位数字";
+        lbl_passwordVerify->Text = "脡猫脰脙脙脺脗毛拢潞脢搂掳脺, 虏禄脳茫6脦禄脢媒脳脰";
         return;
     }
     
     if (SetPassword(txt_username->Text, txt_password->Text)) {
         lbl_passwordVerify->ForeColor = Color::Green;
-        lbl_passwordVerify->Text = "设置密码：成功";
+        lbl_passwordVerify->Text = "脡猫脰脙脙脺脗毛拢潞鲁脡鹿娄";
         UpdateDataGridView();
     }
     else {
-        lbl_passwordVerify->Text = "设置密码：失败";
+        lbl_passwordVerify->Text = "脡猫脰脙脙脺脗毛拢潞脢搂掳脺";
     }
 }
 
@@ -87,14 +87,14 @@ Void WeAlumni::NewPage::btn_VerifyPassword_Click(System::Object^ sender, System:
     lbl_passwordVerify->Visible = true;
     lbl_passwordVerify->ForeColor = Color::Red;
     if (txt_password->TextLength == 0) {
-        lbl_passwordVerify->Text = "请输入密码（不少于6位）";
+        lbl_passwordVerify->Text = "脟毛脢盲脠毛脙脺脗毛拢篓虏禄脡脵脫脷6脦禄拢漏";
     }
     else if (VerifyPassword(txt_username->Text, txt_password->Text)) {
         lbl_passwordVerify->ForeColor = Color::Green;
-        lbl_passwordVerify->Text = "密码正确";
+        lbl_passwordVerify->Text = "脙脺脗毛脮媒脠路";
     }
     else {
-        lbl_passwordVerify->Text = "密码错误";
+        lbl_passwordVerify->Text = "脙脺脗毛麓铆脦贸";
     }
 }
 
@@ -105,17 +105,17 @@ Void WeAlumni::NewPage::btn_VerifyPassword_Click(System::Object^ sender, System:
  * @return None
  */
 Void WeAlumni::NewPage::UpdateDataGridView() {
-    String^ command = "SELECT Username AS '用户名', Password AS '密码', Email, Auth AS '授权' FROM Admin;";
+    String^ command = "SELECT Username AS '脫脙禄搂脙没', Password AS '脙脺脗毛', Email, Auth AS '脢脷脠篓' FROM Admin;";
     BindingSource^ bSource = gcnew BindingSource();
     int status = database->ReadDataAdapter(command);
     if (status == -1) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "数据库错误，错误码： " + GetLastError();
+        lbl_DBError->Text = "脢媒戮脻驴芒麓铆脦贸拢卢麓铆脦贸脗毛拢潞 " + GetLastError();
         DBHasPassword = false;
     }
     else if (status == 0) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "数据库无数据";
+        lbl_DBError->Text = "脢媒戮脻驴芒脦脼脢媒戮脻";
         DBHasPassword = false;
     }
     else {

@@ -1,4 +1,4 @@
-#include "StarterPage.h"
+#include "StartPage.h"
 
 /*
  * Main.cpp
@@ -18,6 +18,6 @@ System::Void Main(array<System::String^>^ args)
     System::Windows::Forms::Application::EnableVisualStyles();
     System::Windows::Forms::Application::SetCompatibleTextRenderingDefault(false);
 
-    WeAlumni::StarterPage starter_page;
-    System::Windows::Forms::Application::Run(% starter_page);
+    WeAlumni::StartPage start_page;
+    System::Windows::Forms::Application::Run(% start_page);
 }
