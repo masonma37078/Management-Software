@@ -5,9 +5,25 @@
   Sen       | Record
   Xiangdong | OPT
   Yiyun     | Treasury
+  ----  NONE  ----
+  Haoran
 
-3/25
-  Nothing
+3/28
+  ----Add Page----
+  Jiaying   | Member
+  Rui       | Staff
+  Xiangdong | OPT
+   ----Info Page----
+  Haoran    | Order
+  ----  NONE  ----
+  Sen
 
-3/26
-  Nothing
+4/1
+  ----Revise Page: UI & Logic----
+  Jiaying   | MemInfoPage MemAddPage
+  Rui       | StfInfoPage StfAddPage
+  Sen       | RecInfoPage
+  Xiangdong | OPTInfoPage OPTAddPage
+  Yiyun     | TreInfoPage TreAddPage
+  Haoran    | OrdInfoPage
+  

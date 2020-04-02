@@ -102,6 +102,12 @@
     <ClCompile Include="OrdInfoPage.cpp">
       <Filter>Source Files\Order</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseEncryptionAndDecryption.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Database.h">
@@ -145,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="OrdInfoPage.h">
       <Filter>Header Files\Order</Filter>
+    </ClInclude>
+    <ClInclude Include="MainWindow.h">
+      <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
