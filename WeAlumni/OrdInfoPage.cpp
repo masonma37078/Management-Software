@@ -19,7 +19,7 @@ using namespace System;
  * @return None
  */
 Void WeAlumni::OrdInfoPage::UpdateInfo() {
-    String^ command = "SELECT Orders.Id, Orders.Status, Orders.Time, Orders.MemId, Member.Name, Member.Email, Member.Country, Member.Address1, Member.Address2, Member.City, Member.Postal, Orders.StfId, Orders.ItemId, Item.Name, Orders.Amount, Orders.Price, Orders.Comment, Item.Price FROM (Item Join (Orders, Member) ON Item.Id = Orders.ItemId AND Orders.MemId = Member.Id AND Orders.Id = " + odrId + ");";
+    String^ command = "SELECT Orders.Id, Orders.Status, Orders.Time, Orders.MemId, Member.Name, Member.Email, Member.Country, Member.Address1, Member.Address2, Member.City, Member.Postal, Orders.StfId, Orders.ItemId, Item.Name, Orders.Amount, Orders.Price, Orders.Comment, Item.Price FROM (Item Join (Orders, Member) ON Item.Id = Orders.ItemId AND Orders.MemId = Member.Id AND Orders.Id = " + ordId + ");";
     int status = -1;
 
     try {
@@ -56,7 +56,7 @@ Void WeAlumni::OrdInfoPage::UpdateInfo() {
         lbl_ItemId->Text = database->dataReader[12]->ToString();
         lbl_ItemName->Text = database->dataReader[13]->ToString();
         lbl_OdrAmt->Text = database->dataReader[14]->ToString();
-        lbl_OdrPrice->Text = database->dataReader[15]->ToString();
+        lbl_OrdPrice->Text = database->dataReader[15]->ToString();
         lbl_Content->Text = database->dataReader[16]->ToString();
         item_price = Convert::ToDouble(database->dataReader[17]);
         btn_Check->Visible = false;
@@ -151,7 +151,7 @@ Void WeAlumni::OrdInfoPage::btn_Confirm_Click(System::Object^ sender, System::Ev
                               "Amount = '" + txt_OdrAmt->Text + "', " +
                               "Comment = '" + rtxt_Content->Text + "', " +
                               "Price = '" + Convert::ToString(order_price) + "' " +
-                          "WHERE Id = " + odrId + ";";
+                          "WHERE Id = " + ordId + ";";
     int status = -1;
 
     try {
@@ -207,7 +207,7 @@ Void WeAlumni::OrdInfoPage::btn_DelConfirm_Click(System::Object^ sender, System:
     btn_Confirm->Visible = false;
     btn_Cancel->Visible = false;
     btn_ChangeInfo->Visible = true;
-    String^ command = "DELETE FROM Orders WHERE Id =" + odrId + ";";
+    String^ command = "DELETE FROM Orders WHERE Id =" + ordId + ";";
     int status = -1;
 
     try {
@@ -225,7 +225,7 @@ Void WeAlumni::OrdInfoPage::btn_DelConfirm_Click(System::Object^ sender, System:
     }
     else if (status == 0) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "No Update";
+        lbl_DBError->Text = "No Such Id";
     }
     else {
         this->Close();
