@@ -6,7 +6,7 @@
  * This file implements all MemInfoPage interfaces.
  *
  * @author: Jiaying Hou
- * Revised: 3/28/20
+ * Revised: 4/4/20
  *
  */
 
@@ -14,12 +14,21 @@ using namespace System;
 
 /*
 * Initialize
-* This method will pre-initialize all member's info
+* This method will try to initialize database. 
+* If success, it will pre-initialize all member's info.
 * @param none
 * @return none
 */
 Void WeAlumni::MemInfoPage::Initialize() {
-	UpdateInfo();
+	try {
+		database = gcnew Database(Database::DatabaseType::Data);
+		UpdateInfo();
+		UpdateRecord();
+	}
+	catch (System::Exception^ exception) {
+		lbl_error->Text = exception->Message;
+		lbl_error->ForeColor = System::Drawing::Color::Red;
+	}
 }
 
 /*
@@ -73,8 +82,8 @@ Void WeAlumni::MemInfoPage::UpdateInfo() {
 		lbl_Position->Text = database->dataReader[22]->ToString();
 		lbl_SearchAuth->Text = database->dataReader[23]->ToString();
 
-		txt_Status->Text = database->dataReader[1]->ToString();
-		txt_Type->Text = database->dataReader[2]->ToString();
+		cmb_Status->Text = database->dataReader[1]->ToString();
+		cmb_Type->Text = database->dataReader[2]->ToString();
 		txt_Name->Text = database->dataReader[3]->ToString();
 		txt_Gender->Text = database->dataReader[4]->ToString();
 		txt_Birth->Text = database->dataReader[5]->ToString();
@@ -87,15 +96,15 @@ Void WeAlumni::MemInfoPage::UpdateInfo() {
 		txt_City->Text = database->dataReader[12]->ToString();
 		txt_Postal->Text = database->dataReader[13]->ToString();
 		txt_StdId->Text = database->dataReader[14]->ToString();
-		txt_Program->Text = database->dataReader[15]->ToString();
+		cmb_Program->Text = database->dataReader[15]->ToString();
 		txt_EndDate->Text = database->dataReader[16]->ToString();
-		txt_Degree->Text = database->dataReader[17]->ToString();
+		cmb_Degree->Text = database->dataReader[17]->ToString();
 		txt_Major1->Text = database->dataReader[18]->ToString();
 		txt_Major2->Text = database->dataReader[19]->ToString();
-		txt_CareerStatus->Text = database->dataReader[20]->ToString();
+		cmb_CareerStatus->Text = database->dataReader[20]->ToString();
 		txt_Company->Text = database->dataReader[21]->ToString();
 		txt_Position->Text = database->dataReader[22]->ToString();
-		txt_SearchAuth->Text = database->dataReader[23]->ToString();
+		cmb_SearchAuth->Text = database->dataReader[23]->ToString();
 	}
 	else {
 		lbl_error->Text = "Error occured";
@@ -109,8 +118,8 @@ Void WeAlumni::MemInfoPage::UpdateInfo() {
 * When click button "Change Info", multiple TextBoxes will be visible to collect changed information.
 */
 Void WeAlumni::MemInfoPage::btn_ChangeInfo_Click(System::Object^ sender, System::EventArgs^ e) {
-	txt_Status->Visible = true;
-	txt_Type->Visible = true;
+	cmb_Status->Visible = true;
+	cmb_Type->Visible = true;
 	txt_Name->Visible = true;
 	txt_Gender->Visible = true;
 	txt_Birth->Visible = true;
@@ -123,15 +132,15 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfo_Click(System::Object^ sender, System:
 	txt_City->Visible = true;
 	txt_Postal->Visible = true;
 	txt_StdId->Visible = true;
-	txt_Program->Visible = true;
+	cmb_Program->Visible = true;
 	txt_EndDate->Visible = true;
-	txt_Degree->Visible = true;
+	cmb_Degree->Visible = true;
 	txt_Major1->Visible = true;
 	txt_Major2->Visible = true;
-	txt_CareerStatus->Visible = true;
+	cmb_CareerStatus->Visible = true;
 	txt_Company->Visible = true;
 	txt_Position->Visible = true;
-	txt_SearchAuth->Visible = true;
+	cmb_SearchAuth->Visible = true;
 	btn_ChangeInfoAccept->Visible = true;
 	btn_ChangeInfoCancel->Visible = true;
 	lbl_error->Visible = false;
@@ -148,10 +157,14 @@ Void WeAlumni::MemInfoPage::btn_Delete_Click(System::Object^ sender, System::Eve
 }
 
 /*
-*btn_ShwPrcssActn_Click
-*When click button "Show Process Action", record of the member will be shown
+* UpdateRecord
+*
+* This method read from Record table for the record of this member.
+* Then update record to DataGridView1
+* @param none
+* @return none
 */
-Void WeAlumni::MemInfoPage::btn_ShwPrcssActn_Click(System::Object^ sender, System::EventArgs^ e) {
+Void WeAlumni::MemInfoPage::UpdateRecord() {
 	BindingSource^ bSource = gcnew BindingSource();
 	String^ command = "SELECT Record.Id AS 'Record Id', " + 
 				 "Record.Time AS 'Action Time', " + 
@@ -198,8 +211,8 @@ Void WeAlumni::MemInfoPage::btn_ShwPrcssActn_Click(System::Object^ sender, Syste
 */
 Void WeAlumni::MemInfoPage::btn_ChangeInfoAccept_Click(System::Object^ sender, System::EventArgs^ e) {
 	String^ cmd = "UPDATE Member " +
-		      "SET Status = '" + txt_Status->Text + "', " +
-			  "Type = '" + txt_Type->Text + "', " +
+		      "SET Status = '" + cmb_Status->Text + "', " +
+			  "Type = '" + cmb_Type->Text + "', " +
 			  "Name = '" + txt_Name->Text + "', " +
 			  "Gender = '" + txt_Gender->Text + "', " +
 			  "Birth = '" + txt_Birth->Text + "', " +
@@ -212,15 +225,15 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfoAccept_Click(System::Object^ sender, S
 			  "City = '" + txt_City->Text + "', " +
 			  "Postal = '" + txt_Postal->Text + "', " +
 		      	  "StdId = '" + txt_StdId->Text + "', " +
-			  "Program = '" + txt_Program->Text + "', " +
+			  "Program = '" + cmb_Program->Text + "', " +
 		      	  "EndDate = '" + txt_EndDate->Text + "', " +
-			  "Degree = '" + txt_Degree->Text + "', " +
+			  "Degree = '" + cmb_Degree->Text + "', " +
 			  "Major1 = '" + txt_Major1->Text + "', " +
 			  "Major2 = '" + txt_Major2->Text + "', " +
-			  "CareerStatus = '" + txt_CareerStatus->Text + "', " +
+			  "CareerStatus = '" + cmb_CareerStatus->Text + "', " +
 			  "Company = '" + txt_Company->Text + "', " +
 			  "Position = '" + txt_Position->Text + "', " +
-			  "SearchAuth = '" + txt_SearchAuth->Text + "' " +
+			  "SearchAuth = '" + cmb_SearchAuth->Text + "' " +
 		      "WHERE Id = " + _id;
 	
 	int status = -1;
@@ -236,8 +249,8 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfoAccept_Click(System::Object^ sender, S
 	}
 	
 	if (status > 0) {
-		lbl_Status->Text = txt_Status->Text;
-		lbl_Type->Text = txt_Type->Text;
+		lbl_Status->Text = cmb_Status->Text;
+		lbl_Type->Text = cmb_Type->Text;
 		lbl_Name->Text = txt_Name->Text;
 		lbl_Gender->Text = txt_Gender->Text;
 		lbl_Birth->Text = txt_Birth->Text;
@@ -250,18 +263,18 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfoAccept_Click(System::Object^ sender, S
 		lbl_City->Text = txt_City->Text;
 		lbl_Postal->Text = txt_Postal->Text;
 		lbl_StdId->Text = txt_StdId->Text;
-		lbl_Program->Text = txt_Program->Text;
+		lbl_Program->Text = cmb_Program->Text;
 		lbl_EndDate->Text = txt_EndDate->Text;
-		lbl_Degree->Text = txt_Degree->Text;
+		lbl_Degree->Text = cmb_Degree->Text;
 		lbl_Major1->Text = txt_Major1->Text;
 		lbl_Major2->Text = txt_Major2->Text;
-		lbl_CareerStatus->Text = txt_CareerStatus->Text;
+		lbl_CareerStatus->Text = cmb_CareerStatus->Text;
 		lbl_Company->Text = txt_Company->Text;
 		lbl_Position->Text = txt_Position->Text;
-		lbl_SearchAuth->Text = txt_SearchAuth->Text;
+		lbl_SearchAuth->Text = cmb_SearchAuth->Text;
 
-		txt_Status->Visible = false;
-		txt_Type->Visible = false;
+		cmb_Status->Visible = false;
+		cmb_Type->Visible = false;
 		txt_Name->Visible = false;
 		txt_Gender->Visible = false;
 		txt_Birth->Visible = false;
@@ -274,15 +287,15 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfoAccept_Click(System::Object^ sender, S
 		txt_City->Visible = false;
 		txt_Postal->Visible = false;
 		txt_StdId->Visible = false;
-		txt_Program->Visible = false;
+		cmb_Program->Visible = false;
 		txt_EndDate->Visible = false;
-		txt_Degree->Visible = false;
+		cmb_Degree->Visible = false;
 		txt_Major1->Visible = false;
 		txt_Major2->Visible = false;
-		txt_CareerStatus->Visible = false;
+		cmb_CareerStatus->Visible = false;
 		txt_Company->Visible = false;
 		txt_Position->Visible = false;
-		txt_SearchAuth->Visible = false;
+		cmb_SearchAuth->Visible = false;
 		btn_ChangeInfoAccept->Visible = false;
 		btn_ChangeInfoCancel->Visible = false;
 		lbl_error->Text = "Changes saved";
@@ -302,8 +315,8 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfoAccept_Click(System::Object^ sender, S
 */
 Void WeAlumni::MemInfoPage::btn_ChangeInfoCancel_Click(System::Object^ sender, System::EventArgs^ e) {
 	lbl_error->Visible = false;
-	txt_Status->Visible = false;
-	txt_Type->Visible = false;
+	cmb_Status->Visible = false;
+	cmb_Type->Visible = false;
 	txt_Name->Visible = false;
 	txt_Gender->Visible = false;
 	txt_Birth->Visible = false;
@@ -316,20 +329,20 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfoCancel_Click(System::Object^ sender, S
 	txt_City->Visible = false;
 	txt_Postal->Visible = false;
 	txt_StdId->Visible = false;
-	txt_Program->Visible = false;
+	cmb_Program->Visible = false;
 	txt_EndDate->Visible = false;
-	txt_Degree->Visible = false;
+	cmb_Degree->Visible = false;
 	txt_Major1->Visible = false;
 	txt_Major2->Visible = false;
-	txt_CareerStatus->Visible = false;
+	cmb_CareerStatus->Visible = false;
 	txt_Company->Visible = false;
 	txt_Position->Visible = false;
-	txt_SearchAuth->Visible = false;
+	cmb_SearchAuth->Visible = false;
 	btn_ChangeInfoAccept->Visible = false;
 	btn_ChangeInfoCancel->Visible = false;
 
-	txt_Status->Text = lbl_Status->Text;
-	txt_Type->Text = lbl_Type->Text;
+	cmb_Status->Text = lbl_Status->Text;
+	cmb_Type->Text = lbl_Type->Text;
 	txt_Name->Text = lbl_Name->Text;
 	txt_Gender->Text = lbl_Gender->Text;
 	txt_Birth->Text = lbl_Birth->Text;
@@ -342,15 +355,15 @@ Void WeAlumni::MemInfoPage::btn_ChangeInfoCancel_Click(System::Object^ sender, S
 	txt_City->Text = lbl_City->Text;
 	txt_Postal->Text = lbl_Postal->Text;
 	txt_StdId->Text = lbl_StdId->Text;
-	txt_Program->Text = lbl_Program->Text;
+	cmb_Program->Text = lbl_Program->Text;
 	txt_EndDate->Text = lbl_EndDate->Text;
-	txt_Degree->Text = lbl_Degree->Text;
+	cmb_Degree->Text = lbl_Degree->Text;
 	txt_Major1->Text = lbl_Major1->Text;
 	txt_Major2->Text = lbl_Major2->Text;
-	txt_CareerStatus->Text = lbl_CareerStatus->Text;
+	cmb_CareerStatus->Text = lbl_CareerStatus->Text;
 	txt_Company->Text = lbl_Company->Text;
 	txt_Position->Text = lbl_Position->Text;
-	txt_SearchAuth->Text = lbl_SearchAuth->Text;
+	cmb_SearchAuth->Text = lbl_SearchAuth->Text;
 }
 
 /*
@@ -397,5 +410,14 @@ Void WeAlumni::MemInfoPage::btn_DeleteCancel_Click(System::Object^ sender, Syste
 	lbl_error->Visible = false;
 	btn_DeleteAccept->Visible = false;
 	btn_DeleteCancel->Visible = false;
+}
+
+/*
+ * dataGridView1_CellContentClick
+ * by double clicking specific row of DataGridView1, a corresponding Record Info page will show up.
+ */
+Void WeAlumni::MemInfoPage::dataGridView1_CellDoubleClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e){
+	RecInfoPage^ recInfoPage = gcnew RecInfoPage(Convert::ToInt32(dataGridView1->CurrentRow->Cells[0]->Value));
+	recInfoPage->ShowDialog();
 }
 

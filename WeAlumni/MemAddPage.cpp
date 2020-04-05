@@ -6,7 +6,7 @@
  * This file implements all MemAddPage interfaces.
  *
  * @author: Jiaying Hou
- * Revised: 4/1/20
+ * Revised: 4/4/20
  *
  */
 
@@ -14,11 +14,28 @@ using namespace System;
 
 /*
 * Initialize
-* This method will pre-initialize member's id
+* This method will try to initialize database
 * @param none
 * @return none
 */
 Void WeAlumni::MemAddPage::Initialize() {
+	try {
+		database = gcnew Database(Database::DatabaseType::Data);
+		UpdateInfo();
+	}
+	catch (System::Exception^ exception) {
+		lbl_error->Text = exception->Message;
+		lbl_error->ForeColor = System::Drawing::Color::Red;
+	}
+}
+
+/*
+* UpdateInfo
+* This method will pre-initialize member's id
+* @param none
+* @return none
+*/
+Void WeAlumni::MemAddPage::UpdateInfo() {
 	_id = database->GetNextId(WeAlumni::Database::DatabaseTable::Member);
 	lbl_Id->Text = _id.ToString();
 }
@@ -35,18 +52,18 @@ Void WeAlumni::MemAddPage::btn_accept_Click(System::Object^ sender, System::Even
 									  "Address2, City, Postal, StdId, Program, " +
 		                              "EndDate, Degree, Major1, Major2, CareerStatus, " +
 		                              "Company, Position, SearchAuth) " + "VALUES (" +
-		                               _id + ", '" + txt_Status->Text + "', '" +
-									   txt_Type->Text + "', '" + txt_Name->Text + "', '" +
+		                               _id + ", '" + cmb_Status->Text + "', '" +
+									   cmb_Type->Text + "', '" + txt_Name->Text + "', '" +
 		                               txt_Gender->Text + "', '" + txt_Birth->Text + "', '" +
 		                               txt_Email->Text + "', '" + txt_Phone->Text + "', '" +
 		                               txt_Wechat + "', '" + txt_Country->Text + "', '" +
 	                    	           txt_Address1->Text + "', '" + txt_Address2->Text + "', '" +
 		                               txt_City->Text + "', '" + txt_Postal->Text + "', '" +
-		                               txt_StdId->Text + "', '" + txt_Program->Text + "', '" +
-		                               txt_EndDate->Text + "', '" + txt_Degree->Text + "', '" +
+		                               txt_StdId->Text + "', '" + cmb_Program->Text + "', '" +
+		                               txt_EndDate->Text + "', '" + cmb_Degree->Text + "', '" +
 		                               txt_Major1->Text + "', '" + txt_Major2->Text + "', '" +
-		                               txt_CareerStatus->Text + "', '" + txt_Company->Text + "', '" +
-		                               txt_Position->Text + "', '" + txt_SearchAuth->Text + "');";
+		                               cmb_CareerStatus->Text + "', '" + txt_Company->Text + "', '" +
+		                               txt_Position->Text + "', '" + cmb_SearchAuth->Text + "');";
 
 	int status = -1;
 	
