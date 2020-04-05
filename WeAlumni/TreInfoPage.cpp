@@ -7,6 +7,7 @@
  *
  * @author: Yiyun Zheng
  * Revised: 3/28/20
+ *          4/4/20 Lock btn when record not found. No message if show data successfully
  *
  */
 
@@ -30,6 +31,7 @@ System::Void WeAlumni::TreInfoPage::UpdateInfo(String^ Record_Id) {
     catch (Exception^ exception){
         lbl_Error->Text = exception->Message;
         lbl_Error->ForeColor = System::Drawing::Color::Red;
+        UnableAllBtn();
         return;
     }
     if (Status == 1) {
@@ -42,8 +44,9 @@ System::Void WeAlumni::TreInfoPage::UpdateInfo(String^ Record_Id) {
         UpdateOutsideInfo(StaffId);
     }
     else {
-        lbl_Error->Text = "Unable to find Treasury Info Page.";
+        lbl_Error->Text = "Error: Unable to find Treasury Info Page.";
         lbl_Error->ForeColor = System::Drawing::Color::Red;
+        UnableAllBtn();
     }
 }
 
@@ -71,7 +74,7 @@ int WeAlumni::TreInfoPage::UpdateOutsideInfo(String^ SId) {
         lbl_Dept->Text = _DataDB->dataReader[0]->ToString();
         lbl_Position->Text = _DataDB->dataReader[1]->ToString();
         lbl_StfName->Text = _DataDB->dataReader[2]->ToString();
-        lbl_Error->Text = "Success: All Info Show Above";
+        lbl_Error->Text = "";
         lbl_Error->ForeColor = System::Drawing::Color::Green;
     }
     else {
@@ -250,4 +253,18 @@ System::Void WeAlumni::TreInfoPage::btn_Cancle_Click(System::Object^ sender, Sys
     SetShowLabelStatus(true);
     SetTextStatus(false);
     SetButtonStatus(false);
+}
+
+/*
+ * btn_Cancle_Click
+ * This method will show infomation label, hide text box,
+ * and show other two button for modify or delete without change any infomation.
+ * @param None
+ * @return None
+ */
+System::Void WeAlumni::TreInfoPage::UnableAllBtn() {
+    btn_Accpet->Enabled = false;
+    btn_Cancle->Enabled = false;
+    btn_ChangeInfo->Enabled = false;
+    btn_Delete->Enabled = false;
 }
