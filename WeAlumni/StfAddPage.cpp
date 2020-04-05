@@ -6,11 +6,28 @@
  * This file implements all StfAddPage interfaces.
  *
  * @author: Rui Jia
- * Revised: 4/1/20
+ * Revised: 4/4/20
  *
  */
 
 using namespace System;
+
+/*
+ * Initialize()
+ * Pre-initialize all staff Add Page
+ * @param None
+ * @return None
+ */
+Void WeAlumni::StfAddPage::Initialize() {
+    try {
+        _database = gcnew Database(Database::DatabaseType::Data);
+    }
+    catch (System::Exception^ exception) {
+        lbl_Error->Text = exception->Message;
+        lbl_Error->Visible = true;
+        return;
+    }
+}
 
 /*
  * Verify_Click(System::Object^ sender, System::EventArgs^ e)
@@ -92,10 +109,13 @@ Void WeAlumni::StfAddPage::Verify_Click(System::Object^ sender, System::EventArg
  * @return None
  */
 Void WeAlumni::StfAddPage::InsertStaff() {
+    txt_MemId->Enabled = false;
+    txt_Name->Enabled = false;
     cmb_Auth->Enabled = true;
     cmb_Dept->Enabled = true;
     cmb_Posi->Enabled = true;
     btn_Confirm->Visible = true;
+    btn_Cancel->Visible = true;
     btn_Verify->Visible = false;
 }
 
@@ -133,6 +153,7 @@ Void WeAlumni::StfAddPage::Confirm_Click(System::Object^ sender, System::EventAr
         cmb_Posi->Enabled = false;
         btn_Confirm->Visible = false;
         AddNewRecord();
+        btn_Cancel->Text = "Close";
     }
     else {
         lbl_Error->Text = "ERRPR";
