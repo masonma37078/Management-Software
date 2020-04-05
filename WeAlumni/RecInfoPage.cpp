@@ -33,11 +33,11 @@ Void WeAlumni::RecInfoPage::UpdateInfo() {
     
     if (status == -1) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "du cha le ";
+        lbl_DBError->Text = "Error -1";
     }
     else if (status == 0) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "mei du shu";
+        lbl_DBError->Text = "No Record Id Found";
     }
     else {
         lbl_RcdId->Text = database->dataReader[4]->ToString();
@@ -106,11 +106,11 @@ Void WeAlumni::RecInfoPage::btn_DelConfirm_Click(System::Object^ sender, System:
 
     if (status == -1) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "Error -1 ";
+        lbl_DBError->Text = "Error -1";
     }
     else if (status == 0) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "No Update";
+        lbl_DBError->Text = "No such Id";
     }
     else {
         this->Close();
@@ -138,6 +138,7 @@ Void WeAlumni::RecInfoPage::btn_Cancel_Click(System::Object^ sender, System::Eve
     btn_DeleteId->Visible = true;
     btn_Update->Visible = true;
     btn_Confirm->Visible = false;
+    btn_DelConfirm->Visible = false;
     btn_Cancel->Visible = false;
 }
 
