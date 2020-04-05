@@ -1,29 +1,44 @@
-3/24
+3/24 - S1
   ----Info Page----
-  Jiaying   | Member
-  Rui       | Staff
-  Sen       | Record
+  Jiaying        | Member
+  Rui              | Staff
+  Sen             | Record
   Xiangdong | OPT
-  Yiyun     | Treasury
+  Yiyun          | Treasury
   ----  NONE  ----
   Haoran
 
-3/28
+3/28 - S2
   ----Add Page----
-  Jiaying   | Member
-  Rui       | Staff
+  Jiaying       | Member
+  Rui             | Staff
   Xiangdong | OPT
    ----Info Page----
-  Haoran    | Order
+  Haoran       | Order
   ----  NONE  ----
   Sen
 
-4/1
+4/1 - S3
   ----Revise Page: UI & Logic----
-  Jiaying   | MemInfoPage MemAddPage
-  Rui       | StfInfoPage StfAddPage
-  Sen       | RecInfoPage
+  Jiaying       | MemInfoPage MemAddPage
+  Rui             | StfInfoPage StfAddPage
+  Sen             | RecInfoPage
   Xiangdong | OPTInfoPage OPTAddPage
-  Yiyun     | TreInfoPage TreAddPage
-  Haoran    | OrdInfoPage
-  
+  Yiyun          | TreInfoPage TreAddPage
+  Haoran       | OrdInfoPage
+
+4/4 - S4
+----Main Window----
+  Jiaying          | Member
+----Add Page----
+  Haoran         | OrdAddPage
+----Login Page----
+  Sen               | LoginPage
+----System----
+  Rui                | System - Change Username/Password
+                         + SystemInfo
+----Logic----
+  Xiangdong   | Login - DB Check
+                         + Forgot password
+  Yiyun            | Tre - DB Check
+                         + System - DB
