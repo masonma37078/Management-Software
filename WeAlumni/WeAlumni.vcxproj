@@ -165,6 +165,7 @@
     <ClInclude Include="OrdInfoPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="PublicUserInfo.h" />
     <ClInclude Include="RecInfoPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
