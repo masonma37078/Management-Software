@@ -7,6 +7,7 @@
  *
  * @author: Yiyun Zheng
  * Revised: 4/1/20
+ *          4/4/20 Time textbox show current date and time.Provide exit btn after add new info
  *
  */
 
@@ -19,6 +20,7 @@
 System::Void WeAlumni::TreAddPage::UpdateInfo(String^ SId) {
     lbl_Id->Text = Convert::ToString(_TreDB->GetNextId(Database::DatabaseTable::Treasury));
     lbl_StfId->Text = SId;
+    txt_Time->Text = _TreDB->GetSystemTime();
 }
 
 /*
@@ -57,7 +59,7 @@ System::Void WeAlumni::TreAddPage::btn_Confirm_Click(System::Object^ sender, Sys
         lbl_Error->Visible = true;
 
         btn_Confirm->Enabled = false;
-        btn_Cancel->Enabled = false;
+        btn_Cancel->Text = "Exit";
         SetBoxReadOnly();
     }
 }

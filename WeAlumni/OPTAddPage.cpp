@@ -6,7 +6,8 @@
  * This file will provide an empty page with textbox for new file
  *
  * @author: Xiangdong Che
- * Revised: 4/01/20  
+ * Revised:  4/04/20  Fixed insert fail bug and added Exit button
+ *           4/01/20  
  *          
  *
  */
@@ -54,9 +55,9 @@ Void WeAlumni::OPTAddPage::btn_Verify_Click(System::Object^ sender, System::Even
     String^ command;
     int status = -1;
     if (txt_MemId->Text == "" && txt_MemName->Text == "") {
-        lbl_error->Text = "Empty ID and Name";
-        lbl_error->ForeColor = Color::Red;
-        lbl_error->Visible = true;
+        lbl_Verify->Text = "Empty ID and Name";
+        lbl_Verify->ForeColor = Color::Red;
+        lbl_Verify->Visible = true;
     }
     else if (txt_MemId->Text != "" && txt_MemName->Text == "") {
         command = "SELECT Name " +
@@ -73,14 +74,14 @@ Void WeAlumni::OPTAddPage::btn_Verify_Click(System::Object^ sender, System::Even
         }
 
         if (status == -1) {
-            lbl_error->Text = "Invalid Member ID";
-            lbl_error->ForeColor = Color::Red;
-            lbl_error->Visible = true;
+            lbl_Verify->Text = "Invalid Member ID";
+            lbl_Verify->ForeColor = Color::Red;
+            lbl_Verify->Visible = true;
         }
         else {
-            lbl_error->Text = "Verified";
-            lbl_error->ForeColor = Color::Green;
-            lbl_error->Visible = true;
+            lbl_Verify->Text = "Verified";
+            lbl_Verify->ForeColor = Color::Green;
+            lbl_Verify->Visible = true;
             txt_MemName->Text = database->dataReader[0]->ToString();
             success = true;
         }
@@ -100,14 +101,14 @@ Void WeAlumni::OPTAddPage::btn_Verify_Click(System::Object^ sender, System::Even
         }
 
         if (status == -1) {
-            lbl_error->Text = "Invalid Member Name";
-            lbl_error->ForeColor = Color::Red;
-            lbl_error->Visible = true;
+            lbl_Verify->Text = "Invalid Member Name";
+            lbl_Verify->ForeColor = Color::Red;
+            lbl_Verify->Visible = true;
         }
         else {
-            lbl_error->Text = "Verified";
-            lbl_error->ForeColor = Color::Green;
-            lbl_error->Visible = true;
+            lbl_Verify->Text = "Verified";
+            lbl_Verify->ForeColor = Color::Green;
+            lbl_Verify->Visible = true;
             txt_MemId->Text = database->dataReader[0]->ToString();
             success = true;
         }
@@ -127,20 +128,22 @@ Void WeAlumni::OPTAddPage::btn_Verify_Click(System::Object^ sender, System::Even
         }
 
         if (database->dataReader[0]->ToString() == lbl_MemName->Text) {
-            lbl_error->Text = "Verified";
-            lbl_error->ForeColor = Color::Green;
-            lbl_error->Visible = true;
+            lbl_Verify->Text = "Verified";
+            lbl_Verify->ForeColor = Color::Green;
+            lbl_Verify->Visible = true;
             success = true;
         }
         else {
-            lbl_error->Text = "ID and Name are not matched";
-            lbl_error->ForeColor = Color::Red;
-            lbl_error->Visible = true;
+            lbl_Verify->Text = "ID and Name are not matched";
+            lbl_Verify->ForeColor = Color::Red;
+            lbl_Verify->Visible = true;
         }
     }
 
     if (success == true) {
         btn_Verify->Enabled = false;
+        txt_MemId->Enabled = false;
+        txt_MemName->Enabled = false;
     }
 }
 
@@ -158,8 +161,10 @@ Void WeAlumni::OPTAddPage::btn_Confirm_Click(System::Object^ sender, System::Eve
         lbl_error->Visible = true;
     }
     else {
-        String^ command = "INSERT INTO OPT (Status, " +
+        String^ command = "INSERT INTO OPT (Id," +
+                                           "Status, " +
                                            "MemId, " +
+                                           "StfId, " +
                                            "StartDate, " +
                                            "EndDate, " +
                                            "Title, " +
@@ -167,8 +172,10 @@ Void WeAlumni::OPTAddPage::btn_Confirm_Click(System::Object^ sender, System::Eve
                                            "CardNumber, " +
                                            "CardStartDate, " +
                                            "CardEndDate) " +
-                          "VALUES ('" + cmb_Status->Text + "', " +
+                          "VALUES ("  + Convert::ToInt32(lbl_OPTID->Text) + "," + 
+                                  "'" + cmb_Status->Text + "', " +
                                         Convert::ToInt32(txt_MemId->Text) + "," +
+                                        Convert::ToInt32(lbl_StfId->Text) + "," +
                                   "'" + txt_StartDate->Text + "'," +
                                   "'" + txt_EndDate->Text + "'," +
                                   "'" + txt_Title->Text + "'," +
@@ -201,8 +208,9 @@ Void WeAlumni::OPTAddPage::btn_Confirm_Click(System::Object^ sender, System::Eve
     }
 
     if (finish == true) {
-        btn_Confirm->Enabled = false;
-        btn_Cancel->Enabled = false;
+        btn_Confirm->Visible = false;
+        btn_Cancel->Visible = false;
+        btn_Exit->Visible = true;
         SetBoxReadOnly();
     }
 }
@@ -217,4 +225,13 @@ Void WeAlumni::OPTAddPage::btn_Cancel_Click(System::Object^ sender, System::Even
     this->Close();
 }
 
+/*
+ * btn_Exit_Click
+ * close current page after insert succussfully
+ * @param None
+ * @return None
+ */
+Void WeAlumni::OPTAddPage::btn_Exit_Click(System::Object^ sender, System::EventArgs^ e) {
+    this->Close();
+}
 

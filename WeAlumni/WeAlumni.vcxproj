@@ -165,6 +165,7 @@
     <ClInclude Include="OrdInfoPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="PublicUserInfo.h" />
     <ClInclude Include="RecInfoPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -185,6 +186,15 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="MemInfoPage.resx">
+      <DependentUpon>MemInfoPage.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OPTAddPage.resx">
+      <DependentUpon>OPTAddPage.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OPTInfoPage.resx">
+      <DependentUpon>OPTInfoPage.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StartPage.resx">
       <DependentUpon>StartPage.h</DependentUpon>
     </EmbeddedResource>

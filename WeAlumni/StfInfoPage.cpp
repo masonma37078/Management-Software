@@ -6,7 +6,7 @@
  * This file implements all StfInfoPage interfaces.
  *
  * @author: Rui Jia
- * Revised: 4/1/20
+ * Revised: 4/4/20
  *
  */
 
@@ -19,6 +19,14 @@ using namespace System;
  * @return None
  */
 Void WeAlumni::StfInfoPage::Initialize() {
+    try {
+        _database = gcnew Database(Database::DatabaseType::Data);
+    }
+    catch (System::Exception^ exception) {
+        lbl_Error->Text = exception->Message;
+        lbl_Error->Visible = true;
+        return;
+    }
     UpdateInfo();
 }
 
@@ -30,19 +38,19 @@ Void WeAlumni::StfInfoPage::Initialize() {
  * @return None
  */
 Void WeAlumni::StfInfoPage::UpdateInfo() {
-    lbl_error->Visible = false;
-    lbl_success->Visible = false;
+    lbl_Error->Visible = false;
 
     int status = -1;
-    String^ cmd =  "SELECT * FROM Staff  WHERE MemId = '" + _MemId + "';";
+    String^ cmd = "SELECT * FROM Staff WHERE MemId = '" + _MemId + "';";
     try {
         status = _database->ReadData(cmd);
     }
     catch (Exception^ exception) {
-        lbl_error->Text = exception->Message;
-        lbl_error->Visible = true;
+        lbl_Error->Text = exception->Message;
+        lbl_Error->Visible = true;
         return;
     }
+
     if (status > 0) {
         lbl_StfId->Text = _StfId.ToString();
         lbl_MemId->Text = _database->dataReader->GetInt32(0).ToString();
@@ -55,8 +63,11 @@ Void WeAlumni::StfInfoPage::UpdateInfo() {
         cmb_Auth->Text = lbl_Auth->Text;
     }
     else {
-        lbl_error->Text = "ERROR";
-        lbl_error->Visible = true;
+        lbl_Error->Text = "Can't find the data";
+        lbl_Error->Visible = true;
+        btn_ChangeInfo->Enabled = false;
+        btn_DeleteInfo->Enabled = false;
+        btn_Record->Enabled = false;
     }
 
     int status2 = -1;
@@ -65,21 +76,25 @@ Void WeAlumni::StfInfoPage::UpdateInfo() {
         status2 = _database->ReadData(cmd2);
     }
     catch (Exception^ exception) {
-        lbl_error->Text = exception->Message;
-        lbl_error->Visible = true;
+        lbl_Error->Text = exception->Message;
+        lbl_Error->Visible = true;
         return;
     }
-    if (status2 > 0) {
+
+    if (status > 0 && status2 > 0) {
         lbl_Name->Text = _database->dataReader->GetString(3);
         lbl_Gender->Text = _database->dataReader->GetString(4);
         lbl_Birth->Text = _database->dataReader->GetString(5);
         lbl_Email->Text = _database->dataReader->GetString(6);
         lbl_Phone->Text = _database->dataReader->GetString(7);
         lbl_Wechat->Text = _database->dataReader->GetString(8);
+        UpdateDataGridView();
     }
     else {
-        lbl_error->Text = "ERROR";
-        lbl_error->Visible = true;
+        lbl_Error->Text = "Can't find the data";
+        lbl_Error->Visible = true;
+        btn_ChangeInfo->Enabled = false;
+        btn_DeleteInfo->Enabled = false;
     }
 }
 
@@ -138,8 +153,7 @@ Void WeAlumni::StfInfoPage::ChangeLabelInvisible() {
  * @return None
  */
 Void WeAlumni::StfInfoPage::ChangeInfo_Click(System::Object^ sender, System::EventArgs^ e) {
-    lbl_error->Visible = false;
-    lbl_success->Visible = false;
+    lbl_Error->Visible = false;
     ChangeTxtVisible();
     ChangeLabelInvisible();
     btn_Accpet->Visible = true;
@@ -156,31 +170,33 @@ Void WeAlumni::StfInfoPage::ChangeInfo_Click(System::Object^ sender, System::Eve
  */
 Void WeAlumni::StfInfoPage::AcceptButton_Click(System::Object^ sender, System::EventArgs^ e) {
     int status = -1;
-    String^ command = "UPDATE Staff " + 
-                      "SET    Dept = '"     + cmb_Dept->Text + "', " +
+    String^ command = "UPDATE Staff " +
+                      "SET    Dept = '" + cmb_Dept->Text + "', " +
                              "Position = '" + cmb_Posi->Text + "', " +
-                             "Auth = '"     + cmb_Auth->Text + "' " +
-                      "WHERE  MemId = '"    + _MemId + "';";
+                             "Auth = '" + cmb_Auth->Text + "' " +
+                      "WHERE  MemId = '" + _MemId + "';";
     try {
         status = _database->UpdateData(command);
     }
     catch (Exception^ exception) {
-        lbl_error->Text = exception->Message;
-        lbl_error->Visible = true;
+        lbl_Error->Text = exception->Message;
+        lbl_Error->Visible = true;
         return;
     }
+
     if (status > 0) {
         UpdateInfo();
         ChangeTxtInvisible();
         ChangeLabelVisible();
-        lbl_success->Text = "Update Successful!";
-        lbl_success->Visible = true;
+        lbl_Error->Text = "Updata Successful!";
+        lbl_Error->ForeColor = Color::Green;
+        lbl_Error->Visible = true;
         btn_Accpet->Visible = false;
         btn_Cancle->Visible = false;
     }
     else {
-        lbl_error->Text = "ERROR";
-        lbl_error->Visible = true;
+        lbl_Error->Text = "ERROR";
+        lbl_Error->Visible = true;
     }
 }
 
@@ -204,8 +220,7 @@ Void WeAlumni::StfInfoPage::CancelButton_Click(System::Object^ sender, System::E
  * @return None
  */
 Void WeAlumni::StfInfoPage::DeleteInfo_Click(System::Object^ sender, System::EventArgs^ e) {
-    lbl_error->Visible = false;
-    lbl_success->Visible = false;
+    lbl_Error->Visible = false;
     btn_Delete->Visible = true;
     btn_Close->Visible = true;
 }
@@ -223,7 +238,7 @@ Void WeAlumni::StfInfoPage::DeleteAcceptButton_Click(System::Object^ sender, Sys
         status = _database->DeleteData(command);
     }
     catch (Exception^ exception) {
-        lbl_error->Text = exception->Message;
+        lbl_Error->Text = exception->Message;
         return;
     }
 
@@ -231,10 +246,8 @@ Void WeAlumni::StfInfoPage::DeleteAcceptButton_Click(System::Object^ sender, Sys
         this->Close();
     }
     else {
-        lbl_error->Text = "ERROR";
-        lbl_error->Visible = true;
-        btn_Delete->Visible = false;
-        btn_Close->Visible = false;
+        lbl_Error->Text = "ERROR";
+        lbl_Error->Visible = true;
     }
 }
 
@@ -250,41 +263,14 @@ Void WeAlumni::StfInfoPage::DeleteCancelButton_Click(System::Object^ sender, Sys
 }
 
 /*
- * AddNewRecord(System::Object^ sender, System::EventArgs^ e)
- * When click button "Add new record"£¬ add new recoding data to Record table.
- * @param System::Object^ sender, System::EventArgs^ e
+ * RecordButton_Click(System::Object^ sender, System::EventArgs^ e)
+ * Click "Record", jump to RecInfoPage page.
+ * @param None
  * @return None
  */
-Void WeAlumni::StfInfoPage::AddNewRecord(System::Object^ sender, System::EventArgs^ e) {
-    int status = -1;
-    int RecordId = _database->GetNextId(Database::DatabaseTable::Record);
-    int MemId = Int32::Parse(lbl_MemId->Text);
-    String^ Name = lbl_Name->Text;
-    String^ time = _database->GetSystemTime();
-    String^ action = "a";
-    String^ command = "INSERT INTO Record VALUES(" + RecordId + "," +
-                                                     _StfId + "," +
-                                                     MemId + ", '" +
-                                                     Name + "', '" +
-                                                     time + "', '" +
-                                                     action + "');";
-    try {
-        status = _database->InsertData(command);
-    }
-    catch (Exception^ exception) {
-        lbl_error->Text = exception->Message;
-        return;
-    }
-
-    if (status > 0) {
-        lbl_success->Text = "Update recording data successful!";
-        lbl_success->Visible = true;
-    }
-    else {
-        lbl_error->Text = "ERRPR";
-        lbl_error->Visible = true;
-    }
-    UpdateDataGridView();
+Void WeAlumni::StfInfoPage::RecordButton_Click(System::Object^ sender, System::EventArgs^ e) {
+    RecInfoPage^ page = gcnew RecInfoPage(_MemId);
+    page->Show();
 }
 
 /*
@@ -300,25 +286,24 @@ Void WeAlumni::StfInfoPage::UpdateDataGridView() {
                              "R.MemId   AS 'Member ID', " +
                              "R.MemName AS 'Member Name', " +
                              "R.Action  AS 'Action' " +
-                       "FROM  Record R";
+                      "FROM   Record R";
     BindingSource^ bSource = gcnew BindingSource();
     try {
         status = _database->ReadDataAdapter(command);
     }
     catch (Exception^ exception) {
-        lbl_error->Text = exception->Message;
-        lbl_error->Visible = true;
+        lbl_Error->Text = exception->Message;
+        lbl_Error->Visible = true;
         return;
     }
 
     if (status > 0) {
-        lbl_error->Visible = false;
         bSource->DataSource = _database->dataTable;
         dgv_Staff->DataSource = bSource;
     }
     else {
-        lbl_error->Text = "ERROR";
-        lbl_error->Visible = true;
+        lbl_Error->Text = "NO DATA";
+        lbl_Error->Visible = true;
     }
 }
 

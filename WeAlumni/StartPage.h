@@ -292,7 +292,7 @@ private: System::Void button5_Click(System::Object^ sender, System::EventArgs^ e
 	p->~RecInfoPage();
 }
 private: System::Void button6_Click(System::Object^ sender, System::EventArgs^ e) {
-	TreInfoPage^ p = gcnew TreInfoPage(Convert::ToString(_id));
+	TreInfoPage^ p = gcnew TreInfoPage(_id);
 	p->ShowDialog();
 	p->~TreInfoPage();
 }
@@ -315,7 +315,7 @@ private: System::Void button9_Click(System::Object^ sender, System::EventArgs^ e
 	//Leave empty
 }
 private: System::Void button7_Click(System::Object^ sender, System::EventArgs^ e) {
-	TreAddPage^ p = gcnew TreAddPage(Convert::ToString(_id));
+	TreAddPage^ p = gcnew TreAddPage(_id);
 	p->ShowDialog();
 	p->~TreAddPage();
 }

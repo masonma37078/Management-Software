@@ -7,7 +7,7 @@
  * This file includes functions of inserting new data into Staff table
  *
  * @author: Rui Jia
- * Revised: 4/01/20
+ * Revised: 4/4/20
  *
  */
 
@@ -28,14 +28,7 @@ namespace WeAlumni {
 		StfAddPage(void)
 		{
 			InitializeComponent();
-			try {
-				_database = gcnew Database(Database::DatabaseType::Data);
-			}
-			catch (System::Exception^ exception) {
-				lbl_Error->Text = exception->Message;
-				lbl_Error->Visible = true;
-				return;
-			}
+			Initialize();
 		}
 
 	protected:
@@ -99,113 +92,139 @@ namespace WeAlumni {
 			// 
 			// lbl_Prompt_StfAddPage
 			// 
+			this->lbl_Prompt_StfAddPage->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_Prompt_StfAddPage->AutoSize = true;
-			this->lbl_Prompt_StfAddPage->Location = System::Drawing::Point(292, 64);
+			this->lbl_Prompt_StfAddPage->Font = (gcnew System::Drawing::Font(L"SimSun", 15, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->lbl_Prompt_StfAddPage->Location = System::Drawing::Point(377, 54);
 			this->lbl_Prompt_StfAddPage->Name = L"lbl_Prompt_StfAddPage";
-			this->lbl_Prompt_StfAddPage->Size = System::Drawing::Size(119, 15);
+			this->lbl_Prompt_StfAddPage->Size = System::Drawing::Size(208, 25);
 			this->lbl_Prompt_StfAddPage->TabIndex = 0;
 			this->lbl_Prompt_StfAddPage->Text = L"Staff Add Page";
 			// 
 			// txt_MemId
 			// 
-			this->txt_MemId->Location = System::Drawing::Point(206, 117);
+			this->txt_MemId->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->txt_MemId->Location = System::Drawing::Point(249, 120);
 			this->txt_MemId->Name = L"txt_MemId";
 			this->txt_MemId->Size = System::Drawing::Size(95, 25);
 			this->txt_MemId->TabIndex = 2;
 			// 
 			// lbl_Prompt_MemId
 			// 
+			this->lbl_Prompt_MemId->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_Prompt_MemId->AutoSize = true;
-			this->lbl_Prompt_MemId->Location = System::Drawing::Point(109, 120);
+			this->lbl_Prompt_MemId->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->lbl_Prompt_MemId->Location = System::Drawing::Point(120, 121);
 			this->lbl_Prompt_MemId->Name = L"lbl_Prompt_MemId";
-			this->lbl_Prompt_MemId->Size = System::Drawing::Size(79, 15);
+			this->lbl_Prompt_MemId->Size = System::Drawing::Size(108, 19);
 			this->lbl_Prompt_MemId->TabIndex = 3;
 			this->lbl_Prompt_MemId->Text = L"Member ID";
 			// 
 			// lbl_Prompt_Name
 			// 
+			this->lbl_Prompt_Name->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_Prompt_Name->AutoSize = true;
-			this->lbl_Prompt_Name->Location = System::Drawing::Point(331, 120);
+			this->lbl_Prompt_Name->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->lbl_Prompt_Name->Location = System::Drawing::Point(394, 121);
 			this->lbl_Prompt_Name->Name = L"lbl_Prompt_Name";
-			this->lbl_Prompt_Name->Size = System::Drawing::Size(95, 15);
+			this->lbl_Prompt_Name->Size = System::Drawing::Size(130, 19);
 			this->lbl_Prompt_Name->TabIndex = 4;
 			this->lbl_Prompt_Name->Text = L"Member Name";
 			// 
 			// txt_Name
 			// 
-			this->txt_Name->Location = System::Drawing::Point(463, 117);
+			this->txt_Name->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->txt_Name->Location = System::Drawing::Point(557, 120);
 			this->txt_Name->Name = L"txt_Name";
 			this->txt_Name->Size = System::Drawing::Size(100, 25);
 			this->txt_Name->TabIndex = 5;
 			// 
 			// lbl_Prompt_Dept
 			// 
+			this->lbl_Prompt_Dept->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_Prompt_Dept->AutoSize = true;
+			this->lbl_Prompt_Dept->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
 			this->lbl_Prompt_Dept->Location = System::Drawing::Point(109, 174);
 			this->lbl_Prompt_Dept->Name = L"lbl_Prompt_Dept";
-			this->lbl_Prompt_Dept->Size = System::Drawing::Size(87, 15);
+			this->lbl_Prompt_Dept->Size = System::Drawing::Size(119, 19);
 			this->lbl_Prompt_Dept->TabIndex = 6;
 			this->lbl_Prompt_Dept->Text = L"Department";
 			// 
 			// lbl_Prompt_Posi
 			// 
+			this->lbl_Prompt_Posi->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_Prompt_Posi->AutoSize = true;
-			this->lbl_Prompt_Posi->Location = System::Drawing::Point(109, 228);
+			this->lbl_Prompt_Posi->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->lbl_Prompt_Posi->Location = System::Drawing::Point(131, 228);
 			this->lbl_Prompt_Posi->Name = L"lbl_Prompt_Posi";
-			this->lbl_Prompt_Posi->Size = System::Drawing::Size(71, 15);
+			this->lbl_Prompt_Posi->Size = System::Drawing::Size(97, 19);
 			this->lbl_Prompt_Posi->TabIndex = 7;
 			this->lbl_Prompt_Posi->Text = L"Position";
 			// 
 			// lbl_Prompt_Auth
 			// 
+			this->lbl_Prompt_Auth->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_Prompt_Auth->AutoSize = true;
+			this->lbl_Prompt_Auth->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
 			this->lbl_Prompt_Auth->Location = System::Drawing::Point(109, 279);
 			this->lbl_Prompt_Auth->Name = L"lbl_Prompt_Auth";
-			this->lbl_Prompt_Auth->Size = System::Drawing::Size(87, 15);
+			this->lbl_Prompt_Auth->Size = System::Drawing::Size(119, 19);
 			this->lbl_Prompt_Auth->TabIndex = 8;
 			this->lbl_Prompt_Auth->Text = L"Auth Level";
 			// 
 			// cmb_Dept
 			// 
+			this->cmb_Dept->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->cmb_Dept->Enabled = false;
 			this->cmb_Dept->FormattingEnabled = true;
 			this->cmb_Dept->Items->AddRange(gcnew cli::array< System::Object^  >(3) {
 				L"General Administration", L"Information Technology Support",
 					L"Career Development Support"
 			});
-			this->cmb_Dept->Location = System::Drawing::Point(206, 171);
+			this->cmb_Dept->Location = System::Drawing::Point(249, 173);
 			this->cmb_Dept->Name = L"cmb_Dept";
 			this->cmb_Dept->Size = System::Drawing::Size(275, 23);
 			this->cmb_Dept->TabIndex = 9;
 			// 
 			// cmb_Posi
 			// 
+			this->cmb_Posi->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->cmb_Posi->Enabled = false;
 			this->cmb_Posi->FormattingEnabled = true;
 			this->cmb_Posi->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Director", L"Manager", L"Staff" });
-			this->cmb_Posi->Location = System::Drawing::Point(206, 225);
+			this->cmb_Posi->Location = System::Drawing::Point(249, 227);
 			this->cmb_Posi->Name = L"cmb_Posi";
 			this->cmb_Posi->Size = System::Drawing::Size(275, 23);
 			this->cmb_Posi->TabIndex = 10;
 			// 
 			// cmb_Auth
 			// 
+			this->cmb_Auth->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->cmb_Auth->Enabled = false;
 			this->cmb_Auth->FormattingEnabled = true;
 			this->cmb_Auth->Items->AddRange(gcnew cli::array< System::Object^  >(5) {
 				L"Level 1", L"Level 2", L"Level 3", L"Level 4",
 					L"Level 5"
 			});
-			this->cmb_Auth->Location = System::Drawing::Point(206, 276);
+			this->cmb_Auth->Location = System::Drawing::Point(249, 278);
 			this->cmb_Auth->Name = L"cmb_Auth";
 			this->cmb_Auth->Size = System::Drawing::Size(275, 23);
 			this->cmb_Auth->TabIndex = 11;
 			// 
 			// btn_Confirm
 			// 
-			this->btn_Confirm->Location = System::Drawing::Point(138, 453);
+			this->btn_Confirm->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->btn_Confirm->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->btn_Confirm->Location = System::Drawing::Point(90, 427);
 			this->btn_Confirm->Name = L"btn_Confirm";
-			this->btn_Confirm->Size = System::Drawing::Size(118, 23);
+			this->btn_Confirm->Size = System::Drawing::Size(223, 64);
 			this->btn_Confirm->TabIndex = 12;
 			this->btn_Confirm->Text = L"Confirm";
 			this->btn_Confirm->UseVisualStyleBackColor = true;
@@ -214,19 +233,26 @@ namespace WeAlumni {
 			// 
 			// btn_Cancel
 			// 
-			this->btn_Cancel->Location = System::Drawing::Point(361, 453);
+			this->btn_Cancel->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->btn_Cancel->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->btn_Cancel->Location = System::Drawing::Point(343, 427);
 			this->btn_Cancel->Name = L"btn_Cancel";
-			this->btn_Cancel->Size = System::Drawing::Size(138, 23);
+			this->btn_Cancel->Size = System::Drawing::Size(223, 64);
 			this->btn_Cancel->TabIndex = 13;
 			this->btn_Cancel->Text = L"Cancel";
 			this->btn_Cancel->UseVisualStyleBackColor = true;
+			this->btn_Cancel->Visible = false;
 			this->btn_Cancel->Click += gcnew System::EventHandler(this, &StfAddPage::Cancel_Click);
 			// 
 			// btn_Verify
 			// 
-			this->btn_Verify->Location = System::Drawing::Point(557, 453);
+			this->btn_Verify->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->btn_Verify->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
+			this->btn_Verify->Location = System::Drawing::Point(591, 427);
 			this->btn_Verify->Name = L"btn_Verify";
-			this->btn_Verify->Size = System::Drawing::Size(192, 23);
+			this->btn_Verify->Size = System::Drawing::Size(223, 64);
 			this->btn_Verify->TabIndex = 14;
 			this->btn_Verify->Text = L"Verify Information";
 			this->btn_Verify->UseVisualStyleBackColor = true;
@@ -234,11 +260,14 @@ namespace WeAlumni {
 			// 
 			// lbl_Error
 			// 
+			this->lbl_Error->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_Error->AutoSize = true;
+			this->lbl_Error->Font = (gcnew System::Drawing::Font(L"SimSun", 13.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(134)));
 			this->lbl_Error->ForeColor = System::Drawing::Color::Red;
-			this->lbl_Error->Location = System::Drawing::Point(414, 353);
+			this->lbl_Error->Location = System::Drawing::Point(422, 352);
 			this->lbl_Error->Name = L"lbl_Error";
-			this->lbl_Error->Size = System::Drawing::Size(47, 15);
+			this->lbl_Error->Size = System::Drawing::Size(75, 24);
 			this->lbl_Error->TabIndex = 15;
 			this->lbl_Error->Text = L"ERROR";
 			this->lbl_Error->Visible = false;
@@ -272,8 +301,9 @@ namespace WeAlumni {
 	private:
 		int _StfId;
 		Database^ _database;
-		
+
 	private:
+		Void Initialize();
 		Void Verify_Click(System::Object^ sender, System::EventArgs^ e);
 		Void InsertStaff();
 		Void Confirm_Click(System::Object^ sender, System::EventArgs^ e);
