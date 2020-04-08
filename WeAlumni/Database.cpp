@@ -196,6 +196,24 @@ System::String^ WeAlumni::Database::GetSystemTime() {
 }
 
 /*
+ * Log
+ * This method will automatically save log info into the Log table
+ * @param int staff id 
+ *        String^ the action the user did
+ * @return None
+ */
+void WeAlumni::Database::Log(int stfId, String^ action) {
+    Database^ db = gcnew Database(DatabaseType::Data);
+    db->InsertData("INSERT INTO Log VALUES (" + 
+                        db->GetNextId(DatabaseTable::Log) + ", '" + 
+                        db->GetSystemTime() + "', " +
+                        stfId + ", '" + 
+                        action + "');"
+                  );
+    db->~Database();
+}
+
+/*
  * ReadData
  * This method will try to read the Database as the command given.
  * @param String^ command that will be executed

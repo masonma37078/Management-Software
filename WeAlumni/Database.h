@@ -85,6 +85,7 @@ namespace WeAlumni {
 
     public:
         void SetDatabaseType(DatabaseType type) { _databaseType = type; };
+        static void Log(int stfId, String^ action);
         bool CreateDatabaseFile();
         bool CheckDatabaseFileExistence();
         int GetNextId(DatabaseTable tableName);
