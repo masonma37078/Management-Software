@@ -90,9 +90,6 @@
     <ClCompile Include="StfInfoPage.cpp">
       <Filter>Source Files\Staff</Filter>
     </ClCompile>
-    <ClCompile Include="StartPage.cpp">
-      <Filter>Source Files\System</Filter>
-    </ClCompile>
     <ClCompile Include="TreAddPage.cpp">
       <Filter>Source Files\Treasury</Filter>
     </ClCompile>
@@ -107,6 +104,15 @@
     </ClCompile>
     <ClCompile Include="DatabaseEncryptionAndDecryption.cpp">
       <Filter>Source Files\Database</Filter>
+    </ClCompile>
+    <ClCompile Include="SysChangeUserInfoPage.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="SysInfoPage.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="StartPage2.cpp">
+      <Filter>Source Files\System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +162,15 @@
       <Filter>Header Files\System</Filter>
     </ClInclude>
     <ClInclude Include="PublicUserInfo.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SysChangeUserInfoPage.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="SysInfoPage.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="StartPage2.h">
       <Filter>Header Files\System</Filter>
     </ClInclude>
   </ItemGroup>

@@ -26,6 +26,9 @@ namespace WeAlumni {
             Level_4,
             Level_5
         };
+        PublicUserInfo() {
+
+        }
 
         PublicUserInfo(int id, String^ name, Auth auth) {
             _id = id;
@@ -45,8 +48,11 @@ namespace WeAlumni {
         Auth _auth;
 
     public:
-        int GetId() { return _id; };
-        String^ GetName() { return _name; };
-        Auth GetAuth() { return _auth; };
+        int GetId() { return _id; }
+        String^ GetName() { return _name; }
+        Auth GetAuth() { return _auth; }
+        void SetId(int id) { _id = id; }
+        void SetName(String^ name) { _name = name; }
+        void SetAuth(Auth auth) { _auth = auth; }
     };
 }

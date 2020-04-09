@@ -37,7 +37,7 @@ void WeAlumni::MainWindow::SetAllPanelInvisible() {
 */
 Void WeAlumni::MainWindow::Initialize() {
     try {
-        database = gcnew Database(Database::DatabaseType::Data);;
+        database = gcnew Database(Database::DatabaseType::Data);
     }
     catch (System::Exception^ exception) {
         mem_lbl_error->Text = exception->Message;
@@ -76,7 +76,7 @@ Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::
     if (major->Length)        vec.push_back(6);
     if (searchAuth->Length)   vec.push_back(7);
     if (vec.size() == 0) {
-        mem_dataGridView1->DataSource = NULL;
+        mem_dataGridView1->DataSource = nullptr;
         mem_lbl_error->Visible = true;
         mem_lbl_error->Text = "CANNOT FIND MEMBER";
         return;
@@ -130,7 +130,7 @@ Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::
 * When click button "Clear", this method clear up every TextBox or ComboBox of the search engine and UpdateDataGridView.
 */
 Void WeAlumni::MainWindow::mem_btn_Clear_Click(System::Object^ sender, System::EventArgs^ e) {
-    mem_dataGridView1->DataSource = NULL;
+    mem_dataGridView1->DataSource = nullptr;
     mem_txt_Id->Text = "";
     mem_txt_Gender->Text = "";
     mem_txt_Major->Text = "";
@@ -139,7 +139,7 @@ Void WeAlumni::MainWindow::mem_btn_Clear_Click(System::Object^ sender, System::E
     mem_cmb_SearchAuth->Text = "";
     mem_cmb_Status->Text = "";
     mem_cmb_Type->Text = "";
-    mem_dataGridView1->DataSource = NULL;
+    mem_dataGridView1->DataSource = nullptr;
 }
 
 /*
@@ -150,7 +150,7 @@ Void WeAlumni::MainWindow::mem_btn_Clear_Click(System::Object^ sender, System::E
 Void WeAlumni::MainWindow::mem_btn_Add_Click(System::Object^ sender, System::EventArgs^ e) {
     MemAddPage^ map = gcnew MemAddPage();
     map->ShowDialog();
-    mem_dataGridView1->DataSource = NULL;
+    mem_dataGridView1->DataSource = nullptr;
 }
 
 /*

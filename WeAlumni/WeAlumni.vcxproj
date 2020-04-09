@@ -137,9 +137,11 @@
     <ClCompile Include="OPTInfoPage.cpp" />
     <ClCompile Include="OrdInfoPage.cpp" />
     <ClCompile Include="RecInfoPage.cpp" />
-    <ClCompile Include="StartPage.cpp" />
+    <ClCompile Include="StartPage2.cpp" />
     <ClCompile Include="StfAddPage.cpp" />
     <ClCompile Include="StfInfoPage.cpp" />
+    <ClCompile Include="SysChangeUserInfoPage.cpp" />
+    <ClCompile Include="SysInfoPage.cpp" />
     <ClCompile Include="TreAddPage.cpp" />
     <ClCompile Include="TreInfoPage.cpp" />
   </ItemGroup>
@@ -172,12 +174,17 @@
     <ClInclude Include="StartPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="StartPage2.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="StfAddPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="StfInfoPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
+    <ClInclude Include="SysChangeUserInfoPage.h" />
+    <ClInclude Include="SysInfoPage.h" />
     <ClInclude Include="TreAddPage.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -197,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StartPage.resx">
       <DependentUpon>StartPage.h</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StartPage2.resx">
+      <DependentUpon>StartPage2.h</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
