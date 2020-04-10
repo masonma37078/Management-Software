@@ -20,16 +20,16 @@ And synchronize data with another project, WeAlumni WeChat Mini Program, to main
 
 ## Development Team
 
-|                                                           |                            |
-|-----------------------------------------------------------|----------------------------|
-| ***IT Manager<br/>Project Manager<br/>Tech Lead/Support***| Hang Yuan (hyuan3@ucsc.edu)|
-| ***Developer***                                           | Xiangdong Che              |
-|                                                           | Jiaying Hou                |
-|                                                           | Rui Jia                    |
-|                                                           | Haoran Li                  |
-|                                                           | Sen Ma                     |
-|                                                           | Yiyun Zheng                |
-| ***UI Designer***                                         | Xuqing Yan                 |
+|                            |                            |
+|----------------------------|----------------------------|
+| ***IT Manager/PM<br/>***   | Hang Yuan (hyuan3@ucsc.edu)|
+| ***Developer***            | Xiangdong Che              |
+|                            | Jiaying Hou                |
+|                            | Rui Jia                    |
+|                            | Haoran Li                  |
+|                            | Sen Ma                     |
+|                            | Yiyun Zheng                |
+| ***UI Designer***          | Xuqing Yan                 |
 
 &nbsp;&nbsp;&nbsp;&nbsp;\*Names are ordered by last name alphabetically
 
