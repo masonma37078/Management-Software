@@ -2,7 +2,8 @@ CREATE TABLE IF NOT EXISTS Admin (
   Username TEXT NOT NULL UNIQUE ,
   Password TEXT,
   StfId INT,
-  Auth INT NOT NULL
+  Auth INT NOT NULL，
+  IsDefault INT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS Member (

@@ -42,3 +42,15 @@
                          + Forgot password
   Yiyun            | Tre - DB Check
                          + System - DB
+
+4/8 - S5
+----Main Window----
+  Rui                | Staff
+----MemInfoPage----
+  Jiaying          | Add Auth Feather
+----OrdInfoPage----
+  Haoran         | Add Auth Feather
+----CONTINUE----
+  Sen
+  Xiangdong
+  Yiyun
