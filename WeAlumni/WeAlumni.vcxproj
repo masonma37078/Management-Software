@@ -127,8 +127,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DatabasePrecheckPrompt.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseEncryptionAndDecryption.cpp" />
+    <ClCompile Include="DatabasePrecheck.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="MemAddPage.cpp" />
@@ -149,6 +151,10 @@
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseEncryptionAndDecryption.h" />
     <ClInclude Include="DatabaseParam.h" />
+    <ClInclude Include="DatabasePrecheck.h" />
+    <ClInclude Include="DatabasePrecheckPrompt.h">
+      <FileType>CppForm</FileType>
+    </ClInclude>
     <ClInclude Include="MainWindow.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -184,6 +190,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="SysChangeUserInfoPage.h" />
+    <ClInclude Include="SysForgotPassword.h" />
     <ClInclude Include="SysInfoPage.h" />
     <ClInclude Include="TreAddPage.h">
       <FileType>CppForm</FileType>
@@ -193,6 +200,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DatabasePrecheckPrompt.resx">
+      <DependentUpon>DatabasePrecheckPrompt.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MemInfoPage.resx">
       <DependentUpon>MemInfoPage.h</DependentUpon>
     </EmbeddedResource>
