@@ -19,7 +19,7 @@ using namespace System;
   * @return None
   */
 Void WeAlumni::LoginPage::Initialize() {
-    //DatabasePrecheck::StartPrecheck();
+    DatabasePrecheck::StartPrecheck();
     try {
         _database = gcnew Database(Database::DatabaseType::Admin);
         ShowDefault();
@@ -27,7 +27,6 @@ Void WeAlumni::LoginPage::Initialize() {
     catch (System::Exception^ exception) {
         lbl_DBError->Text = exception->Message;
         lbl_DBError->Visible = true;
-        return;
     }
 }
 
@@ -51,6 +50,7 @@ Void WeAlumni::LoginPage::Login_Click(System::Object^ sender, System::EventArgs^
     if (status == -1) {
         lbl_DBError->Visible = true;
         lbl_DBError->Text = "Error -1 ";
+        return;
     }
     else if (status == 0) {
         lbl_DBError->Visible = true;
@@ -136,7 +136,7 @@ Void WeAlumni::LoginPage::ShowDefault() {
   * @return None
   */
 Void WeAlumni::LoginPage::JumpToMain() {
-    MainWindow^ mw = gcnew MainWindow();
+    MainWindow^ mw = gcnew MainWindow(_publicUserInfo);
     mw->Show();
 }
 
