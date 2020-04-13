@@ -60,7 +60,7 @@ void WeAlumni::DatabasePrecheck::StartPrecheck() {
     DatabasePrecheckPrompt^ data_page = gcnew DatabasePrecheckPrompt(DatabasePrecheckPrompt::DatabaseType::data);
     
     bool status = false;
-    while (status == false) {
+    while (CheckAdmin() == false) {
         if (admin_page->exitStatus == false) {
             admin_page->ShowDialog();
         }

@@ -123,6 +123,9 @@
     <ClCompile Include="LoginPage.cpp">
       <Filter>Source Files\System</Filter>
     </ClCompile>
+    <ClCompile Include="DBImportExport.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Database.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="LoginPage.h">
       <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DBImportExport.h">
+      <Filter>Header Files\Database</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
