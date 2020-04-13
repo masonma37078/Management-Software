@@ -6,8 +6,9 @@
  *
  * This file provide two button for DB Precheck
  *
- * @author: Xiangdong Che
+ * @author: Xiangdong Che, Yiyun Zheng
  * Revised: 04/09/20
+ *          04/11/20 Add check treasury database
  *
  */
 
@@ -30,6 +31,7 @@ namespace WeAlumni {
 		{
 			admin,
 			data,
+			treasury,
 		};
 
 		DatabasePrecheckPrompt(DatabaseType type)

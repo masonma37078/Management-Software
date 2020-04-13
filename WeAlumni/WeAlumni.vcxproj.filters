@@ -120,6 +120,12 @@
     <ClCompile Include="DatabasePrecheckPrompt.cpp">
       <Filter>Source Files\Database</Filter>
     </ClCompile>
+    <ClCompile Include="LoginPage.cpp">
+      <Filter>Source Files\System</Filter>
+    </ClCompile>
+    <ClCompile Include="DBImportExport.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Database.h">
@@ -186,6 +192,12 @@
       <Filter>Header Files\Database</Filter>
     </ClInclude>
     <ClInclude Include="DatabasePrecheckPrompt.h">
+      <Filter>Header Files\Database</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginPage.h">
+      <Filter>Header Files\System</Filter>
+    </ClInclude>
+    <ClInclude Include="DBImportExport.h">
       <Filter>Header Files\Database</Filter>
     </ClInclude>
   </ItemGroup>
