@@ -5,8 +5,9 @@
  *
  * This file provide two button for DB Precheck
  *
- * @author: Xiangdong Che
+ * @author: Xiangdong Che, Yiyun Zheng
  * Revised: 04/09/20
+ *          04/11/20 add check treasury database.
  *
  */
 
@@ -22,6 +23,9 @@ Void WeAlumni::DatabasePrecheckPrompt::Initialize() {
 	exitStatus == false;
 	if (_databaseType == DatabaseType::admin) {
 		lbl_Prompt->Text = "Import Or Create An admin.db";
+	}
+	else if (_databaseType == DatabaseType::treasury) {
+		lbl_Prompt->Text = "Import Or Create An treasury.db";
 	}
 	else {
 		lbl_Prompt->Text = "Import Or Create An data.db";
@@ -43,6 +47,15 @@ Void WeAlumni::DatabasePrecheckPrompt::btn_Import_Click(System::Object^ sender, 
 			IO::File::Copy(FileDialog->FileName, dest);
 		}
 	}
+	else if (_databaseType == DatabaseType::treasury) {
+		FileDialog->InitialDirectory = Environment::GetFolderPath(Environment::SpecialFolder::Desktop);
+		FileDialog->Filter = "treasury.db|*.DB";
+		if (FileDialog->ShowDialog() == Windows::Forms::DialogResult::OK) {
+			String^ dest = IO::Path::Combine(Environment::CurrentDirectory, IO::Path::GetFileName(FileDialog->FileName));
+			IO::File::Copy(FileDialog->FileName, dest);
+		}
+	}
+
 	else {
 		FileDialog->InitialDirectory = Environment::GetFolderPath(Environment::SpecialFolder::Desktop);
 		FileDialog->Filter = "data.db|data.db";
@@ -64,6 +77,10 @@ Void WeAlumni::DatabasePrecheckPrompt::btn_New_Click(System::Object^ sender, Sys
 	Database^ _database = gcnew Database();
 	if (_databaseType == DatabaseType::admin) {
 		_database->SetDatabaseType(Database::DatabaseType::Admin);
+		_database->CreateDatabaseFile();
+	}
+	else if (_databaseType == DatabaseType::treasury) {
+		_database->SetDatabaseType(Database::DatabaseType::Treasury);
 		_database->CreateDatabaseFile();
 	}
 	else {
