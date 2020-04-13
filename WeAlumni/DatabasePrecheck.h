@@ -160,10 +160,9 @@ namespace WeAlumni {
 
 	public:
 		bool exitStatus;
-
+		bool checkFile();
 	private:
 		Void Initialize();
-		bool checkFile();
 		Void btn_Import_Click(System::Object^ sender, System::EventArgs^ e);
 		Void btn_New_Click(System::Object^ sender, System::EventArgs^ e);
 		Void btn_Exit_Click(System::Object^ sender, System::EventArgs^ e);

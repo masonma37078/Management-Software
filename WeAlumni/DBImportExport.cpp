@@ -1,4 +1,5 @@
 #include "DBImportExport.h"
+
 /*
  * DBImportExport.cpp
  *
@@ -32,15 +33,19 @@ void WeAlumni::DBImportExport::UnZipDB(String^ Source) {
  */
 void WeAlumni::DBImportExport::ZipDB(String^ dst) {
 	try {
+		DatabasePrecheck^ file = gcnew DatabasePrecheck();
 		ZipFile^ zip = ZipFile::Create(dst);
 		zip->BeginUpdate();
-		if (DatabasePrecheck::CheckAdmin()) {
+		file->setDatabaseType(DatabasePrecheck::DatabaseType::admin);
+		if (file->checkFile()) {
 			zip->Add("admin.db");
 		}
-		if (DatabasePrecheck::CheckData()) {
+		file->setDatabaseType(DatabasePrecheck::DatabaseType::data);
+		if (file->checkFile()) {
 			zip->Add("data.db");
 		}
-		if (DatabasePrecheck::CheckTre()) {
+		file->setDatabaseType(DatabasePrecheck::DatabaseType::admin);
+		if (file->checkFile()) {
 			zip->Add("treasury.db");
 		}
 		zip->CommitUpdate();
