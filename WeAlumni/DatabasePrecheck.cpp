@@ -1,110 +1,190 @@
 #include "DatabasePrecheck.h"
 
 /*
- * DatabasePrecheck.h
+ * DatabasePrecheck.cpp
  *
- * This file provide method to do DB precheck
+ * This file provide two button for DB Precheck
  *
- * @author: Xiangdong Che, Yiyun ZHeng
+ * @author: Xiangdong Che, Yiyun Zheng
  * Revised: 04/09/20
-  *         04/11/20 Add check treasury database
- *
+ *          04/11/20 add check treasury database.
+ *	    04/12/20 Combine this file with Prompt file 
  */
 
- /*
-  * CheckAdmin
-  * This method check existence of admin.db
-  * @param None
-  * @return true if exsit
-  *		    false if not exist
-  */
-bool WeAlumni::DatabasePrecheck::CheckAdmin() {
-    String^ fileName = "admin.db";
-    return System::IO::File::Exists(fileName);
-}
+using namespace System;
 
 /*
- * CheckData
- * This method check existence of data.db
+ * Initialize
+ * This method initialize the prompt with correct text
  * @param None
- * @return true if exsit
- *		   false if not exist
+ * @return None
  */
-bool WeAlumni::DatabasePrecheck::CheckData() {
-    String^ fileName = "data.db";
-    return System::IO::File::Exists(fileName);
+Void WeAlumni::DatabasePrecheck::Initialize() {
+	exitStatus = false;
+	if (_databaseType == DatabaseType::admin) {
+		lbl_Prompt->Text = "Import Or Create An admin.db";
+	}
+	else if (_databaseType == DatabaseType::treasury) {
+		lbl_Prompt->Text = "Import Or Create An treasury.db";
+	}
+	else {
+		lbl_Prompt->Text = "Import Or Create An data.db";
+	}
 }
 
+/*
+ * setDatabaseType
+ * This method initialize the prompt with correct text
+ * @param DatabaseType
+ * @return None
+ */
+Void WeAlumni::DatabasePrecheck::setDatabaseType(DatabaseType type) {
+	_databaseType = type;
+	Initialize();
+}
 
 /*
- * CheckTre
- * This method check existence of treasury.db
+ * checkFile
+ * This method check existence of corresponding file
  * @param None
- * @return true if exsit
- *		   false if not exist
+ * @return None
  */
-bool WeAlumni::DatabasePrecheck::CheckTre() {
-    String^ fileName = "treasury.db";
-    return System::IO::File::Exists(fileName);
+bool WeAlumni::DatabasePrecheck::checkFile() {
+	String^ fileName;
+	if (_databaseType == DatabaseType::admin) {
+		fileName = "admin.db";
+	}
+	else if (_databaseType == DatabaseType::data) {
+		fileName = "data.db";
+	}
+	else {
+		fileName = "treasury.db";
+	}
+
+	return System::IO::File::Exists(fileName);
 }
 
 /*
- * Startcheck
- * This method start check process
+ * loginPrecheck
+ * This method start login precheck process
  * @param None
  * @return None
  *
  */
-void WeAlumni::DatabasePrecheck::StartPrecheck() {
-    DatabasePrecheckPrompt^ admin_page = gcnew DatabasePrecheckPrompt(DatabasePrecheckPrompt::DatabaseType::admin);
-    DatabasePrecheckPrompt^ data_page = gcnew DatabasePrecheckPrompt(DatabasePrecheckPrompt::DatabaseType::data);
-    
-    bool status = false;
-    while (CheckAdmin() == false) {
-        if (admin_page->exitStatus == false) {
-            admin_page->ShowDialog();
-        }
-        else {
-            return;
-        }
-        status = admin_page->exitStatus;
-    }
-    admin_page->~DatabasePrecheckPrompt();
-    
-    while (CheckData() == false) {
-        if (data_page->exitStatus == false) {
-            data_page->ShowDialog();
-        }
-        else {
-            return;
-        }
-        status = admin_page->exitStatus;
-    }
-    data_page->~DatabasePrecheckPrompt();
+void WeAlumni::DatabasePrecheck::loginPrecheck() {
+	DatabasePrecheck^ page = gcnew DatabasePrecheck()
+	bool status = false;
+	page->setDatabaseType(DatabaseType::admin);
 
-   
+	while (page->checkFile() == false) {
+		if (page->exitStatus == false) {
+			page->ShowDialog();
+		}
+		else {
+			return;
+		}
+		status = page->exitStatus;
+	}
+	page->setDatabaseType(DatabaseType::data);
+	while (page->checkFile() == false) {
+		if (page->exitStatus == false) {
+			page->ShowDialog();
+		}
+		else {
+			return;
+		}
+		status = page->exitStatus;
+	}
+	page->~DatabasePrecheck();
 }
 
 /*
- * TrePreCheck
- * This method treasury precheck process
+ * TrePrecheck
+ * This method start TrePrecheck
  * @param None
  * @return None
- *
  */
 bool WeAlumni::DatabasePrecheck::TrePrecheck() {
-    DatabasePrecheckPrompt^ tre_page = gcnew DatabasePrecheckPrompt(DatabasePrecheckPrompt::DatabaseType::treasury);
-    bool status = false;
-    while (CheckTre() == false) {
-        if (tre_page->exitStatus == false) {
-            tre_page->ShowDialog();
-        }
-        else {
-            return false;
-        }
-        status = tre_page->exitStatus;
-    }
-    return true;
-    tre_page->~DatabasePrecheckPrompt();
+	DatabasePrecheck^ page = gcnew DatabasePrecheck(DatabaseType::treasury);
+	bool status = false;
+	while (page->checkFile() == false) {
+		if (page->exitStatus == false) {
+			page->ShowDialog();
+		}
+		else {
+			return false;
+		}
+		status = page->exitStatus;
+	}
+	return true;
+	page->~DatabasePrecheck();
 }
 
+/*
+ * btn_Import_Click
+ * This method provide dialog for import
+ * @param None
+ * @return None
+ */
+Void WeAlumni::DatabasePrecheck::btn_Import_Click(System::Object^ sender, System::EventArgs^ e) {
+	if (_databaseType == DatabaseType::admin) {
+		FileDialog->InitialDirectory = Environment::GetFolderPath(Environment::SpecialFolder::Desktop);
+		FileDialog->Filter = "admin.db|admin.db";
+		if (FileDialog->ShowDialog() == Windows::Forms::DialogResult::OK) {
+			String^ dest = IO::Path::Combine(Environment::CurrentDirectory, IO::Path::GetFileName(FileDialog->FileName));
+			IO::File::Copy(FileDialog->FileName, dest);
+		}
+	}
+	else if (_databaseType == DatabaseType::treasury) {
+		FileDialog->InitialDirectory = Environment::GetFolderPath(Environment::SpecialFolder::Desktop);
+		FileDialog->Filter = "treasury.db|*.DB";
+		if (FileDialog->ShowDialog() == Windows::Forms::DialogResult::OK) {
+			String^ dest = IO::Path::Combine(Environment::CurrentDirectory, IO::Path::GetFileName(FileDialog->FileName));
+			IO::File::Copy(FileDialog->FileName, dest);
+		}
+	}
+
+	else {
+		FileDialog->InitialDirectory = Environment::GetFolderPath(Environment::SpecialFolder::Desktop);
+		FileDialog->Filter = "data.db|data.db";
+		if (FileDialog->ShowDialog() == Windows::Forms::DialogResult::OK) {
+			String^ dest = IO::Path::Combine(Environment::CurrentDirectory, IO::Path::GetFileName(FileDialog->FileName));
+			IO::File::Copy(FileDialog->FileName, dest);
+		}
+	}
+	this->Close();
+}
+
+/*
+ * btn_New_Click
+ * This method provide dialog for creating new db file
+ * @param None
+ * @return None
+ */
+Void WeAlumni::DatabasePrecheck::btn_New_Click(System::Object^ sender, System::EventArgs^ e) {
+	Database^ _database = gcnew Database();
+	if (_databaseType == DatabaseType::admin) {
+		_database->SetDatabaseType(Database::DatabaseType::Admin);
+		_database->CreateDatabaseFile();
+	}
+	else if (_databaseType == DatabaseType::treasury) {
+		_database->SetDatabaseType(Database::DatabaseType::Treasury);
+		_database->CreateDatabaseFile();
+	}
+	else {
+		_database->SetDatabaseType(Database::DatabaseType::Data);
+		_database->CreateDatabaseFile();
+	}
+	this->Close();
+}
+
+/*
+ * btn_Exit_Click
+ * This method set exitStatus to true 
+ * @param None
+ * @return None
+ */
+Void WeAlumni::DatabasePrecheck::btn_Exit_Click(System::Object^ sender, System::EventArgs^ e) {
+	exitStatus = true;
+	this->Close();
+}

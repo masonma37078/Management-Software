@@ -130,10 +130,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DatabasePrecheckPrompt.cpp" />
+    <ClCompile Include="DatabasePrecheck.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="DatabaseEncryptionAndDecryption.cpp" />
-    <ClCompile Include="DatabasePrecheck.cpp" />
     <ClCompile Include="DBImportExport.cpp" />
     <ClCompile Include="LoginPage.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -156,8 +155,7 @@
     <ClInclude Include="Database.h" />
     <ClInclude Include="DatabaseEncryptionAndDecryption.h" />
     <ClInclude Include="DatabaseParam.h" />
-    <ClInclude Include="DatabasePrecheck.h" />
-    <ClInclude Include="DatabasePrecheckPrompt.h">
+    <ClInclude Include="DatabasePrecheck.h">
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="DBImportExport.h" />
@@ -207,8 +205,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="DatabasePrecheckPrompt.resx">
-      <DependentUpon>DatabasePrecheckPrompt.h</DependentUpon>
+    <EmbeddedResource Include="DatabasePrecheck.resx">
+      <DependentUpon>DatabasePrecheck.h</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MemInfoPage.resx">
       <DependentUpon>MemInfoPage.h</DependentUpon>
