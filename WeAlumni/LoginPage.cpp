@@ -73,10 +73,12 @@ Void WeAlumni::LoginPage::Login_Click(System::Object^ sender, System::EventArgs^
   * this method remembers username and password
   */
 Void WeAlumni::LoginPage::Check_Remember() {
+    String^ command = "Update Admin SET IsDefault = 0 Where IsDefault = 1;"
     String^ command1 = "Update Admin SET IsDefault = 1 Where Username  = '" + txt_Username->Text + "';";
     int status1 = -1;
 
     try {
+        _database->UpdateData(command);
         status1 = _database->UpdateData(command1);
     }
     catch (Exception^ exception) {
@@ -112,7 +114,7 @@ Void WeAlumni::LoginPage::ShowDefault() {
     
     if (status == -1) {
         lbl_DBError->Visible = true;
-        lbl_DBError->Text = "defaut fail Error -1 ";
+        lbl_DBError->Text = "found no defaut";
         return;
     }
     else if (status == 0) {
