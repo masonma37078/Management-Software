@@ -118,6 +118,8 @@
       <Filter>Source Files\System</Filter>
     </ClCompile>
     <ClCompile Include="DatabasePrecheck.cpp">
+      <Filter>Source Files\Database</Filter>
+    </ClCompile>
     <ClCompile Include="DBImportExport.cpp">
       <Filter>Source Files\Database</Filter>
     </ClCompile>
@@ -187,6 +189,8 @@
       <Filter>Header Files\System</Filter>
     </ClInclude>
     <ClInclude Include="DatabasePrecheck.h">
+      <Filter>Header Files\Database</Filter>
+    </ClInclude>
     <ClInclude Include="DBImportExport.h">
       <Filter>Header Files\Database</Filter>
     </ClInclude>
