@@ -72,7 +72,7 @@ bool WeAlumni::DatabasePrecheck::checkFile() {
  *
  */
 void WeAlumni::DatabasePrecheck::loginPrecheck() {
-	DatabasePrecheck^ page = gcnew DatabasePrecheck()
+	DatabasePrecheck^ page = gcnew DatabasePrecheck();
 	bool status = false;
 	page->setDatabaseType(DatabaseType::admin);
 
