@@ -4,6 +4,7 @@
 #include "MemAddPage.h"
 #include "StfInfoPage.h"
 #include "StfAddPage.h"
+#define MEM_SELECT_ALL "SELECT Member.Id AS 'MemberId', Member.Status AS 'MemberStatus', Member.Type AS 'MemberType', Member.Name AS 'MemberName', Member.Gender AS 'MemberGender', Member.Email AS 'MemberEmail' FROM Member ORDER BY Id ASC"
 
 /*
  * MainWindow.h
@@ -14,6 +15,7 @@
  * Revised: 3/27/20
  *          4/8/20 add member MainWindow
  *          4/12/20 add staff MainWindow and auth control for staff and member
+ *          4/14/20 bug fix
  *
  */
 
@@ -119,6 +121,10 @@
 	private: System::Windows::Forms::ComboBox^ stf_cmb_Auth;
 	private: System::Windows::Forms::ComboBox^ stf_cmb_Dept;
 	private: System::Windows::Forms::Label^ stf_lbl_Error;
+	private: System::Windows::Forms::Label^ mem_Prompt_Result;
+	private: System::Windows::Forms::Label^ mem_Prompt_ViewInfo;
+	private: System::Windows::Forms::Label^ mem_Prompt_PgInfo;
+	private: System::Windows::Forms::Splitter^ mem_splitter2;
 	private: System::Windows::Forms::Panel^ pan_myInfo;
 
 #pragma region Windows Form Designer generated code
@@ -129,22 +135,10 @@
 		   void InitializeComponent(void)
 		   {
 			   this->toolStripContainer1 = (gcnew System::Windows::Forms::ToolStripContainer());
-			   this->pan_staff = (gcnew System::Windows::Forms::Panel());
-			   this->stf_lbl_Error = (gcnew System::Windows::Forms::Label());
-			   this->stf_cmb_Auth = (gcnew System::Windows::Forms::ComboBox());
-			   this->stf_cmb_Dept = (gcnew System::Windows::Forms::ComboBox());
-			   this->stf_dataGridView = (gcnew System::Windows::Forms::DataGridView());
-			   this->stf_btn_Import = (gcnew System::Windows::Forms::Button());
-			   this->stf_btn_Clear = (gcnew System::Windows::Forms::Button());
-			   this->stf_btn_Search = (gcnew System::Windows::Forms::Button());
-			   this->stf_txt_Name = (gcnew System::Windows::Forms::TextBox());
-			   this->stf_txt_Id = (gcnew System::Windows::Forms::TextBox());
-			   this->stf_lbl_Prompt_Auth = (gcnew System::Windows::Forms::Label());
-			   this->stf_lbl_Prompt_Dept = (gcnew System::Windows::Forms::Label());
-			   this->stf_lbl_Prompt_Name = (gcnew System::Windows::Forms::Label());
-			   this->stf_lbl_Prompt_Id = (gcnew System::Windows::Forms::Label());
-			   this->stf_btn_Add = (gcnew System::Windows::Forms::Button());
 			   this->pan_member = (gcnew System::Windows::Forms::Panel());
+			   this->mem_Prompt_PgInfo = (gcnew System::Windows::Forms::Label());
+			   this->mem_Prompt_ViewInfo = (gcnew System::Windows::Forms::Label());
+			   this->mem_Prompt_Result = (gcnew System::Windows::Forms::Label());
 			   this->mem_lbl_error = (gcnew System::Windows::Forms::Label());
 			   this->mem_btn_Import = (gcnew System::Windows::Forms::Button());
 			   this->mem_btn_Add = (gcnew System::Windows::Forms::Button());
@@ -167,11 +161,27 @@
 			   this->mem_lbl_Prompt_Type = (gcnew System::Windows::Forms::Label());
 			   this->mem_lbl_Prompt_Status = (gcnew System::Windows::Forms::Label());
 			   this->mem_lbl_Prompt_Id = (gcnew System::Windows::Forms::Label());
+			   this->mem_splitter2 = (gcnew System::Windows::Forms::Splitter());
 			   this->pan_record = (gcnew System::Windows::Forms::Panel());
 			   this->pan_OPT = (gcnew System::Windows::Forms::Panel());
 			   this->pan_order = (gcnew System::Windows::Forms::Panel());
 			   this->pan_treasury = (gcnew System::Windows::Forms::Panel());
 			   this->pan_myInfo = (gcnew System::Windows::Forms::Panel());
+			   this->pan_staff = (gcnew System::Windows::Forms::Panel());
+			   this->stf_lbl_Error = (gcnew System::Windows::Forms::Label());
+			   this->stf_cmb_Auth = (gcnew System::Windows::Forms::ComboBox());
+			   this->stf_cmb_Dept = (gcnew System::Windows::Forms::ComboBox());
+			   this->stf_dataGridView = (gcnew System::Windows::Forms::DataGridView());
+			   this->stf_btn_Import = (gcnew System::Windows::Forms::Button());
+			   this->stf_btn_Clear = (gcnew System::Windows::Forms::Button());
+			   this->stf_btn_Search = (gcnew System::Windows::Forms::Button());
+			   this->stf_txt_Name = (gcnew System::Windows::Forms::TextBox());
+			   this->stf_txt_Id = (gcnew System::Windows::Forms::TextBox());
+			   this->stf_lbl_Prompt_Auth = (gcnew System::Windows::Forms::Label());
+			   this->stf_lbl_Prompt_Dept = (gcnew System::Windows::Forms::Label());
+			   this->stf_lbl_Prompt_Name = (gcnew System::Windows::Forms::Label());
+			   this->stf_lbl_Prompt_Id = (gcnew System::Windows::Forms::Label());
+			   this->stf_btn_Add = (gcnew System::Windows::Forms::Button());
 			   this->ms_panelOptions = (gcnew System::Windows::Forms::MenuStrip());
 			   this->tsm_member = (gcnew System::Windows::Forms::ToolStripMenuItem());
 			   this->tsm_staff = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -188,10 +198,10 @@
 			   this->toolStripContainer1->LeftToolStripPanel->SuspendLayout();
 			   this->toolStripContainer1->TopToolStripPanel->SuspendLayout();
 			   this->toolStripContainer1->SuspendLayout();
-			   this->pan_staff->SuspendLayout();
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->stf_dataGridView))->BeginInit();
 			   this->pan_member->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->mem_dataGridView1))->BeginInit();
+			   this->pan_staff->SuspendLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->stf_dataGridView))->BeginInit();
 			   this->ms_panelOptions->SuspendLayout();
 			   this->ms_systemOptions->SuspendLayout();
 			   this->SuspendLayout();
@@ -225,6 +235,332 @@
 			   // toolStripContainer1.TopToolStripPanel
 			   // 
 			   this->toolStripContainer1->TopToolStripPanel->Controls->Add(this->ms_systemOptions);
+			   // 
+			   // pan_member
+			   // 
+			   this->pan_member->Controls->Add(this->mem_Prompt_PgInfo);
+			   this->pan_member->Controls->Add(this->mem_Prompt_ViewInfo);
+			   this->pan_member->Controls->Add(this->mem_Prompt_Result);
+			   this->pan_member->Controls->Add(this->mem_lbl_error);
+			   this->pan_member->Controls->Add(this->mem_btn_Import);
+			   this->pan_member->Controls->Add(this->mem_btn_Add);
+			   this->pan_member->Controls->Add(this->mem_btn_Clear);
+			   this->pan_member->Controls->Add(this->mem_btn_Search);
+			   this->pan_member->Controls->Add(this->mem_cmb_CareerStatus);
+			   this->pan_member->Controls->Add(this->mem_dataGridView1);
+			   this->pan_member->Controls->Add(this->mem_cmb_SearchAuth);
+			   this->pan_member->Controls->Add(this->mem_cmb_Type);
+			   this->pan_member->Controls->Add(this->mem_cmb_Status);
+			   this->pan_member->Controls->Add(this->mem_txt_Gender);
+			   this->pan_member->Controls->Add(this->mem_txt_Name);
+			   this->pan_member->Controls->Add(this->mem_txt_Major);
+			   this->pan_member->Controls->Add(this->mem_txt_Id);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_SearchAuth);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Major);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_CareerStatus);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Gender);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Name);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Type);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Status);
+			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Id);
+			   this->pan_member->Controls->Add(this->mem_splitter2);
+			   this->pan_member->Dock = System::Windows::Forms::DockStyle::Fill;
+			   this->pan_member->Location = System::Drawing::Point(0, 0);
+			   this->pan_member->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			   this->pan_member->Name = L"pan_member";
+			   this->pan_member->Size = System::Drawing::Size(982, 636);
+			   this->pan_member->TabIndex = 6;
+			   // 
+			   // mem_Prompt_PgInfo
+			   // 
+			   this->mem_Prompt_PgInfo->AccessibleDescription = L"";
+			   this->mem_Prompt_PgInfo->AutoSize = true;
+			   this->mem_Prompt_PgInfo->Location = System::Drawing::Point(30, 201);
+			   this->mem_Prompt_PgInfo->Name = L"mem_Prompt_PgInfo";
+			   this->mem_Prompt_PgInfo->Size = System::Drawing::Size(540, 13);
+			   this->mem_Prompt_PgInfo->TabIndex = 67;
+			   this->mem_Prompt_PgInfo->Text = L"The data is accurately queried and there are no necessary items. Please provide a"
+				   L"s much information as possible.";
+			   // 
+			   // mem_Prompt_ViewInfo
+			   // 
+			   this->mem_Prompt_ViewInfo->AutoSize = true;
+			   this->mem_Prompt_ViewInfo->Location = System::Drawing::Point(652, 289);
+			   this->mem_Prompt_ViewInfo->Name = L"mem_Prompt_ViewInfo";
+			   this->mem_Prompt_ViewInfo->Size = System::Drawing::Size(193, 13);
+			   this->mem_Prompt_ViewInfo->TabIndex = 24;
+			   this->mem_Prompt_ViewInfo->Text = L"All member info will be shown by default";
+			   // 
+			   // mem_Prompt_Result
+			   // 
+			   this->mem_Prompt_Result->AutoSize = true;
+			   this->mem_Prompt_Result->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->mem_Prompt_Result->Location = System::Drawing::Point(445, 282);
+			   this->mem_Prompt_Result->Name = L"mem_Prompt_Result";
+			   this->mem_Prompt_Result->Size = System::Drawing::Size(123, 20);
+			   this->mem_Prompt_Result->TabIndex = 23;
+			   this->mem_Prompt_Result->Text = L"Search Result";
+			   // 
+			   // mem_lbl_error
+			   // 
+			   this->mem_lbl_error->AutoSize = true;
+			   this->mem_lbl_error->ForeColor = System::Drawing::Color::Red;
+			   this->mem_lbl_error->Location = System::Drawing::Point(480, 465);
+			   this->mem_lbl_error->Name = L"mem_lbl_error";
+			   this->mem_lbl_error->Size = System::Drawing::Size(29, 13);
+			   this->mem_lbl_error->TabIndex = 22;
+			   this->mem_lbl_error->Text = L"Error";
+			   this->mem_lbl_error->Visible = false;
+			   // 
+			   // mem_btn_Import
+			   // 
+			   this->mem_btn_Import->Location = System::Drawing::Point(793, 220);
+			   this->mem_btn_Import->Name = L"mem_btn_Import";
+			   this->mem_btn_Import->Size = System::Drawing::Size(70, 28);
+			   this->mem_btn_Import->TabIndex = 21;
+			   this->mem_btn_Import->Text = L"Import";
+			   this->mem_btn_Import->UseVisualStyleBackColor = true;
+			   this->mem_btn_Import->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Import_Click);
+			   // 
+			   // mem_btn_Add
+			   // 
+			   this->mem_btn_Add->Location = System::Drawing::Point(793, 162);
+			   this->mem_btn_Add->Name = L"mem_btn_Add";
+			   this->mem_btn_Add->Size = System::Drawing::Size(70, 28);
+			   this->mem_btn_Add->TabIndex = 20;
+			   this->mem_btn_Add->Text = L"Add";
+			   this->mem_btn_Add->UseVisualStyleBackColor = true;
+			   this->mem_btn_Add->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Add_Click);
+			   // 
+			   // mem_btn_Clear
+			   // 
+			   this->mem_btn_Clear->Location = System::Drawing::Point(793, 101);
+			   this->mem_btn_Clear->Name = L"mem_btn_Clear";
+			   this->mem_btn_Clear->Size = System::Drawing::Size(70, 28);
+			   this->mem_btn_Clear->TabIndex = 19;
+			   this->mem_btn_Clear->Text = L"Clear";
+			   this->mem_btn_Clear->UseVisualStyleBackColor = true;
+			   this->mem_btn_Clear->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Clear_Click);
+			   // 
+			   // mem_btn_Search
+			   // 
+			   this->mem_btn_Search->Location = System::Drawing::Point(793, 42);
+			   this->mem_btn_Search->Name = L"mem_btn_Search";
+			   this->mem_btn_Search->Size = System::Drawing::Size(70, 28);
+			   this->mem_btn_Search->TabIndex = 18;
+			   this->mem_btn_Search->Text = L"Search";
+			   this->mem_btn_Search->UseVisualStyleBackColor = true;
+			   this->mem_btn_Search->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Search_Click);
+			   // 
+			   // mem_cmb_CareerStatus
+			   // 
+			   this->mem_cmb_CareerStatus->FormattingEnabled = true;
+			   this->mem_cmb_CareerStatus->Items->AddRange(gcnew cli::array< System::Object^  >(4) {
+				   L"GradProgram", L"Unemployed", L"Employed",
+					   L"StartBusiness"
+			   });
+			   this->mem_cmb_CareerStatus->Location = System::Drawing::Point(120, 113);
+			   this->mem_cmb_CareerStatus->Name = L"mem_cmb_CareerStatus";
+			   this->mem_cmb_CareerStatus->Size = System::Drawing::Size(104, 21);
+			   this->mem_cmb_CareerStatus->TabIndex = 17;
+			   // 
+			   // mem_dataGridView1
+			   // 
+			   this->mem_dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			   this->mem_dataGridView1->Location = System::Drawing::Point(0, 305);
+			   this->mem_dataGridView1->Name = L"mem_dataGridView1";
+			   this->mem_dataGridView1->RowHeadersWidth = 51;
+			   this->mem_dataGridView1->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
+			   this->mem_dataGridView1->Size = System::Drawing::Size(982, 331);
+			   this->mem_dataGridView1->TabIndex = 16;
+			   this->mem_dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MainWindow::mem_dataGridView1_CellContentClick);
+			   // 
+			   // mem_cmb_SearchAuth
+			   // 
+			   this->mem_cmb_SearchAuth->FormattingEnabled = true;
+			   this->mem_cmb_SearchAuth->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Yes", L"No" });
+			   this->mem_cmb_SearchAuth->Location = System::Drawing::Point(532, 112);
+			   this->mem_cmb_SearchAuth->Name = L"mem_cmb_SearchAuth";
+			   this->mem_cmb_SearchAuth->Size = System::Drawing::Size(75, 21);
+			   this->mem_cmb_SearchAuth->TabIndex = 15;
+			   // 
+			   // mem_cmb_Type
+			   // 
+			   this->mem_cmb_Type->FormattingEnabled = true;
+			   this->mem_cmb_Type->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Normal", L"DivHead", L"Staff", L"Head" });
+			   this->mem_cmb_Type->Location = System::Drawing::Point(188, 55);
+			   this->mem_cmb_Type->Name = L"mem_cmb_Type";
+			   this->mem_cmb_Type->Size = System::Drawing::Size(102, 21);
+			   this->mem_cmb_Type->TabIndex = 14;
+			   // 
+			   // mem_cmb_Status
+			   // 
+			   this->mem_cmb_Status->FormattingEnabled = true;
+			   this->mem_cmb_Status->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Active", L"Review", L"Invalid" });
+			   this->mem_cmb_Status->Location = System::Drawing::Point(333, 54);
+			   this->mem_cmb_Status->Name = L"mem_cmb_Status";
+			   this->mem_cmb_Status->Size = System::Drawing::Size(102, 21);
+			   this->mem_cmb_Status->TabIndex = 13;
+			   // 
+			   // mem_txt_Gender
+			   // 
+			   this->mem_txt_Gender->Location = System::Drawing::Point(628, 54);
+			   this->mem_txt_Gender->Name = L"mem_txt_Gender";
+			   this->mem_txt_Gender->Size = System::Drawing::Size(75, 20);
+			   this->mem_txt_Gender->TabIndex = 11;
+			   // 
+			   // mem_txt_Name
+			   // 
+			   this->mem_txt_Name->Location = System::Drawing::Point(487, 54);
+			   this->mem_txt_Name->Name = L"mem_txt_Name";
+			   this->mem_txt_Name->Size = System::Drawing::Size(75, 20);
+			   this->mem_txt_Name->TabIndex = 10;
+			   // 
+			   // mem_txt_Major
+			   // 
+			   this->mem_txt_Major->Location = System::Drawing::Point(308, 113);
+			   this->mem_txt_Major->Name = L"mem_txt_Major";
+			   this->mem_txt_Major->Size = System::Drawing::Size(115, 20);
+			   this->mem_txt_Major->TabIndex = 9;
+			   // 
+			   // mem_txt_Id
+			   // 
+			   this->mem_txt_Id->Location = System::Drawing::Point(64, 55);
+			   this->mem_txt_Id->Name = L"mem_txt_Id";
+			   this->mem_txt_Id->Size = System::Drawing::Size(75, 20);
+			   this->mem_txt_Id->TabIndex = 8;
+			   // 
+			   // mem_lbl_Prompt_SearchAuth
+			   // 
+			   this->mem_lbl_Prompt_SearchAuth->AutoSize = true;
+			   this->mem_lbl_Prompt_SearchAuth->Location = System::Drawing::Point(463, 116);
+			   this->mem_lbl_Prompt_SearchAuth->Name = L"mem_lbl_Prompt_SearchAuth";
+			   this->mem_lbl_Prompt_SearchAuth->Size = System::Drawing::Size(63, 13);
+			   this->mem_lbl_Prompt_SearchAuth->TabIndex = 7;
+			   this->mem_lbl_Prompt_SearchAuth->Text = L"SearchAuth";
+			   // 
+			   // mem_lbl_Prompt_Major
+			   // 
+			   this->mem_lbl_Prompt_Major->AutoSize = true;
+			   this->mem_lbl_Prompt_Major->Location = System::Drawing::Point(257, 116);
+			   this->mem_lbl_Prompt_Major->Name = L"mem_lbl_Prompt_Major";
+			   this->mem_lbl_Prompt_Major->Size = System::Drawing::Size(33, 13);
+			   this->mem_lbl_Prompt_Major->TabIndex = 6;
+			   this->mem_lbl_Prompt_Major->Text = L"Major";
+			   // 
+			   // mem_lbl_Prompt_CareerStatus
+			   // 
+			   this->mem_lbl_Prompt_CareerStatus->AutoSize = true;
+			   this->mem_lbl_Prompt_CareerStatus->Location = System::Drawing::Point(46, 116);
+			   this->mem_lbl_Prompt_CareerStatus->Name = L"mem_lbl_Prompt_CareerStatus";
+			   this->mem_lbl_Prompt_CareerStatus->Size = System::Drawing::Size(68, 13);
+			   this->mem_lbl_Prompt_CareerStatus->TabIndex = 5;
+			   this->mem_lbl_Prompt_CareerStatus->Text = L"CareerStatus";
+			   // 
+			   // mem_lbl_Prompt_Gender
+			   // 
+			   this->mem_lbl_Prompt_Gender->AutoSize = true;
+			   this->mem_lbl_Prompt_Gender->Location = System::Drawing::Point(580, 57);
+			   this->mem_lbl_Prompt_Gender->Name = L"mem_lbl_Prompt_Gender";
+			   this->mem_lbl_Prompt_Gender->Size = System::Drawing::Size(42, 13);
+			   this->mem_lbl_Prompt_Gender->TabIndex = 4;
+			   this->mem_lbl_Prompt_Gender->Text = L"Gender";
+			   // 
+			   // mem_lbl_Prompt_Name
+			   // 
+			   this->mem_lbl_Prompt_Name->AutoSize = true;
+			   this->mem_lbl_Prompt_Name->Location = System::Drawing::Point(446, 58);
+			   this->mem_lbl_Prompt_Name->Name = L"mem_lbl_Prompt_Name";
+			   this->mem_lbl_Prompt_Name->Size = System::Drawing::Size(35, 13);
+			   this->mem_lbl_Prompt_Name->TabIndex = 3;
+			   this->mem_lbl_Prompt_Name->Text = L"Name";
+			   // 
+			   // mem_lbl_Prompt_Type
+			   // 
+			   this->mem_lbl_Prompt_Type->AutoSize = true;
+			   this->mem_lbl_Prompt_Type->Location = System::Drawing::Point(296, 57);
+			   this->mem_lbl_Prompt_Type->Name = L"mem_lbl_Prompt_Type";
+			   this->mem_lbl_Prompt_Type->Size = System::Drawing::Size(31, 13);
+			   this->mem_lbl_Prompt_Type->TabIndex = 2;
+			   this->mem_lbl_Prompt_Type->Text = L"Type";
+			   // 
+			   // mem_lbl_Prompt_Status
+			   // 
+			   this->mem_lbl_Prompt_Status->AutoSize = true;
+			   this->mem_lbl_Prompt_Status->Location = System::Drawing::Point(145, 57);
+			   this->mem_lbl_Prompt_Status->Name = L"mem_lbl_Prompt_Status";
+			   this->mem_lbl_Prompt_Status->Size = System::Drawing::Size(37, 13);
+			   this->mem_lbl_Prompt_Status->TabIndex = 1;
+			   this->mem_lbl_Prompt_Status->Text = L"Status";
+			   // 
+			   // mem_lbl_Prompt_Id
+			   // 
+			   this->mem_lbl_Prompt_Id->AutoSize = true;
+			   this->mem_lbl_Prompt_Id->Location = System::Drawing::Point(46, 57);
+			   this->mem_lbl_Prompt_Id->Name = L"mem_lbl_Prompt_Id";
+			   this->mem_lbl_Prompt_Id->Size = System::Drawing::Size(16, 13);
+			   this->mem_lbl_Prompt_Id->TabIndex = 0;
+			   this->mem_lbl_Prompt_Id->Text = L"Id";
+			   // 
+			   // mem_splitter2
+			   // 
+			   this->mem_splitter2->BackColor = System::Drawing::SystemColors::GradientActiveCaption;
+			   this->mem_splitter2->Cursor = System::Windows::Forms::Cursors::HSplit;
+			   this->mem_splitter2->Dock = System::Windows::Forms::DockStyle::Bottom;
+			   this->mem_splitter2->Enabled = false;
+			   this->mem_splitter2->Location = System::Drawing::Point(0, 254);
+			   this->mem_splitter2->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			   this->mem_splitter2->MinimumSize = System::Drawing::Size(0, 43);
+			   this->mem_splitter2->Name = L"mem_splitter2";
+			   this->mem_splitter2->Size = System::Drawing::Size(982, 382);
+			   this->mem_splitter2->TabIndex = 66;
+			   this->mem_splitter2->TabStop = false;
+			   // 
+			   // pan_record
+			   // 
+			   this->pan_record->Dock = System::Windows::Forms::DockStyle::Fill;
+			   this->pan_record->Location = System::Drawing::Point(0, 0);
+			   this->pan_record->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			   this->pan_record->Name = L"pan_record";
+			   this->pan_record->Size = System::Drawing::Size(982, 636);
+			   this->pan_record->TabIndex = 4;
+			   // 
+			   // pan_OPT
+			   // 
+			   this->pan_OPT->Dock = System::Windows::Forms::DockStyle::Fill;
+			   this->pan_OPT->Location = System::Drawing::Point(0, 0);
+			   this->pan_OPT->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			   this->pan_OPT->Name = L"pan_OPT";
+			   this->pan_OPT->Size = System::Drawing::Size(982, 636);
+			   this->pan_OPT->TabIndex = 3;
+			   // 
+			   // pan_order
+			   // 
+			   this->pan_order->Dock = System::Windows::Forms::DockStyle::Fill;
+			   this->pan_order->Location = System::Drawing::Point(0, 0);
+			   this->pan_order->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			   this->pan_order->Name = L"pan_order";
+			   this->pan_order->Size = System::Drawing::Size(982, 636);
+			   this->pan_order->TabIndex = 2;
+			   // 
+			   // pan_treasury
+			   // 
+			   this->pan_treasury->Dock = System::Windows::Forms::DockStyle::Fill;
+			   this->pan_treasury->Location = System::Drawing::Point(0, 0);
+			   this->pan_treasury->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			   this->pan_treasury->Name = L"pan_treasury";
+			   this->pan_treasury->Size = System::Drawing::Size(982, 636);
+			   this->pan_treasury->TabIndex = 1;
+			   // 
+			   // pan_myInfo
+			   // 
+			   this->pan_myInfo->Dock = System::Windows::Forms::DockStyle::Fill;
+			   this->pan_myInfo->Location = System::Drawing::Point(0, 0);
+			   this->pan_myInfo->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
+			   this->pan_myInfo->Name = L"pan_myInfo";
+			   this->pan_myInfo->Size = System::Drawing::Size(982, 636);
+			   this->pan_myInfo->TabIndex = 0;
 			   // 
 			   // pan_staff
 			   // 
@@ -399,283 +735,6 @@
 			   this->stf_btn_Add->UseVisualStyleBackColor = true;
 			   this->stf_btn_Add->Click += gcnew System::EventHandler(this, &MainWindow::stf_btn_Add_Click);
 			   // 
-			   // pan_member
-			   // 
-			   this->pan_member->Controls->Add(this->mem_lbl_error);
-			   this->pan_member->Controls->Add(this->mem_btn_Import);
-			   this->pan_member->Controls->Add(this->mem_btn_Add);
-			   this->pan_member->Controls->Add(this->mem_btn_Clear);
-			   this->pan_member->Controls->Add(this->mem_btn_Search);
-			   this->pan_member->Controls->Add(this->mem_cmb_CareerStatus);
-			   this->pan_member->Controls->Add(this->mem_dataGridView1);
-			   this->pan_member->Controls->Add(this->mem_cmb_SearchAuth);
-			   this->pan_member->Controls->Add(this->mem_cmb_Type);
-			   this->pan_member->Controls->Add(this->mem_cmb_Status);
-			   this->pan_member->Controls->Add(this->mem_txt_Gender);
-			   this->pan_member->Controls->Add(this->mem_txt_Name);
-			   this->pan_member->Controls->Add(this->mem_txt_Major);
-			   this->pan_member->Controls->Add(this->mem_txt_Id);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_SearchAuth);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Major);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_CareerStatus);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Gender);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Name);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Type);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Status);
-			   this->pan_member->Controls->Add(this->mem_lbl_Prompt_Id);
-			   this->pan_member->Dock = System::Windows::Forms::DockStyle::Fill;
-			   this->pan_member->Location = System::Drawing::Point(0, 0);
-			   this->pan_member->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
-			   this->pan_member->Name = L"pan_member";
-			   this->pan_member->Size = System::Drawing::Size(982, 636);
-			   this->pan_member->TabIndex = 6;
-			   // 
-			   // mem_lbl_error
-			   // 
-			   this->mem_lbl_error->AutoSize = true;
-			   this->mem_lbl_error->ForeColor = System::Drawing::Color::Red;
-			   this->mem_lbl_error->Location = System::Drawing::Point(46, 251);
-			   this->mem_lbl_error->Name = L"mem_lbl_error";
-			   this->mem_lbl_error->Size = System::Drawing::Size(29, 13);
-			   this->mem_lbl_error->TabIndex = 22;
-			   this->mem_lbl_error->Text = L"Error";
-			   this->mem_lbl_error->Visible = false;
-			   // 
-			   // mem_btn_Import
-			   // 
-			   this->mem_btn_Import->Location = System::Drawing::Point(793, 220);
-			   this->mem_btn_Import->Name = L"mem_btn_Import";
-			   this->mem_btn_Import->Size = System::Drawing::Size(70, 28);
-			   this->mem_btn_Import->TabIndex = 21;
-			   this->mem_btn_Import->Text = L"Import";
-			   this->mem_btn_Import->UseVisualStyleBackColor = true;
-			   this->mem_btn_Import->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Import_Click);
-			   // 
-			   // mem_btn_Add
-			   // 
-			   this->mem_btn_Add->Location = System::Drawing::Point(793, 162);
-			   this->mem_btn_Add->Name = L"mem_btn_Add";
-			   this->mem_btn_Add->Size = System::Drawing::Size(70, 28);
-			   this->mem_btn_Add->TabIndex = 20;
-			   this->mem_btn_Add->Text = L"Add";
-			   this->mem_btn_Add->UseVisualStyleBackColor = true;
-			   this->mem_btn_Add->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Add_Click);
-			   // 
-			   // mem_btn_Clear
-			   // 
-			   this->mem_btn_Clear->Location = System::Drawing::Point(793, 101);
-			   this->mem_btn_Clear->Name = L"mem_btn_Clear";
-			   this->mem_btn_Clear->Size = System::Drawing::Size(70, 28);
-			   this->mem_btn_Clear->TabIndex = 19;
-			   this->mem_btn_Clear->Text = L"Clear";
-			   this->mem_btn_Clear->UseVisualStyleBackColor = true;
-			   this->mem_btn_Clear->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Clear_Click);
-			   // 
-			   // mem_btn_Search
-			   // 
-			   this->mem_btn_Search->Location = System::Drawing::Point(793, 42);
-			   this->mem_btn_Search->Name = L"mem_btn_Search";
-			   this->mem_btn_Search->Size = System::Drawing::Size(70, 28);
-			   this->mem_btn_Search->TabIndex = 18;
-			   this->mem_btn_Search->Text = L"Search";
-			   this->mem_btn_Search->UseVisualStyleBackColor = true;
-			   this->mem_btn_Search->Click += gcnew System::EventHandler(this, &MainWindow::mem_btn_Search_Click);
-			   // 
-			   // mem_cmb_CareerStatus
-			   // 
-			   this->mem_cmb_CareerStatus->FormattingEnabled = true;
-			   this->mem_cmb_CareerStatus->Items->AddRange(gcnew cli::array< System::Object^  >(4) {
-				   L"GradProgram", L"Unemployed", L"Employed",
-					   L"StartBusiness"
-			   });
-			   this->mem_cmb_CareerStatus->Location = System::Drawing::Point(120, 113);
-			   this->mem_cmb_CareerStatus->Name = L"mem_cmb_CareerStatus";
-			   this->mem_cmb_CareerStatus->Size = System::Drawing::Size(104, 21);
-			   this->mem_cmb_CareerStatus->TabIndex = 17;
-			   // 
-			   // mem_dataGridView1
-			   // 
-			   this->mem_dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			   this->mem_dataGridView1->Location = System::Drawing::Point(0, 267);
-			   this->mem_dataGridView1->Name = L"mem_dataGridView1";
-			   this->mem_dataGridView1->RowHeadersWidth = 51;
-			   this->mem_dataGridView1->SelectionMode = System::Windows::Forms::DataGridViewSelectionMode::FullRowSelect;
-			   this->mem_dataGridView1->Size = System::Drawing::Size(979, 317);
-			   this->mem_dataGridView1->TabIndex = 16;
-			   this->mem_dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MainWindow::mem_dataGridView1_CellContentClick);
-			   // 
-			   // mem_cmb_SearchAuth
-			   // 
-			   this->mem_cmb_SearchAuth->FormattingEnabled = true;
-			   this->mem_cmb_SearchAuth->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"Yes", L"No" });
-			   this->mem_cmb_SearchAuth->Location = System::Drawing::Point(532, 112);
-			   this->mem_cmb_SearchAuth->Name = L"mem_cmb_SearchAuth";
-			   this->mem_cmb_SearchAuth->Size = System::Drawing::Size(75, 21);
-			   this->mem_cmb_SearchAuth->TabIndex = 15;
-			   // 
-			   // mem_cmb_Type
-			   // 
-			   this->mem_cmb_Type->FormattingEnabled = true;
-			   this->mem_cmb_Type->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Normal", L"DivHead", L"Staff", L"Head" });
-			   this->mem_cmb_Type->Location = System::Drawing::Point(188, 55);
-			   this->mem_cmb_Type->Name = L"mem_cmb_Type";
-			   this->mem_cmb_Type->Size = System::Drawing::Size(102, 21);
-			   this->mem_cmb_Type->TabIndex = 14;
-			   // 
-			   // mem_cmb_Status
-			   // 
-			   this->mem_cmb_Status->FormattingEnabled = true;
-			   this->mem_cmb_Status->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"Active", L"Review", L"Invalid" });
-			   this->mem_cmb_Status->Location = System::Drawing::Point(333, 54);
-			   this->mem_cmb_Status->Name = L"mem_cmb_Status";
-			   this->mem_cmb_Status->Size = System::Drawing::Size(102, 21);
-			   this->mem_cmb_Status->TabIndex = 13;
-			   // 
-			   // mem_txt_Gender
-			   // 
-			   this->mem_txt_Gender->Location = System::Drawing::Point(628, 54);
-			   this->mem_txt_Gender->Name = L"mem_txt_Gender";
-			   this->mem_txt_Gender->Size = System::Drawing::Size(75, 20);
-			   this->mem_txt_Gender->TabIndex = 11;
-			   // 
-			   // mem_txt_Name
-			   // 
-			   this->mem_txt_Name->Location = System::Drawing::Point(487, 54);
-			   this->mem_txt_Name->Name = L"mem_txt_Name";
-			   this->mem_txt_Name->Size = System::Drawing::Size(75, 20);
-			   this->mem_txt_Name->TabIndex = 10;
-			   // 
-			   // mem_txt_Major
-			   // 
-			   this->mem_txt_Major->Location = System::Drawing::Point(308, 113);
-			   this->mem_txt_Major->Name = L"mem_txt_Major";
-			   this->mem_txt_Major->Size = System::Drawing::Size(115, 20);
-			   this->mem_txt_Major->TabIndex = 9;
-			   // 
-			   // mem_txt_Id
-			   // 
-			   this->mem_txt_Id->Location = System::Drawing::Point(64, 55);
-			   this->mem_txt_Id->Name = L"mem_txt_Id";
-			   this->mem_txt_Id->Size = System::Drawing::Size(75, 20);
-			   this->mem_txt_Id->TabIndex = 8;
-			   // 
-			   // mem_lbl_Prompt_SearchAuth
-			   // 
-			   this->mem_lbl_Prompt_SearchAuth->AutoSize = true;
-			   this->mem_lbl_Prompt_SearchAuth->Location = System::Drawing::Point(463, 116);
-			   this->mem_lbl_Prompt_SearchAuth->Name = L"mem_lbl_Prompt_SearchAuth";
-			   this->mem_lbl_Prompt_SearchAuth->Size = System::Drawing::Size(63, 13);
-			   this->mem_lbl_Prompt_SearchAuth->TabIndex = 7;
-			   this->mem_lbl_Prompt_SearchAuth->Text = L"SearchAuth";
-			   // 
-			   // mem_lbl_Prompt_Major
-			   // 
-			   this->mem_lbl_Prompt_Major->AutoSize = true;
-			   this->mem_lbl_Prompt_Major->Location = System::Drawing::Point(257, 116);
-			   this->mem_lbl_Prompt_Major->Name = L"mem_lbl_Prompt_Major";
-			   this->mem_lbl_Prompt_Major->Size = System::Drawing::Size(33, 13);
-			   this->mem_lbl_Prompt_Major->TabIndex = 6;
-			   this->mem_lbl_Prompt_Major->Text = L"Major";
-			   // 
-			   // mem_lbl_Prompt_CareerStatus
-			   // 
-			   this->mem_lbl_Prompt_CareerStatus->AutoSize = true;
-			   this->mem_lbl_Prompt_CareerStatus->Location = System::Drawing::Point(46, 116);
-			   this->mem_lbl_Prompt_CareerStatus->Name = L"mem_lbl_Prompt_CareerStatus";
-			   this->mem_lbl_Prompt_CareerStatus->Size = System::Drawing::Size(68, 13);
-			   this->mem_lbl_Prompt_CareerStatus->TabIndex = 5;
-			   this->mem_lbl_Prompt_CareerStatus->Text = L"CareerStatus";
-			   // 
-			   // mem_lbl_Prompt_Gender
-			   // 
-			   this->mem_lbl_Prompt_Gender->AutoSize = true;
-			   this->mem_lbl_Prompt_Gender->Location = System::Drawing::Point(580, 57);
-			   this->mem_lbl_Prompt_Gender->Name = L"mem_lbl_Prompt_Gender";
-			   this->mem_lbl_Prompt_Gender->Size = System::Drawing::Size(42, 13);
-			   this->mem_lbl_Prompt_Gender->TabIndex = 4;
-			   this->mem_lbl_Prompt_Gender->Text = L"Gender";
-			   // 
-			   // mem_lbl_Prompt_Name
-			   // 
-			   this->mem_lbl_Prompt_Name->AutoSize = true;
-			   this->mem_lbl_Prompt_Name->Location = System::Drawing::Point(446, 58);
-			   this->mem_lbl_Prompt_Name->Name = L"mem_lbl_Prompt_Name";
-			   this->mem_lbl_Prompt_Name->Size = System::Drawing::Size(35, 13);
-			   this->mem_lbl_Prompt_Name->TabIndex = 3;
-			   this->mem_lbl_Prompt_Name->Text = L"Name";
-			   // 
-			   // mem_lbl_Prompt_Type
-			   // 
-			   this->mem_lbl_Prompt_Type->AutoSize = true;
-			   this->mem_lbl_Prompt_Type->Location = System::Drawing::Point(296, 57);
-			   this->mem_lbl_Prompt_Type->Name = L"mem_lbl_Prompt_Type";
-			   this->mem_lbl_Prompt_Type->Size = System::Drawing::Size(31, 13);
-			   this->mem_lbl_Prompt_Type->TabIndex = 2;
-			   this->mem_lbl_Prompt_Type->Text = L"Type";
-			   // 
-			   // mem_lbl_Prompt_Status
-			   // 
-			   this->mem_lbl_Prompt_Status->AutoSize = true;
-			   this->mem_lbl_Prompt_Status->Location = System::Drawing::Point(145, 57);
-			   this->mem_lbl_Prompt_Status->Name = L"mem_lbl_Prompt_Status";
-			   this->mem_lbl_Prompt_Status->Size = System::Drawing::Size(37, 13);
-			   this->mem_lbl_Prompt_Status->TabIndex = 1;
-			   this->mem_lbl_Prompt_Status->Text = L"Status";
-			   // 
-			   // mem_lbl_Prompt_Id
-			   // 
-			   this->mem_lbl_Prompt_Id->AutoSize = true;
-			   this->mem_lbl_Prompt_Id->Location = System::Drawing::Point(46, 57);
-			   this->mem_lbl_Prompt_Id->Name = L"mem_lbl_Prompt_Id";
-			   this->mem_lbl_Prompt_Id->Size = System::Drawing::Size(16, 13);
-			   this->mem_lbl_Prompt_Id->TabIndex = 0;
-			   this->mem_lbl_Prompt_Id->Text = L"Id";
-			   // 
-			   // pan_record
-			   // 
-			   this->pan_record->Dock = System::Windows::Forms::DockStyle::Fill;
-			   this->pan_record->Location = System::Drawing::Point(0, 0);
-			   this->pan_record->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
-			   this->pan_record->Name = L"pan_record";
-			   this->pan_record->Size = System::Drawing::Size(982, 636);
-			   this->pan_record->TabIndex = 4;
-			   // 
-			   // pan_OPT
-			   // 
-			   this->pan_OPT->Dock = System::Windows::Forms::DockStyle::Fill;
-			   this->pan_OPT->Location = System::Drawing::Point(0, 0);
-			   this->pan_OPT->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
-			   this->pan_OPT->Name = L"pan_OPT";
-			   this->pan_OPT->Size = System::Drawing::Size(982, 636);
-			   this->pan_OPT->TabIndex = 3;
-			   // 
-			   // pan_order
-			   // 
-			   this->pan_order->Dock = System::Windows::Forms::DockStyle::Fill;
-			   this->pan_order->Location = System::Drawing::Point(0, 0);
-			   this->pan_order->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
-			   this->pan_order->Name = L"pan_order";
-			   this->pan_order->Size = System::Drawing::Size(982, 636);
-			   this->pan_order->TabIndex = 2;
-			   // 
-			   // pan_treasury
-			   // 
-			   this->pan_treasury->Dock = System::Windows::Forms::DockStyle::Fill;
-			   this->pan_treasury->Location = System::Drawing::Point(0, 0);
-			   this->pan_treasury->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
-			   this->pan_treasury->Name = L"pan_treasury";
-			   this->pan_treasury->Size = System::Drawing::Size(982, 636);
-			   this->pan_treasury->TabIndex = 1;
-			   // 
-			   // pan_myInfo
-			   // 
-			   this->pan_myInfo->Dock = System::Windows::Forms::DockStyle::Fill;
-			   this->pan_myInfo->Location = System::Drawing::Point(0, 0);
-			   this->pan_myInfo->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
-			   this->pan_myInfo->Name = L"pan_myInfo";
-			   this->pan_myInfo->Size = System::Drawing::Size(982, 636);
-			   this->pan_myInfo->TabIndex = 0;
-			   // 
 			   // ms_panelOptions
 			   // 
 			   this->ms_panelOptions->Dock = System::Windows::Forms::DockStyle::None;
@@ -748,6 +807,7 @@
 			   // 
 			   // ms_systemOptions
 			   // 
+			   this->ms_systemOptions->BackColor = System::Drawing::SystemColors::Control;
 			   this->ms_systemOptions->Dock = System::Windows::Forms::DockStyle::None;
 			   this->ms_systemOptions->ImageScalingSize = System::Drawing::Size(20, 20);
 			   this->ms_systemOptions->Items->AddRange(gcnew cli::array< System::Windows::Forms::ToolStripItem^  >(3) {
@@ -799,12 +859,12 @@
 			   this->toolStripContainer1->TopToolStripPanel->PerformLayout();
 			   this->toolStripContainer1->ResumeLayout(false);
 			   this->toolStripContainer1->PerformLayout();
-			   this->pan_staff->ResumeLayout(false);
-			   this->pan_staff->PerformLayout();
-			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->stf_dataGridView))->EndInit();
 			   this->pan_member->ResumeLayout(false);
 			   this->pan_member->PerformLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->mem_dataGridView1))->EndInit();
+			   this->pan_staff->ResumeLayout(false);
+			   this->pan_staff->PerformLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->stf_dataGridView))->EndInit();
 			   this->ms_panelOptions->ResumeLayout(false);
 			   this->ms_panelOptions->PerformLayout();
 			   this->ms_systemOptions->ResumeLayout(false);
@@ -855,6 +915,7 @@
 	private:
 		Void Initialize();
 		Void mem_CheckAuth();
+		Void mem_UpdateDataGridView(String^ command);
 		Void mem_btn_Search_Click(System::Object^ sender, System::EventArgs^ e);
 		Void mem_btn_Clear_Click(System::Object^ sender, System::EventArgs^ e);
 		Void mem_btn_Add_Click(System::Object^ sender, System::EventArgs^ e);
