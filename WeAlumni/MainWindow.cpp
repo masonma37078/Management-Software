@@ -9,7 +9,7 @@
  * Revised: 3/27/20
  *          4/8/20 add member MainWindow functions
  *          4/12/20 add staff MainWindow and auth control for staff and member
- *          4/14/20 bug fix
+ *          4/15/20 bug fix
  *
  */
 
@@ -46,18 +46,22 @@ Void WeAlumni::MainWindow::Initialize() {
         mem_lbl_error->ForeColor = System::Drawing::Color::Red;
     }
     mem_UpdateDataGridView(MEM_SELECT_ALL);
-    stf_CheckAuth();
+    mem_GeneralInformation();
     mem_CheckAuth();
+    stf_GeneralInformation();
+    stf_UpdateDataGridView(STF_SELECT_ALL);
+    stf_CheckAuth();
 }
+
 /*
  *  Member
  */
-/*
-* mem_btn_Search_Click
-*
-* This method will try to search from Record table for the record of this member.
-* Then update record to DataGridView1
-*/
+ /*
+ * mem_btn_Search_Click
+ *
+ * This method will try to search from Record table for the record of this member.
+ * Then update record to DataGridView1
+ */
 Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::EventArgs^ e) {
     String^ id = mem_txt_Id->Text;
     String^ status = mem_cmb_Status->Text;
@@ -83,7 +87,10 @@ Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::
     if (major->Length)        vec.push_back(6);
     if (searchAuth->Length)   vec.push_back(7);
     if (vec.size() == 0) {
-        mem_UpdateDataGridView(MEM_SELECT_ALL);
+        mem_lbl_error->ForeColor = System::Drawing::Color::Red;
+        mem_lbl_error->Text = "CANNOT FIND MEMBER";
+        mem_lbl_error->Visible = true;
+        mem_dataGridView1->DataSource = nullptr;
         return;
     }
 
@@ -105,6 +112,7 @@ Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::
     }
     cmd += cmd2 + " ORDER BY Member.Id ASC;";
     mem_UpdateDataGridView(cmd);
+    mem_GeneralInformation();
 }
 
 /*
@@ -121,7 +129,9 @@ Void WeAlumni::MainWindow::mem_btn_Clear_Click(System::Object^ sender, System::E
     mem_cmb_SearchAuth->Text = "";
     mem_cmb_Status->Text = "";
     mem_cmb_Type->Text = "";
+    mem_lbl_error->Visible = false;
     mem_UpdateDataGridView(MEM_SELECT_ALL);
+    mem_GeneralInformation();
 }
 
 /*
@@ -130,9 +140,10 @@ Void WeAlumni::MainWindow::mem_btn_Clear_Click(System::Object^ sender, System::E
 * When click button "Add", a new window MemAddPage will be called up.
 */
 Void WeAlumni::MainWindow::mem_btn_Add_Click(System::Object^ sender, System::EventArgs^ e) {
-    MemAddPage^ map = gcnew MemAddPage();
+    MemAddPage^ map = gcnew MemAddPage(_pui);
     map->ShowDialog();
-    mem_dataGridView1->DataSource = nullptr;
+    mem_UpdateDataGridView(MEM_SELECT_ALL);
+    mem_GeneralInformation();
 }
 
 /*
@@ -142,6 +153,8 @@ Void WeAlumni::MainWindow::mem_btn_Add_Click(System::Object^ sender, System::Eve
 Void WeAlumni::MainWindow::mem_dataGridView1_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
     MemInfoPage^ mip = gcnew MemInfoPage(Convert::ToInt32(mem_dataGridView1->CurrentRow->Cells[0]->Value), _pui);
     mip->ShowDialog();
+    mem_UpdateDataGridView(MEM_SELECT_ALL);
+    mem_GeneralInformation();
 }
 
 /*
@@ -188,10 +201,40 @@ Void WeAlumni::MainWindow::mem_UpdateDataGridView(String^ command) {
         mem_dataGridView1->DataSource = bSource;
     }
     else {
-        mem_lbl_error->Visible = true;
         mem_lbl_error->ForeColor = System::Drawing::Color::Red;
         mem_lbl_error->Text = "CANNOT FIND MEMBER";
+        mem_lbl_error->Visible = true;
+        mem_dataGridView1->DataSource = nullptr;
     }
+}
+
+/*
+ * mem_GeneralInformation()
+ * Show general information of member
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::mem_GeneralInformation() {
+    int status = -1;
+    String^ cmd = "SELECT COUNT(Id) FROM Member;";
+
+    try {
+        status = database->ReadData(cmd);
+    }
+    catch (Exception^ exception) {
+        mem_lbl_error->Text = exception->Message;
+        mem_lbl_error->Visible = true;
+        return;
+    }
+
+    if (status > 0) {
+        mem_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
+    }
+    else {
+        mem_lbl_error->Text = "Can't find data";
+        mem_lbl_error->Visible = true;
+    }
+    database->dataReader->Close();
 }
 
 Void WeAlumni::MainWindow::mem_btn_Import_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -211,7 +254,6 @@ Void WeAlumni::MainWindow::mem_btn_Import_Click(System::Object^ sender, System::
 Void WeAlumni::MainWindow::stf_CheckAuth() {
     if (_Auth == PublicUserInfo::Auth::Level_1 || _Auth == PublicUserInfo::Auth::Level_2) {
         stf_btn_Add->Enabled = false;
-        stf_btn_Import->Enabled = false;
     }
 }
 
@@ -245,9 +287,10 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
     if (Dept->Length)         vec.push_back(2);
     if (Auth->Length)         vec.push_back(3);
     if (vec.size() == 0) {
+        mem_UpdateDataGridView(STF_SELECT_ALL);
         stf_dataGridView->DataSource = nullptr;
         stf_lbl_Error->Visible = true;
-        stf_lbl_Error->Text = "CANNOT FIND MEMBER";
+        stf_lbl_Error->Text = "CANNOT FIND STAFF";
         return;
     }
 
@@ -263,26 +306,8 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
         flag = true;
     }
     command += cmd2 + " ORDER BY Staff.MemId ASC;";
-
-    int status = -1;
-    try {
-        status = database->ReadDataAdapter(command);
-    }
-    catch (Exception^ exception) {
-        stf_lbl_Error->Text = exception->Message;
-        stf_lbl_Error->Visible = true;
-        return;
-    }
-
-    if (status > 0) {
-        stf_lbl_Error->Visible = false;
-        bSource->DataSource = database->dataTable;
-        stf_dataGridView->DataSource = bSource;
-    }
-    else {
-        stf_lbl_Error->Visible = true;
-        stf_lbl_Error->Text = "CANNOT FIND MEMBER";
-    }
+    stf_UpdateDataGridView(command);
+    stf_GeneralInformation();
 }
 
 /*
@@ -292,9 +317,10 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
  * @return None
  */
 Void WeAlumni::MainWindow::stf_btn_Add_Click(System::Object^ sender, System::EventArgs^ e) {
-    StfAddPage^ add = gcnew StfAddPage();
+    StfAddPage^ add = gcnew StfAddPage(_pui);
     add->ShowDialog();
-    stf_dataGridView->DataSource = nullptr;
+    stf_UpdateDataGridView(STF_SELECT_ALL);
+    stf_GeneralInformation();
 }
 
 /*
@@ -309,6 +335,8 @@ Void WeAlumni::MainWindow::stf_btn_Clear_Click(System::Object^ sender, System::E
     stf_txt_Name->Text = "";
     stf_cmb_Dept->Text = "";
     stf_cmb_Auth->Text = "";
+    stf_UpdateDataGridView(STF_SELECT_ALL);
+    stf_GeneralInformation();
 }
 
 /*
@@ -318,8 +346,65 @@ Void WeAlumni::MainWindow::stf_btn_Clear_Click(System::Object^ sender, System::E
 Void WeAlumni::MainWindow::stf_dataGridView_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
     StfInfoPage^ mip = gcnew StfInfoPage(Convert::ToInt32(stf_dataGridView->CurrentRow->Cells[0]->Value), _pui);
     mip->ShowDialog();
+    stf_UpdateDataGridView(STF_SELECT_ALL);
+    stf_GeneralInformation();
 }
 
-Void WeAlumni::MainWindow::stf_btn_Import_Click(System::Object^ sender, System::EventArgs^ e) {
+/*
+ * stf_GeneralInformation()
+ * Show general information of staff
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::stf_GeneralInformation() {
+    int status = -1;
+    String^ count = "SELECT COUNT(MemId) FROM Staff;";
+    try {
+        status = database->ReadData(count);
+    }
+    catch (Exception^ exception) {
+        stf_lbl_Error->Text = exception->Message;
+        stf_lbl_Error->Visible = true;
+        return;
+    }
+    if (status > 0) {
+        stf_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
+    }
+    else {
+        stf_lbl_Error->Text = "Can't find the data";
+        stf_lbl_Error->Visible = true;
+    }
+    database->dataReader->Close();
+}
+/*
+ * stf_UpdateDataGridView(String^ command)
+ * update staff data grid view.
+ * @param String^ command
+ * @return None
+ */
+Void WeAlumni::MainWindow::stf_UpdateDataGridView(String^ command) {
+    BindingSource^ bSource = gcnew BindingSource();
+    int status1 = -1;
 
+    try {
+        status1 = database->ReadDataAdapter(command);
+    }
+    catch (Exception^ exception) {
+        stf_lbl_Error->ForeColor = System::Drawing::Color::Red;
+        stf_lbl_Error->Text = exception->Message;
+        stf_lbl_Error->Visible = true;
+        return;
+    }
+
+    if (status1 > 0) {
+        stf_lbl_Error->Visible = false;
+        bSource->DataSource = database->dataTable;
+        stf_dataGridView->DataSource = bSource;
+    }
+    else {
+        stf_dataGridView->DataSource = nullptr;
+        stf_lbl_Error->Visible = true;
+        stf_lbl_Error->ForeColor = System::Drawing::Color::Red;
+        stf_lbl_Error->Text = "CANNOT FIND STAFF";
+    }
 }
