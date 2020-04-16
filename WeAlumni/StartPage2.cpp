@@ -9,5 +9,4 @@ System::Void WeAlumni::StartPage2::btn_jumpToYourPage_Click(System::Object^ send
 
 	MemInfoPage^ mip = gcnew MemInfoPage(0, _pui);
 	mip->Show();
-	中文就是不能用么？
 }
