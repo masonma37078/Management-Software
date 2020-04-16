@@ -20,6 +20,6 @@ System::Void Main(array<System::String^>^ args)
     System::Windows::Forms::Application::EnableVisualStyles();
     System::Windows::Forms::Application::SetCompatibleTextRenderingDefault(false);
 
-    WeAlumni::LoginPage start_page;
+    WeAlumni::StartPage2 start_page;
     System::Windows::Forms::Application::Run(% start_page);
 }
