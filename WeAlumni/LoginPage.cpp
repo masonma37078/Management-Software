@@ -73,7 +73,7 @@ Void WeAlumni::LoginPage::Login_Click(System::Object^ sender, System::EventArgs^
   * this method remembers username and password
   */
 Void WeAlumni::LoginPage::Check_Remember() {
-    String^ command = "Update Admin SET IsDefault = 0 Where IsDefault = 1;"
+    String^ command = "Update Admin SET IsDefault = 0 Where IsDefault = 1;";
     String^ command1 = "Update Admin SET IsDefault = 1 Where Username  = '" + txt_Username->Text + "';";
     int status1 = -1;
 
