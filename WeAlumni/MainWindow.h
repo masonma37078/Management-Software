@@ -6,9 +6,11 @@
 #include "StfAddPage.h"
 #include "OrdInfoPage.h"
 #include "OrdAddPage.h"
+#include "RecInfoPage.h"
 #define MEM_SELECT_ALL "SELECT Member.Id AS 'MemberId', Member.Status AS 'MemberStatus', Member.Type AS 'MemberType', Member.Name AS 'MemberName', Member.Gender AS 'MemberGender', Member.Email AS 'MemberEmail' FROM Member ORDER BY Id ASC"
 #define STF_SELECT_ALL "SELECT Staff.MemId AS 'ID', Member.Name As 'Name', Member.Gender AS 'Gender', Member.Email AS 'Email', Staff.Dept As 'Department', Staff.Position As 'Position', Staff.Auth As 'Auth' FROM Member, Staff WHERE Staff.MemId = Member.Id ORDER BY Staff.MemId ASC"
 #define ORD_SELECT_ALL "SELECT Orders.Id AS 'OrderId', Orders.Status As 'Status', Orders.Time AS 'Time', Member.Name AS 'MemName', Member.Email As 'Email', Item.Name As 'ItmName', Orders.Amount As 'Amount', Item.Price As 'ItmPrice', Orders.Comment As 'Comment' FROM Orders, Member, Item WHERE Orders.MemId = Member.Id AND Orders.ItemId = Item.Id ORDER BY Member.Id ASC"
+#define REC_SELECT_ALL "SELECT Record.Id AS 'RecordId', Record.Time AS 'Time', Record.StfId AS 'StfId', Record.Memname AS 'MemName', Staff.Dept AS 'Department', Staff.Position AS 'Position', Record.Action AS 'Action' FROM Record, Staff WHERE Staff.MemId = Record.StfId"
 
 /*
  * MainWindow.h
@@ -20,7 +22,7 @@
  *          4/8/20 add member MainWindow
  *          4/12/20 add staff MainWindow and auth control for staff and member
  *          4/15/20 bug fix
- *
+ *			4/22/20 add record Mainwindow
  */
 
 namespace WeAlumni {
@@ -160,6 +162,36 @@ namespace WeAlumni {
 	private: System::Windows::Forms::Splitter^ ord_splitter_Error;
 	private: System::Windows::Forms::Label^ ord_lbl_Error;
 	private: System::Windows::Forms::Label^ ord_lbl_Prompt_ViewInfo;
+private: System::Windows::Forms::Label^ Rec_lbl_Prompt_RecId;
+private: System::Windows::Forms::TextBox^ Rec_txt_RecId;
+private: System::Windows::Forms::Label^ rec_lbl_prompt_department;
+
+
+
+
+private: System::Windows::Forms::Label^ Rec_lbl_Prompt_MemName;
+
+private: System::Windows::Forms::Label^ Rec_lbl_Prompt_StfId;
+private: System::Windows::Forms::TextBox^ Rec_txt_MemName;
+
+
+private: System::Windows::Forms::TextBox^ Rec_txt_StfId;
+private: System::Windows::Forms::Button^ Rec_btn_RecSearch;
+private: System::Windows::Forms::TextBox^ Rec_txt_department;
+
+
+
+private: System::Windows::Forms::DataGridView^ Rec_dataGridView;
+
+private: System::Windows::Forms::Button^ Rec_btn_Clear;
+private: System::Windows::Forms::Label^ Rec_lbl_Error;
+private: System::Windows::Forms::Label^ rec_lbl_Count;
+
+private: System::Windows::Forms::Label^ rec_lbl_prompt_total;
+
+
+
+
 
 	private: System::Windows::Forms::Panel^ pan_myInfo;
 
@@ -171,6 +203,21 @@ namespace WeAlumni {
 		   void InitializeComponent(void)
 		   {
 			   this->toolStripContainer1 = (gcnew System::Windows::Forms::ToolStripContainer());
+			   this->pan_record = (gcnew System::Windows::Forms::Panel());
+			   this->rec_lbl_Count = (gcnew System::Windows::Forms::Label());
+			   this->rec_lbl_prompt_total = (gcnew System::Windows::Forms::Label());
+			   this->Rec_lbl_Error = (gcnew System::Windows::Forms::Label());
+			   this->Rec_dataGridView = (gcnew System::Windows::Forms::DataGridView());
+			   this->Rec_btn_Clear = (gcnew System::Windows::Forms::Button());
+			   this->Rec_btn_RecSearch = (gcnew System::Windows::Forms::Button());
+			   this->Rec_txt_department = (gcnew System::Windows::Forms::TextBox());
+			   this->Rec_txt_MemName = (gcnew System::Windows::Forms::TextBox());
+			   this->Rec_txt_StfId = (gcnew System::Windows::Forms::TextBox());
+			   this->Rec_txt_RecId = (gcnew System::Windows::Forms::TextBox());
+			   this->rec_lbl_prompt_department = (gcnew System::Windows::Forms::Label());
+			   this->Rec_lbl_Prompt_MemName = (gcnew System::Windows::Forms::Label());
+			   this->Rec_lbl_Prompt_StfId = (gcnew System::Windows::Forms::Label());
+			   this->Rec_lbl_Prompt_RecId = (gcnew System::Windows::Forms::Label());
 			   this->pan_order = (gcnew System::Windows::Forms::Panel());
 			   this->ord_lbl_Prompt_ViewInfo = (gcnew System::Windows::Forms::Label());
 			   this->ord_lbl_Error = (gcnew System::Windows::Forms::Label());
@@ -245,7 +292,6 @@ namespace WeAlumni {
 			   this->stf_lbl_Prompt_Name = (gcnew System::Windows::Forms::Label());
 			   this->stf_lbl_Prompt_Id = (gcnew System::Windows::Forms::Label());
 			   this->stf_btn_Add = (gcnew System::Windows::Forms::Button());
-			   this->pan_record = (gcnew System::Windows::Forms::Panel());
 			   this->pan_OPT = (gcnew System::Windows::Forms::Panel());
 			   this->pan_treasury = (gcnew System::Windows::Forms::Panel());
 			   this->pan_myInfo = (gcnew System::Windows::Forms::Panel());
@@ -265,6 +311,8 @@ namespace WeAlumni {
 			   this->toolStripContainer1->LeftToolStripPanel->SuspendLayout();
 			   this->toolStripContainer1->TopToolStripPanel->SuspendLayout();
 			   this->toolStripContainer1->SuspendLayout();
+			   this->pan_record->SuspendLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->Rec_dataGridView))->BeginInit();
 			   this->pan_order->SuspendLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ord_dataGridView))->BeginInit();
 			   this->pan_member->SuspendLayout();
@@ -280,6 +328,7 @@ namespace WeAlumni {
 			   // 
 			   // toolStripContainer1.ContentPanel
 			   // 
+			   
 			   this->toolStripContainer1->ContentPanel->Controls->Add(this->pan_order);
 			   this->toolStripContainer1->ContentPanel->Controls->Add(this->pan_member);
 			   this->toolStripContainer1->ContentPanel->Controls->Add(this->pan_staff);
@@ -304,6 +353,176 @@ namespace WeAlumni {
 			   // toolStripContainer1.TopToolStripPanel
 			   // 
 			   this->toolStripContainer1->TopToolStripPanel->Controls->Add(this->ms_systemOptions);
+			   // 
+			   // pan_record
+			   // 
+			   this->pan_record->Controls->Add(this->rec_lbl_Count);
+			   this->pan_record->Controls->Add(this->rec_lbl_prompt_total);
+			   this->pan_record->Controls->Add(this->Rec_lbl_Error);
+			   this->pan_record->Controls->Add(this->Rec_dataGridView);
+			   this->pan_record->Controls->Add(this->Rec_btn_Clear);
+			   this->pan_record->Controls->Add(this->Rec_btn_RecSearch);
+			   this->pan_record->Controls->Add(this->Rec_txt_department);
+			   this->pan_record->Controls->Add(this->Rec_txt_MemName);
+			   this->pan_record->Controls->Add(this->Rec_txt_StfId);
+			   this->pan_record->Controls->Add(this->Rec_txt_RecId);
+			   this->pan_record->Controls->Add(this->rec_lbl_prompt_department);
+			   this->pan_record->Controls->Add(this->Rec_lbl_Prompt_MemName);
+			   this->pan_record->Controls->Add(this->Rec_lbl_Prompt_StfId);
+			   this->pan_record->Controls->Add(this->Rec_lbl_Prompt_RecId);
+			   this->pan_record->Dock = System::Windows::Forms::DockStyle::Fill;
+			   this->pan_record->Location = System::Drawing::Point(0, 0);
+			   this->pan_record->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
+			   this->pan_record->Name = L"pan_record";
+			   this->pan_record->Size = System::Drawing::Size(1359, 784);
+			   this->pan_record->TabIndex = 4;
+			   // 
+			   // rec_lbl_Count
+			   // 
+			   this->rec_lbl_Count->AutoSize = true;
+			   this->rec_lbl_Count->Location = System::Drawing::Point(138, 338);
+			   this->rec_lbl_Count->Name = L"rec_lbl_Count";
+			   this->rec_lbl_Count->Size = System::Drawing::Size(16, 17);
+			   this->rec_lbl_Count->TabIndex = 13;
+			   this->rec_lbl_Count->Text = L"0";
+			   // 
+			   // rec_lbl_prompt_total
+			   // 
+			   this->rec_lbl_prompt_total->AutoSize = true;
+			   this->rec_lbl_prompt_total->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->rec_lbl_prompt_total->Location = System::Drawing::Point(61, 335);
+			   this->rec_lbl_prompt_total->Name = L"rec_lbl_prompt_total";
+			   this->rec_lbl_prompt_total->Size = System::Drawing::Size(62, 20);
+			   this->rec_lbl_prompt_total->TabIndex = 12;
+			   this->rec_lbl_prompt_total->Text = L"总计:";
+			   // 
+			   // Rec_lbl_Error
+			   // 
+			   this->Rec_lbl_Error->AutoSize = true;
+			   this->Rec_lbl_Error->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
+			   this->Rec_lbl_Error->Location = System::Drawing::Point(555, 320);
+			   this->Rec_lbl_Error->Name = L"Rec_lbl_Error";
+			   this->Rec_lbl_Error->Size = System::Drawing::Size(93, 20);
+			   this->Rec_lbl_Error->TabIndex = 11;
+			   this->Rec_lbl_Error->Text = L"错误信息";
+			   // 
+			   // Rec_dataGridView
+			   // 
+			   this->Rec_dataGridView->Anchor = System::Windows::Forms::AnchorStyles::Bottom;
+			   this->Rec_dataGridView->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
+			   this->Rec_dataGridView->Location = System::Drawing::Point(53, 385);
+			   this->Rec_dataGridView->Name = L"Rec_dataGridView";
+			   this->Rec_dataGridView->RowHeadersWidth = 51;
+			   this->Rec_dataGridView->RowTemplate->Height = 24;
+			   this->Rec_dataGridView->Size = System::Drawing::Size(1121, 276);
+			   this->Rec_dataGridView->TabIndex = 10;
+			   // 
+			   // Rec_btn_Clear
+			   // 
+			   this->Rec_btn_Clear->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->Rec_btn_Clear->Location = System::Drawing::Point(837, 115);
+			   this->Rec_btn_Clear->Name = L"Rec_btn_Clear";
+			   this->Rec_btn_Clear->Size = System::Drawing::Size(79, 37);
+			   this->Rec_btn_Clear->TabIndex = 9;
+			   this->Rec_btn_Clear->Text = L"清空";
+			   this->Rec_btn_Clear->UseVisualStyleBackColor = true;
+			   this->Rec_btn_Clear->Click += gcnew System::EventHandler(this, &MainWindow::Rec_btn_Clear_Click);
+			   // 
+			   // Rec_btn_RecSearch
+			   // 
+			   this->Rec_btn_RecSearch->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->Rec_btn_RecSearch->Location = System::Drawing::Point(837, 50);
+			   this->Rec_btn_RecSearch->Name = L"Rec_btn_RecSearch";
+			   this->Rec_btn_RecSearch->Size = System::Drawing::Size(79, 37);
+			   this->Rec_btn_RecSearch->TabIndex = 8;
+			   this->Rec_btn_RecSearch->Text = L"查询";
+			   this->Rec_btn_RecSearch->UseVisualStyleBackColor = true;
+			   this->Rec_btn_RecSearch->Click += gcnew System::EventHandler(this, &MainWindow::Rec_btn_Search_Click);
+			   // 
+			   // Rec_txt_department
+			   // 
+			   this->Rec_txt_department->Location = System::Drawing::Point(587, 111);
+			   this->Rec_txt_department->Name = L"Rec_txt_department";
+			   this->Rec_txt_department->Size = System::Drawing::Size(100, 22);
+			   this->Rec_txt_department->TabIndex = 7;
+			   // 
+			   // Rec_txt_MemName
+			   // 
+			   this->Rec_txt_MemName->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			   this->Rec_txt_MemName->Location = System::Drawing::Point(587, 56);
+			   this->Rec_txt_MemName->Name = L"Rec_txt_MemName";
+			   this->Rec_txt_MemName->Size = System::Drawing::Size(100, 22);
+			   this->Rec_txt_MemName->TabIndex = 6;
+			   // 
+			   // Rec_txt_StfId
+			   // 
+			   this->Rec_txt_StfId->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			   this->Rec_txt_StfId->Location = System::Drawing::Point(185, 112);
+			   this->Rec_txt_StfId->Name = L"Rec_txt_StfId";
+			   this->Rec_txt_StfId->Size = System::Drawing::Size(100, 22);
+			   this->Rec_txt_StfId->TabIndex = 5;
+			   // 
+			   // Rec_txt_RecId
+			   // 
+			   this->Rec_txt_RecId->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			   this->Rec_txt_RecId->Location = System::Drawing::Point(185, 57);
+			   this->Rec_txt_RecId->Name = L"Rec_txt_RecId";
+			   this->Rec_txt_RecId->Size = System::Drawing::Size(100, 22);
+			   this->Rec_txt_RecId->TabIndex = 4;
+			   // 
+			   // rec_lbl_prompt_department
+			   // 
+			   this->rec_lbl_prompt_department->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			   this->rec_lbl_prompt_department->AutoSize = true;
+			   this->rec_lbl_prompt_department->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->rec_lbl_prompt_department->Location = System::Drawing::Point(465, 115);
+			   this->rec_lbl_prompt_department->Name = L"rec_lbl_prompt_department";
+			   this->rec_lbl_prompt_department->Size = System::Drawing::Size(114, 20);
+			   this->rec_lbl_prompt_department->TabIndex = 3;
+			   this->rec_lbl_prompt_department->Text = L"所在部门：";
+			   // 
+			   // Rec_lbl_Prompt_MemName
+			   // 
+			   this->Rec_lbl_Prompt_MemName->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			   this->Rec_lbl_Prompt_MemName->AutoSize = true;
+			   this->Rec_lbl_Prompt_MemName->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->Rec_lbl_Prompt_MemName->Location = System::Drawing::Point(465, 57);
+			   this->Rec_lbl_Prompt_MemName->Name = L"Rec_lbl_Prompt_MemName";
+			   this->Rec_lbl_Prompt_MemName->Size = System::Drawing::Size(114, 20);
+			   this->Rec_lbl_Prompt_MemName->TabIndex = 2;
+			   this->Rec_lbl_Prompt_MemName->Text = L"员工姓名：";
+			   this->Rec_lbl_Prompt_MemName->Click += gcnew System::EventHandler(this, &MainWindow::lbl_Prompt_MemName_Click);
+			   // 
+			   // Rec_lbl_Prompt_StfId
+			   // 
+			   this->Rec_lbl_Prompt_StfId->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			   this->Rec_lbl_Prompt_StfId->AutoSize = true;
+			   this->Rec_lbl_Prompt_StfId->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->Rec_lbl_Prompt_StfId->Location = System::Drawing::Point(72, 115);
+			   this->Rec_lbl_Prompt_StfId->Name = L"Rec_lbl_Prompt_StfId";
+			   this->Rec_lbl_Prompt_StfId->Size = System::Drawing::Size(114, 20);
+			   this->Rec_lbl_Prompt_StfId->TabIndex = 1;
+			   this->Rec_lbl_Prompt_StfId->Text = L"员工编号：";
+			   // 
+			   // Rec_lbl_Prompt_RecId
+			   // 
+			   this->Rec_lbl_Prompt_RecId->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			   this->Rec_lbl_Prompt_RecId->AutoSize = true;
+			   this->Rec_lbl_Prompt_RecId->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				   static_cast<System::Byte>(0)));
+			   this->Rec_lbl_Prompt_RecId->Location = System::Drawing::Point(72, 57);
+			   this->Rec_lbl_Prompt_RecId->Name = L"Rec_lbl_Prompt_RecId";
+			   this->Rec_lbl_Prompt_RecId->Size = System::Drawing::Size(114, 20);
+			   this->Rec_lbl_Prompt_RecId->TabIndex = 0;
+			   this->Rec_lbl_Prompt_RecId->Text = L"记录编号：";
 			   // 
 			   // pan_order
 			   // 
@@ -944,7 +1163,7 @@ namespace WeAlumni {
 			   this->label1->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			   this->label1->AutoSize = true;
 			   this->label1->BackColor = System::Drawing::SystemColors::Control;
-			   this->label1->Font = (gcnew System::Drawing::Font(L"SimSun", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			   this->label1->Font = (gcnew System::Drawing::Font(L"宋体", 9, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(134)));
 			   this->label1->Location = System::Drawing::Point(945, 331);
 			   this->label1->Name = L"label1";
@@ -957,7 +1176,7 @@ namespace WeAlumni {
 			   this->stf_lbl_Prompt_SearchResult->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			   this->stf_lbl_Prompt_SearchResult->AutoSize = true;
 			   this->stf_lbl_Prompt_SearchResult->BackColor = System::Drawing::SystemColors::Control;
-			   this->stf_lbl_Prompt_SearchResult->Font = (gcnew System::Drawing::Font(L"SimSun", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+			   this->stf_lbl_Prompt_SearchResult->Font = (gcnew System::Drawing::Font(L"宋体", 12, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				   static_cast<System::Byte>(134)));
 			   this->stf_lbl_Prompt_SearchResult->Location = System::Drawing::Point(605, 325);
 			   this->stf_lbl_Prompt_SearchResult->Name = L"stf_lbl_Prompt_SearchResult";
@@ -1164,15 +1383,6 @@ namespace WeAlumni {
 			   this->stf_btn_Add->UseVisualStyleBackColor = true;
 			   this->stf_btn_Add->Click += gcnew System::EventHandler(this, &MainWindow::stf_btn_Add_Click);
 			   // 
-			   // pan_record
-			   // 
-			   this->pan_record->Dock = System::Windows::Forms::DockStyle::Fill;
-			   this->pan_record->Location = System::Drawing::Point(0, 0);
-			   this->pan_record->Margin = System::Windows::Forms::Padding(3, 4, 3, 4);
-			   this->pan_record->Name = L"pan_record";
-			   this->pan_record->Size = System::Drawing::Size(1359, 784);
-			   this->pan_record->TabIndex = 4;
-			   // 
 			   // pan_OPT
 			   // 
 			   this->pan_OPT->Dock = System::Windows::Forms::DockStyle::Fill;
@@ -1289,21 +1499,21 @@ namespace WeAlumni {
 			   // 
 			   this->tsm_system->Name = L"tsm_system";
 			   this->tsm_system->Padding = System::Windows::Forms::Padding(25, 0, 25, 0);
-			   this->tsm_system->Size = System::Drawing::Size(110, 24);
+			   this->tsm_system->Size = System::Drawing::Size(116, 24);
 			   this->tsm_system->Text = L"System";
 			   // 
 			   // tsm_database
 			   // 
 			   this->tsm_database->Name = L"tsm_database";
 			   this->tsm_database->Padding = System::Windows::Forms::Padding(25, 0, 25, 0);
-			   this->tsm_database->Size = System::Drawing::Size(126, 24);
+			   this->tsm_database->Size = System::Drawing::Size(130, 24);
 			   this->tsm_database->Text = L"Database";
 			   // 
 			   // tsm_help
 			   // 
 			   this->tsm_help->Name = L"tsm_help";
 			   this->tsm_help->Padding = System::Windows::Forms::Padding(25, 0, 25, 0);
-			   this->tsm_help->Size = System::Drawing::Size(95, 24);
+			   this->tsm_help->Size = System::Drawing::Size(98, 24);
 			   this->tsm_help->Text = L"Help";
 			   // 
 			   // MainWindow
@@ -1324,6 +1534,9 @@ namespace WeAlumni {
 			   this->toolStripContainer1->TopToolStripPanel->PerformLayout();
 			   this->toolStripContainer1->ResumeLayout(false);
 			   this->toolStripContainer1->PerformLayout();
+			   this->pan_record->ResumeLayout(false);
+			   this->pan_record->PerformLayout();
+			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->Rec_dataGridView))->EndInit();
 			   this->pan_order->ResumeLayout(false);
 			   this->pan_order->PerformLayout();
 			   (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->ord_dataGridView))->EndInit();
@@ -1412,5 +1625,18 @@ namespace WeAlumni {
 		Void ord_btn_Clear_Click(System::Object^ sender, System::EventArgs^ e);
 		Void ord_btn_Add_Click(System::Object^ sender, System::EventArgs^ e);
 		Void ord_dataGridView_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e);
+
+		/*
+			RecordMainWindow
+		*/
+	private:
+		Void Rec_UpdateDataGridView(String^ command);
+		Void Rec_GeneralInformation();
+		Void Rec_btn_Search_Click(System::Object^ sender, System::EventArgs^ e);
+		Void Rec_btn_Clear_Click(System::Object^ sender, System::EventArgs^ e);
+		Void Rec_dataGridView_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e);
+
+private: System::Void lbl_Prompt_MemName_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }

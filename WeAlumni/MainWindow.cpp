@@ -570,3 +570,140 @@ Void WeAlumni::MainWindow::ord_GeneralInformation() {
     }
     database->dataReader->Close();
 }
+
+/*
+ *  Record
+ */
+ /*
+ * Rec_btn_Search_Click
+ *
+ * This method will try to search from Record table for the record of this record
+ * Then update record to rec_DataGridView
+ */
+Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::EventArgs^ e) {
+    String^ recId = Rec_txt_RecId->Text;
+    String^ stfId = Rec_txt_StfId->Text;
+    String^ name = Rec_txt_MemName->Text;
+    String^ dept = Rec_txt_department->Text;
+    String^ cmd = "SELECT Record.Id AS 'RecordId', Record.Time AS 'Time'," +
+        " Record.StfId AS 'StfId'," + " Record.Memname AS 'MemName'," +
+        " Staff.Dept AS 'Department'," + "Staff.Position AS 'Position'," +
+        " Record.Action AS 'Action'" + "FROM Record, Staff WHERE ";
+    String^ cmd1 = "";
+
+    std::vector<int> vec;
+    if (recId->Length)           vec.push_back(0);
+    if (stfId->Length)           vec.push_back(1);
+    if (name->Length)            vec.push_back(2);
+    if (dept->Length)            vec.push_back(3);
+    if (vec.size() == 0) {
+        Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
+        Rec_lbl_Error->Text = "CANNOT FIND Record";
+        Rec_lbl_Error->Visible = true;
+        Rec_dataGridView->DataSource = nullptr;
+        return;
+    }
+
+    bool flag = false;
+    for (auto i : vec) {
+        if (vec.size() != 1 && flag) cmd1 += " AND ";
+        switch (i) {
+        case 0: cmd1 += "Record.Id = '" + Convert::ToInt32(recId) + "' "; break;
+        case 1: cmd1 += "Record.StfId = '" + Convert::ToInt32(stfId) + "' "; break;
+        case 2: cmd1 += "Record.MemName = '" + name + "' "; break;
+        case 4: cmd1 += "Staff.Dept = '" + dept + "' "; break;
+        }
+        flag = true;
+    }
+    cmd += cmd1 + " ORDER BY Record.Id ASC;";
+    Rec_UpdateDataGridView(cmd);
+    Rec_GeneralInformation();
+}
+
+/*
+* rec_btn_Clear_Click
+*
+* When click button "Clear", this method clear up every TextBox or ComboBox of the search engine and UpdateDataGridView.
+*/
+Void WeAlumni::MainWindow::Rec_btn_Clear_Click(System::Object^ sender, System::EventArgs^ e) {
+    Rec_txt_RecId->Text = "";
+    Rec_txt_department->Text = "";
+    Rec_txt_StfId->Text = "";
+    Rec_txt_MemName->Text = "";
+    Rec_lbl_Error->Visible = false;
+    Rec_UpdateDataGridView(REC_SELECT_ALL);
+    Rec_GeneralInformation();
+}
+
+/*
+ * Rec_dataGridView_CellDoubleClick
+ * by double clicking specific row of ord_dataGridView, a corresponding RecInfoPage will show up.
+ */
+Void WeAlumni::MainWindow::Rec_dataGridView_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+    RecInfoPage^ rip = gcnew RecInfoPage(Convert::ToInt32(ord_dataGridView->CurrentRow->Cells[0]->Value));
+    rip->ShowDialog();
+    Rec_UpdateDataGridView(REC_SELECT_ALL);
+    Rec_GeneralInformation();
+}
+
+/*
+ * Rec_UpdateDataGridView(String^ command)
+ * update rec data grid view.
+ * @param String^ command
+ * @return None
+ */
+Void WeAlumni::MainWindow::Rec_UpdateDataGridView(String^ command) {
+    BindingSource^ bSource = gcnew BindingSource();
+    int status = -1;
+
+    try {
+        status = database->ReadDataAdapter(command);
+    }
+    catch (Exception^ exception) {
+        Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
+        Rec_lbl_Error->Text = exception->Message;
+        Rec_lbl_Error->Visible = true;
+        return;
+    }
+
+    if (status > 0) {
+        Rec_lbl_Error->Visible = false;
+        bSource->DataSource = database->dataTable;
+        Rec_dataGridView->DataSource = bSource;
+    }
+    else {
+        Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
+        Rec_lbl_Error->Text = "CANNOT FIND RECORD";
+        Rec_lbl_Error->Visible = true;
+        Rec_dataGridView->DataSource = nullptr;
+    }
+}
+
+/*
+ * Rec_GeneralInformation()
+ * Show general information of record
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::Rec_GeneralInformation() {
+    int status = -1;
+    String^ cmd = "SELECT COUNT(Id) FROM Record;";
+
+    try {
+        status = database->ReadData(cmd);
+    }
+    catch (Exception^ exception) {
+        Rec_lbl_Error->Text = exception->Message;
+        Rec_lbl_Error->Visible = true;
+        return;
+    }
+
+    if (status > 0) {
+        rec_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
+    }
+    else {
+        Rec_lbl_Error->Text = "Can't find data";
+        Rec_lbl_Error->Visible = true;
+    }
+    database->dataReader->Close();
+}
