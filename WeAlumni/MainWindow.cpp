@@ -10,6 +10,7 @@
  *          4/8/20 add member MainWindow functions
  *          4/12/20 add staff MainWindow and auth control for staff and member
  *          4/15/20 bug fix
+ *          4/21/20 Added OPT MainWindow Part(Xiangdong Che)
  *
  */
 
@@ -53,6 +54,8 @@ Void WeAlumni::MainWindow::Initialize() {
     stf_CheckAuth();
     ord_UpdateDataGridView(ORD_SELECT_ALL);
     ord_GeneralInformation();
+    OPT_UpdateDataGridView(OPT_SELECT_ALL);
+    OPT_GeneralInformation();
 }
 
 /*
@@ -598,10 +601,9 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
     if (dept->Length)            vec.push_back(3);
     if (vec.size() == 0) {
         Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        Rec_lbl_Error->Text = "CANNOT FIND Record";
+        Rec_lbl_Error->Text = "No RECORD FOUND";
         Rec_lbl_Error->Visible = true;
         Rec_dataGridView->DataSource = nullptr;
-        return;
     }
 
     bool flag = false;
@@ -706,4 +708,161 @@ Void WeAlumni::MainWindow::Rec_GeneralInformation() {
         Rec_lbl_Error->Visible = true;
     }
     database->dataReader->Close();
+}
+
+/*
+ *
+ *  OPT
+ *
+ */
+
+ /*
+  * OPT_UpdateDataGridView()
+  * Update DataGridView
+  * @param None
+  * @return None
+  */
+Void WeAlumni::MainWindow::OPT_UpdateDataGridView(String^ command) {
+    BindingSource^ bSource = gcnew BindingSource();
+    int status = -1;
+
+    try {
+        status = database->ReadDataAdapter(command);
+    }
+    catch (Exception^ exception) {
+        OPT_lbl_error->ForeColor = System::Drawing::Color::Red;
+        OPT_lbl_error->Text = exception->Message;
+        OPT_lbl_error->Visible = true;
+        return;
+    }
+
+    if (status > 0) {
+        OPT_lbl_error->Visible = false;
+        bSource->DataSource = database->dataTable;
+        OPT_dataGridView->DataSource = bSource;
+    }
+    else {
+        OPT_lbl_error->ForeColor = System::Drawing::Color::Red;
+        OPT_lbl_error->Text = "CANNOT FIND OPT";
+        OPT_lbl_error->Visible = true;
+        OPT_dataGridView->DataSource = nullptr;
+    }
+}
+
+/*
+ * OPT_btn_Search_Click()
+ * Search data with provided info
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::OPT_btn_Search_Click(System::Object^ sender, System::EventArgs^ e) {
+    OPT_lbl_Prompt_default->Visible = false;
+    String^ OPTId = OPT_txt_OPTId->Text;
+    String^ Status = OPT_cmb_Status->Text;
+    String^ MemId = OPT_txt_MemId->Text;
+    String^ MemName = OPT_txt_MemName->Text;
+    String^ CardNumber = OPT_txt_CardNumber->Text;
+
+    String^ command = "SELECT OPT.Id                                                        AS 'OPT编号', " +
+                             "OPT.Status                                                    AS '状态', " +
+                             "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS '成员姓名', " +
+                             "(SELECT Member.Name FROM Member " +
+                                                 "INNER JOIN Staff INNER JOIN OPT " + 
+                             "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS '员工姓名', " +
+                             "OPT.StartDate                                                 AS '开始日期', " +
+                             "OPT.EndDate                                                   AS '结束日期', " +
+                             "OPT.Title                                                     AS '头衔', " +
+                             "OPT.Position                                                  AS '职位' " +
+                             "FROM OPT INNER JOIN Member WHERE ";
+    String^ command2 = "";
+
+    std::vector<int> vec;
+    if (OPTId->Length)         vec.push_back(0);
+    if (Status->Length)        vec.push_back(1);
+    if (MemId->Length)         vec.push_back(2);
+    if (MemName->Length)       vec.push_back(3);
+    if (CardNumber->Length)    vec.push_back(4);
+    if (vec.size() == 0) {
+        OPT_UpdateDataGridView(OPT_SELECT_ALL);
+        return;
+    }
+
+    bool flag = false;
+    for (auto i : vec) {
+
+
+
+        if (vec.size() != 1 && flag) command2 += " AND ";
+        switch (i) {
+        case 0: command2 += "OPT.MemId = Member.Id AND OPT.Id = '" + OPTId + "' "; break;
+        case 1: command2 += "OPT.MemId = Member.Id AND OPT.Status = '" + Status + "' "; break;
+        case 2: command2 += "OPT.MemId = Member.Id AND Member.Id = '" + MemId + "' "; break;
+        case 3: command2 += "OPT.MemId = Member.Id AND Member.Name = '" + MemName + "' "; break;
+        case 4: command2 += "OPT.MemId = Member.Id AND OPT.CardNumber = '" + CardNumber + "' "; break;
+        }
+        flag = true;
+    }
+
+    command += command2 + " ORDER BY OPT.Id ASC;";
+    OPT_UpdateDataGridView(command);
+    OPT_GeneralInformation();
+}
+
+/*
+ * OPT_btn_Clear_Click()
+ * Reset all textboxs and DataGridView
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::OPT_btn_Clear_Click(System::Object^ sender, System::EventArgs^ e) {
+    OPT_lbl_Prompt_default->Visible = true;
+    OPT_txt_OPTId->Text = "";
+    OPT_cmb_Status->Text = "";
+    OPT_txt_MemId->Text = "";
+    OPT_txt_MemName->Text = "";
+    OPT_txt_CardNumber->Text = "";
+    OPT_UpdateDataGridView(OPT_SELECT_ALL);
+    OPT_GeneralInformation();
+}
+
+/*
+ * OPT_dataGridView_CellDoubleClick()
+ * Open OPT InfoPage when double click a row
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::OPT_dataGridView_CellDoubleClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+    OPTInfoPage^ page = gcnew OPTInfoPage(Convert::ToInt32(OPT_dataGridView->CurrentRow->Cells[0]->Value), _pui);
+    page->ShowDialog();
+    OPT_UpdateDataGridView(OPT_SELECT_ALL);
+    OPT_GeneralInformation();
+}
+
+/*
+ * OPT_btn_New_Click()
+ * Open OPT AddPage for adding new OPT file
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::OPT_btn_New_Click(System::Object^ sender, System::EventArgs^ e) {
+    OPTAddPage^ page = gcnew OPTAddPage(_pui);
+    page->ShowDialog();
+    OPT_UpdateDataGridView(OPT_SELECT_ALL);
+    OPT_GeneralInformation();
+}
+
+/*
+ * OPT_GeneralInformation()
+ * Provide total number of rows in DataGridView
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::OPT_GeneralInformation() {
+    int^ count = OPT_dataGridView->RowCount;
+    if (Convert::ToInt32(count) == 0) {
+        OPT_lbl_Count->Text = "0";
+    }
+    else {
+        OPT_lbl_Count->Text = Convert::ToString(OPT_dataGridView->RowCount - 1);
+    }
 }
