@@ -95,8 +95,8 @@
    Sen             | Record
    Haoran       | Orders
    Xiangdong | OPT
-----Testing----
-   Jiaying        | Treasury
+----None----
+   Jiaying
 
 5/2 - S10
 ----Main Window----
