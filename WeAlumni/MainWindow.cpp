@@ -645,7 +645,7 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
         case 0: cmd1 += "Record.Id = '" + Convert::ToInt32(recId) + "' "; break;
         case 1: cmd1 += "Record.StfId = '" + Convert::ToInt32(stfId) + "' "; break;
         case 2: cmd1 += "Record.MemName = '" + name + "' "; break;
-        case 4: cmd1 += "Staff.Dept = '" + dept + "' "; break;
+        case 3: cmd1 += "Staff.Dept = '" + dept + "' "; break;
         }
         flag = true;
     }
@@ -674,7 +674,6 @@ Void WeAlumni::MainWindow::Rec_btn_Clear_Click(System::Object^ sender, System::E
  * by double clicking specific row of recc_dataGridView, a corresponding RecInfoPage will show up.
  */
 Void WeAlumni::MainWindow::Rec_dataGridView_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-    Rec_lbl_Error->Text = "cnm";
     RecInfoPage^ rip = gcnew RecInfoPage(Convert::ToInt32(Rec_dataGridView->CurrentRow->Cells[0]->Value),_pui);
     rip->ShowDialog();
     Rec_UpdateDataGridView(REC_SELECT_ALL);
