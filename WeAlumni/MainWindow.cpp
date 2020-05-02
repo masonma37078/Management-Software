@@ -11,7 +11,7 @@
  *          4/12/20 add staff MainWindow and auth control for staff and member
  *          4/15/20 bug fix
  *          4/21/20 Added OPT MainWindow Part(Xiangdong Che)
- *
+ *          5/1/20 ui & auth update record & order
  */
 
 using namespace System;
@@ -52,8 +52,12 @@ Void WeAlumni::MainWindow::Initialize() {
     stf_GeneralInformation();
     stf_UpdateDataGridView(STF_SELECT_ALL);
     stf_CheckAuth();
+    Rec_GeneralInformation();
+    Rec_UpdateDataGridView(REC_SELECT_ALL);
+    Rec_CheckAuth();
     ord_UpdateDataGridView(ORD_SELECT_ALL);
     ord_GeneralInformation();
+    ord_CheckAuth();
     OPT_UpdateDataGridView(OPT_SELECT_ALL);
     OPT_GeneralInformation();
 }
@@ -591,6 +595,19 @@ Void WeAlumni::MainWindow::ord_GeneralInformation() {
 /*
  *  Record
  */
+ 
+ /*
+  * Rec_CheckAuth()
+  * Check order Auth. If Level == 1 2, 3, user can't see the record mainWindow.
+  * @param None
+  * @return None
+  */
+Void WeAlumni::MainWindow::Rec_CheckAuth() {
+    if (_Auth == PublicUserInfo::Auth::Level_1 || _Auth == PublicUserInfo::Auth::Level_2 || _Auth == PublicUserInfo::Auth::Level_3) {
+        tsm_record->Visible = false;
+        pan_record->Visible = false;
+    }
+}
  /*
  * Rec_btn_Search_Click
  *
@@ -602,10 +619,10 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
     String^ stfId = Rec_txt_StfId->Text;
     String^ name = Rec_txt_MemName->Text;
     String^ dept = Rec_txt_department->Text;
-    String^ cmd = "SELECT Record.Id AS 'RecordId', Record.Time AS 'Time'," +
-        " Record.StfId AS 'StfId'," + " Record.Memname AS 'MemName'," +
-        " Staff.Dept AS 'Department'," + "Staff.Position AS 'Position'," +
-        " Record.Action AS 'Action'" + "FROM Record, Staff WHERE ";
+    String^ cmd = "SELECT Record.Id AS 'ID', Record.Time AS '登记时间'," +
+        " Record.StfId AS '员工编号'," + " Record.Memname AS '员工姓名'," +
+        " Staff.Dept AS '所在部门'," + "Staff.Position AS '职位职务'," +
+        " Record.Action AS '操作内容'" + "FROM Record, Staff WHERE Record.MemId = Staff.MemId AND ";
     String^ cmd1 = "";
 
     std::vector<int> vec;
@@ -615,9 +632,10 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
     if (dept->Length)            vec.push_back(3);
     if (vec.size() == 0) {
         Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        Rec_lbl_Error->Text = "No RECORD FOUND";
+        Rec_lbl_Error->Text = "未找到记录";
         Rec_lbl_Error->Visible = true;
         Rec_dataGridView->DataSource = nullptr;
+        return;
     }
 
     bool flag = false;
@@ -653,10 +671,11 @@ Void WeAlumni::MainWindow::Rec_btn_Clear_Click(System::Object^ sender, System::E
 
 /*
  * Rec_dataGridView_CellDoubleClick
- * by double clicking specific row of ord_dataGridView, a corresponding RecInfoPage will show up.
+ * by double clicking specific row of recc_dataGridView, a corresponding RecInfoPage will show up.
  */
 Void WeAlumni::MainWindow::Rec_dataGridView_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-    RecInfoPage^ rip = gcnew RecInfoPage(Convert::ToInt32(ord_dataGridView->CurrentRow->Cells[0]->Value));
+    Rec_lbl_Error->Text = "cnm";
+    RecInfoPage^ rip = gcnew RecInfoPage(Convert::ToInt32(Rec_dataGridView->CurrentRow->Cells[0]->Value),_pui);
     rip->ShowDialog();
     Rec_UpdateDataGridView(REC_SELECT_ALL);
     Rec_GeneralInformation();
@@ -681,7 +700,6 @@ Void WeAlumni::MainWindow::Rec_UpdateDataGridView(String^ command) {
         Rec_lbl_Error->Visible = true;
         return;
     }
-
     if (status > 0) {
         Rec_lbl_Error->Visible = false;
         bSource->DataSource = database->dataTable;
@@ -689,7 +707,7 @@ Void WeAlumni::MainWindow::Rec_UpdateDataGridView(String^ command) {
     }
     else {
         Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        Rec_lbl_Error->Text = "CANNOT FIND RECORD";
+        Rec_lbl_Error->Text = "未找到记录";
         Rec_lbl_Error->Visible = true;
         Rec_dataGridView->DataSource = nullptr;
     }
@@ -718,7 +736,7 @@ Void WeAlumni::MainWindow::Rec_GeneralInformation() {
         rec_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
     }
     else {
-        Rec_lbl_Error->Text = "Can't find data";
+        Rec_lbl_Error->Text = "无相关数据";
         Rec_lbl_Error->Visible = true;
     }
     database->dataReader->Close();
