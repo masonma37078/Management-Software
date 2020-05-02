@@ -97,7 +97,7 @@ Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::
     if (searchAuth->Length)   vec.push_back(7);
     if (vec.size() == 0) {
         mem_lbl_error->ForeColor = System::Drawing::Color::Red;
-        mem_lbl_error->Text = "CANNOT FIND MEMBER";
+        mem_lbl_error->Text = "²éÎŞ´ËÈË";
         mem_lbl_error->Visible = true;
         mem_dataGridView1->DataSource = nullptr;
         return;
@@ -279,7 +279,7 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
     String^ Dept = stf_cmb_Dept->Text;
     String^ Auth = stf_cmb_Auth->Text;
     String^ command = "SELECT Staff.MemId    AS 'ID', " +
-        "Member.Name    As 'å§“å', " +
+        "Member.Name    As 'ĞÕÃû', " +
         "Member.Gender  AS 'Gender', " +
         "Member.Email   AS 'Email', " +
         "Staff.Dept     As 'Department', " +
@@ -619,10 +619,10 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
     String^ stfId = Rec_txt_StfId->Text;
     String^ name = Rec_txt_MemName->Text;
     String^ dept = Rec_txt_department->Text;
-    String^ cmd = "SELECT Record.Id AS 'ID', Record.Time AS 'ç™»è®°æ—¶é—´'," +
-        " Record.StfId AS 'å‘˜å·¥ç¼–å·'," + " Record.Memname AS 'å‘˜å·¥å§“å'," +
-        " Staff.Dept AS 'æ‰€åœ¨éƒ¨é—¨'," + "Staff.Position AS 'èŒä½èŒåŠ¡'," +
-        " Record.Action AS 'æ“ä½œå†…å®¹'" + "FROM Record, Staff WHERE Record.MemId = Staff.MemId AND ";
+    String^ cmd = "SELECT Record.Id AS 'ID', Record.Time AS 'µÇ¼ÇÊ±¼ä'," +
+        " Record.StfId AS 'Ô±¹¤±àºÅ'," + " Record.Memname AS 'Ô±¹¤ĞÕÃû'," +
+        " Staff.Dept AS 'ËùÔÚ²¿ÃÅ'," + "Staff.Position AS 'Ö°Î»Ö°Îñ'," +
+        " Record.Action AS '²Ù×÷ÄÚÈİ'" + "FROM Record, Staff WHERE Record.MemId = Staff.MemId AND ";
     String^ cmd1 = "";
 
     std::vector<int> vec;
@@ -632,7 +632,7 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
     if (dept->Length)            vec.push_back(3);
     if (vec.size() == 0) {
         Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        Rec_lbl_Error->Text = "æœªæ‰¾åˆ°è®°å½•";
+        Rec_lbl_Error->Text = "Î´ÕÒµ½¼ÇÂ¼";
         Rec_lbl_Error->Visible = true;
         Rec_dataGridView->DataSource = nullptr;
         return;
@@ -706,7 +706,7 @@ Void WeAlumni::MainWindow::Rec_UpdateDataGridView(String^ command) {
     }
     else {
         Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        Rec_lbl_Error->Text = "æœªæ‰¾åˆ°è®°å½•";
+        Rec_lbl_Error->Text = "Î´ÕÒµ½¼ÇÂ¼";
         Rec_lbl_Error->Visible = true;
         Rec_dataGridView->DataSource = nullptr;
     }
@@ -735,7 +735,7 @@ Void WeAlumni::MainWindow::Rec_GeneralInformation() {
         rec_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
     }
     else {
-        Rec_lbl_Error->Text = "æ— ç›¸å…³æ•°æ®";
+        Rec_lbl_Error->Text = "ÎŞÏà¹ØÊı¾İ";
         Rec_lbl_Error->Visible = true;
     }
     database->dataReader->Close();
@@ -794,16 +794,16 @@ Void WeAlumni::MainWindow::OPT_btn_Search_Click(System::Object^ sender, System::
     String^ MemName = OPT_txt_MemName->Text;
     String^ CardNumber = OPT_txt_CardNumber->Text;
 
-    String^ command = "SELECT OPT.Id                                                        AS 'OPTç¼–å·', " +
-        "OPT.Status                                                    AS 'çŠ¶æ€', " +
-        "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS 'æˆå‘˜å§“å', " +
+    String^ command = "SELECT OPT.Id                                                        AS 'OPT±àºÅ', " +
+        "OPT.Status                                                    AS '×´Ì¬', " +
+        "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS '³ÉÔ±ĞÕÃû', " +
         "(SELECT Member.Name FROM Member " +
         "INNER JOIN Staff INNER JOIN OPT " +
-        "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS 'å‘˜å·¥å§“å', " +
-        "OPT.StartDate                                                 AS 'å¼€å§‹æ—¥æœŸ', " +
-        "OPT.EndDate                                                   AS 'ç»“æŸæ—¥æœŸ', " +
-        "OPT.Title                                                     AS 'å¤´è¡”', " +
-        "OPT.Position                                                  AS 'èŒä½' " +
+        "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS 'Ô±¹¤ĞÕÃû', " +
+        "OPT.StartDate                                                 AS '¿ªÊ¼ÈÕÆÚ', " +
+        "OPT.EndDate                                                   AS '½áÊøÈÕÆÚ', " +
+        "OPT.Title                                                     AS 'Í·ÏÎ', " +
+        "OPT.Position                                                  AS 'Ö°Î»' " +
         "FROM OPT INNER JOIN Member WHERE ";
     String^ command2 = "";
 
