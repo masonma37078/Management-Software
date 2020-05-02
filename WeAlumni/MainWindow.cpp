@@ -12,6 +12,7 @@
  *          4/15/20 bug fix
  *          4/21/20 Added OPT MainWindow Part(Xiangdong Che)
  *          5/1/20 ui & auth update record & order
+ *          5/02/20 Changed layout of OPT part(Xiangdong Che)
  */
 
 using namespace System;
@@ -60,6 +61,7 @@ Void WeAlumni::MainWindow::Initialize() {
     ord_CheckAuth();
     OPT_UpdateDataGridView(OPT_SELECT_ALL);
     OPT_GeneralInformation();
+    OPT_CheckAuth();
 }
 
 /*
@@ -795,16 +797,16 @@ Void WeAlumni::MainWindow::OPT_btn_Search_Click(System::Object^ sender, System::
     String^ CardNumber = OPT_txt_CardNumber->Text;
 
     String^ command = "SELECT OPT.Id                                                        AS 'OPT编号', " +
-        "OPT.Status                                                    AS '状态', " +
-        "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS '成员姓名', " +
-        "(SELECT Member.Name FROM Member " +
-        "INNER JOIN Staff INNER JOIN OPT " +
-        "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS '员工姓名', " +
-        "OPT.StartDate                                                 AS '开始日期', " +
-        "OPT.EndDate                                                   AS '结束日期', " +
-        "OPT.Title                                                     AS '头衔', " +
-        "OPT.Position                                                  AS '职位' " +
-        "FROM OPT INNER JOIN Member WHERE ";
+                             "OPT.Status                                                    AS '状态', " +
+                             "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS '成员姓名', " +
+                             "(SELECT Member.Name FROM Member " +
+                             "INNER JOIN Staff INNER JOIN OPT " +
+                             "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS '员工姓名', " +
+                             "OPT.StartDate                                                 AS '开始日期', " +
+                             "OPT.EndDate                                                   AS '结束日期', " +
+                             "OPT.Title                                                     AS '头衔', " +
+                             "OPT.Position                                                  AS '职位' " +
+                      "FROM OPT INNER JOIN Member WHERE ";
     String^ command2 = "";
 
     std::vector<int> vec;
@@ -815,6 +817,7 @@ Void WeAlumni::MainWindow::OPT_btn_Search_Click(System::Object^ sender, System::
     if (CardNumber->Length)    vec.push_back(4);
     if (vec.size() == 0) {
         OPT_UpdateDataGridView(OPT_SELECT_ALL);
+        OPT_lbl_Prompt_default->Visible = true;
         return;
     }
 
@@ -895,6 +898,19 @@ Void WeAlumni::MainWindow::OPT_GeneralInformation() {
     }
     else {
         OPT_lbl_Count->Text = Convert::ToString(OPT_dataGridView->RowCount - 1);
+    }
+}
+
+/*
+ * OPT_CheckAuth()
+ * Check auth of current user
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::OPT_CheckAuth() {
+    if (_Auth == PublicUserInfo::Auth::Level_1 || _Auth == PublicUserInfo::Auth::Level_2) {
+        tsm_OPT->Visible = false;
+        pan_OPT->Visible = false;
     }
 }
 
