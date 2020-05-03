@@ -1,4 +1,4 @@
-#include "MainWindow.h"
+ï»¿#include "MainWindow.h"
 #include <vector>
 /*
  * MainWindow.h
@@ -13,6 +13,7 @@
  *          4/21/20 Added OPT MainWindow Part(Xiangdong Che)
  *          5/1/20 ui & auth update record & order
  *          5/02/20 Changed layout of OPT part(Xiangdong Che)
+ *          5/2/20 Treasury MainWindow (Yiyun Zheng)
  */
 
 using namespace System;
@@ -62,6 +63,9 @@ Void WeAlumni::MainWindow::Initialize() {
     OPT_UpdateDataGridView(OPT_SELECT_ALL);
     OPT_GeneralInformation();
     OPT_CheckAuth();
+
+    Tre_CheckDB();
+    Tre_GeneralInformation();
 }
 
 /*
@@ -99,7 +103,7 @@ Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::
     if (searchAuth->Length)   vec.push_back(7);
     if (vec.size() == 0) {
         mem_lbl_error->ForeColor = System::Drawing::Color::Red;
-        mem_lbl_error->Text = "²éÎŞ´ËÈË";
+        mem_lbl_error->Text = "æŸ¥æ— æ­¤äºº";
         mem_lbl_error->Visible = true;
         mem_dataGridView1->DataSource = nullptr;
         return;
@@ -281,7 +285,7 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
     String^ Dept = stf_cmb_Dept->Text;
     String^ Auth = stf_cmb_Auth->Text;
     String^ command = "SELECT Staff.MemId    AS 'ID', " +
-        "Member.Name    As 'ĞÕÃû', " +
+        "Member.Name    As 'å§“å', " +
         "Member.Gender  AS 'Gender', " +
         "Member.Email   AS 'Email', " +
         "Staff.Dept     As 'Department', " +
@@ -621,10 +625,10 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
     String^ stfId = Rec_txt_StfId->Text;
     String^ name = Rec_txt_MemName->Text;
     String^ dept = Rec_txt_department->Text;
-    String^ cmd = "SELECT Record.Id AS 'ID', Record.Time AS 'µÇ¼ÇÊ±¼ä'," +
-        " Record.StfId AS 'Ô±¹¤±àºÅ'," + " Record.Memname AS 'Ô±¹¤ĞÕÃû'," +
-        " Staff.Dept AS 'ËùÔÚ²¿ÃÅ'," + "Staff.Position AS 'Ö°Î»Ö°Îñ'," +
-        " Record.Action AS '²Ù×÷ÄÚÈİ'" + "FROM Record, Staff WHERE Record.MemId = Staff.MemId AND ";
+    String^ cmd = "SELECT Record.Id AS 'ID', Record.Time AS 'ç™»è®°æ—¶é—´'," +
+        " Record.StfId AS 'å‘˜å·¥ç¼–å·'," + " Record.Memname AS 'å‘˜å·¥å§“å'," +
+        " Staff.Dept AS 'æ‰€åœ¨éƒ¨é—¨'," + "Staff.Position AS 'èŒä½èŒåŠ¡'," +
+        " Record.Action AS 'æ“ä½œå†…å®¹'" + "FROM Record, Staff WHERE Record.MemId = Staff.MemId AND ";
     String^ cmd1 = "";
 
     std::vector<int> vec;
@@ -634,7 +638,7 @@ Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::
     if (dept->Length)            vec.push_back(3);
     if (vec.size() == 0) {
         Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        Rec_lbl_Error->Text = "Î´ÕÒµ½¼ÇÂ¼";
+        Rec_lbl_Error->Text = "æœªæ‰¾åˆ°è®°å½•";
         Rec_lbl_Error->Visible = true;
         Rec_dataGridView->DataSource = nullptr;
         return;
@@ -708,7 +712,7 @@ Void WeAlumni::MainWindow::Rec_UpdateDataGridView(String^ command) {
     }
     else {
         Rec_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        Rec_lbl_Error->Text = "Î´ÕÒµ½¼ÇÂ¼";
+        Rec_lbl_Error->Text = "æœªæ‰¾åˆ°è®°å½•";
         Rec_lbl_Error->Visible = true;
         Rec_dataGridView->DataSource = nullptr;
     }
@@ -737,7 +741,7 @@ Void WeAlumni::MainWindow::Rec_GeneralInformation() {
         rec_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
     }
     else {
-        Rec_lbl_Error->Text = "ÎŞÏà¹ØÊı¾İ";
+        Rec_lbl_Error->Text = "æ— ç›¸å…³æ•°æ®";
         Rec_lbl_Error->Visible = true;
     }
     database->dataReader->Close();
@@ -796,16 +800,16 @@ Void WeAlumni::MainWindow::OPT_btn_Search_Click(System::Object^ sender, System::
     String^ MemName = OPT_txt_MemName->Text;
     String^ CardNumber = OPT_txt_CardNumber->Text;
 
-    String^ command = "SELECT OPT.Id                                                        AS 'OPT±àºÅ', " +
-                             "OPT.Status                                                    AS '×´Ì¬', " +
-                             "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS '³ÉÔ±ĞÕÃû', " +
+    String^ command = "SELECT OPT.Id                                                        AS 'OPTç¼–å·', " +
+                             "OPT.Status                                                    AS 'çŠ¶æ€', " +
+                             "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS 'æˆå‘˜å§“å', " +
                              "(SELECT Member.Name FROM Member " +
                              "INNER JOIN Staff INNER JOIN OPT " +
-                             "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS 'Ô±¹¤ĞÕÃû', " +
-                             "OPT.StartDate                                                 AS '¿ªÊ¼ÈÕÆÚ', " +
-                             "OPT.EndDate                                                   AS '½áÊøÈÕÆÚ', " +
-                             "OPT.Title                                                     AS 'Í·ÏÎ', " +
-                             "OPT.Position                                                  AS 'Ö°Î»' " +
+                             "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS 'å‘˜å·¥å§“å', " +
+                             "OPT.StartDate                                                 AS 'å¼€å§‹æ—¥æœŸ', " +
+                             "OPT.EndDate                                                   AS 'ç»“æŸæ—¥æœŸ', " +
+                             "OPT.Title                                                     AS 'å¤´è¡”', " +
+                             "OPT.Position                                                  AS 'èŒä½' " +
                       "FROM OPT INNER JOIN Member WHERE ";
     String^ command2 = "";
 
@@ -938,4 +942,183 @@ Void WeAlumni::MainWindow::tmsi_ChangeUserInfo_Click(System::Object^ sender, Sys
 Void WeAlumni::MainWindow::tsmi_VersionInfo_Click(System::Object^ sender, System::EventArgs^ e) {
     SysInfoPage^ page = gcnew SysInfoPage();
     page->ShowDialog();
+}
+
+/*
+ *
+ *  Treasury
+ *
+ */
+
+ /*
+  * Tre_UpdateDataGridView()
+  * Update DataGridView
+  * @param None
+  * @return None
+  */
+Void WeAlumni::MainWindow::Tre_UpdateDataGridView(String^ command) {
+    BindingSource^ bSource = gcnew BindingSource();
+    int status = -1;
+
+    try {
+        status = _TreDB->ReadDataAdapter(command);
+    }
+    catch (Exception^ exception) {
+        tre_lbl_error->ForeColor = System::Drawing::Color::Red;
+        tre_lbl_error->Text = exception->Message;
+        tre_lbl_error->Visible = true;
+        return;
+    }
+
+    if (status > 0) {
+        tre_lbl_error->Visible = false;
+        bSource->DataSource = _TreDB->dataTable;
+        tre_dataGridView->DataSource = bSource;
+    }
+    else {
+        tre_lbl_error->ForeColor = System::Drawing::Color::Red;
+        tre_lbl_error->Text = "æ— å¯æŸ¥è¯¢çš„è´¢åŠ¡ä¿¡æ¯";
+        tre_lbl_error->Visible = true;
+        tre_dataGridView->DataSource = nullptr;
+    }
+}
+
+/*
+ * Tre_btn_Search_Click()
+ * Search data with provided info
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::Tre_btn_Search_Click(System::Object^ sender, System::EventArgs^ e) {
+    String^ TreId = tre_txt_treId->Text;
+    String^ TreType = tre_cmb_type->Text;
+
+    String^ command = "SELECT Treasury.Id AS 'è´¢åŠ¡ç¼–å·', " +
+        "Treasury.StfName AS 'æˆå‘˜å§“å', " +
+        "Treasury.Time AS 'ç™»è®°æ—¶é—´', " +
+        "Treasury.type AS 'ç±»å‹', " +
+        "Treasury.Amount AS 'é‡‘é¢', " +
+        "Treasury.Comment AS 'å¤‡æ³¨' " +
+        "FROM Treasury WHERE ";
+    String^ command2 = "";
+
+    std::vector<int> vec;
+    if (TreId->Length)         vec.push_back(0);
+    if (TreType->Length)        vec.push_back(1);
+    if (vec.size() == 0) {
+        Tre_CheckAuth();
+        Tre_GeneralInformation();
+        return;
+    }
+
+    bool flag = false;
+    for (auto i : vec) {
+        if (vec.size() != 1 && flag) command2 += " AND ";
+        switch (i) {
+        case 0: command2 += "Treasury.Id = '" + TreId + "' "; break;
+        case 1: command2 += "Treasury.type = '" + TreType + "' "; break;
+        }
+        flag = true;
+    }
+    
+    if (!_Auth.Equals(PublicUserInfo::Auth::Level_5)) {
+        command2 += " AND Treasury.StfId = " + Convert::ToString(_pui->GetId());
+    }
+    command += command2 + " ORDER BY Treasury.Id ASC;";
+
+    Tre_UpdateDataGridView(command);
+    Tre_GeneralInformation();
+}
+
+/*
+ * Tre_btn_Clear_Click()
+ * Reset all textboxs and DataGridView
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::Tre_btn_Clear_Click(System::Object^ sender, System::EventArgs^ e) {
+    tre_txt_treId->Text = "";
+    tre_cmb_type->Text = "";
+    Tre_CheckAuth();
+    Tre_GeneralInformation();
+}
+
+/*
+ * Tre_dataGridView_CellDoubleClick()
+ * Open Treasury InfoPage when double click a row
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::Tre_dataGridView_CellDoubleClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+
+    TreInfoPage^ page = gcnew TreInfoPage(_pui, Convert::ToInt32(tre_dataGridView->CurrentRow->Cells[0]->Value));
+    page->ShowDialog();
+    Tre_CheckAuth();
+    Tre_GeneralInformation();
+
+}
+
+/*
+ * Tre_btn_New_Click()
+ * Open OPT AddPage for adding new Treasury record
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::Tre_btn_New_Click(System::Object^ sender, System::EventArgs^ e) {
+    TreAddPage^ page = gcnew TreAddPage(_pui);
+    page->ShowDialog();
+    Tre_CheckAuth();
+    Tre_GeneralInformation();
+
+}
+
+/*
+ * Tre_GeneralInformation()
+ * Provide total number of rows in DataGridView
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::Tre_GeneralInformation() {
+    int^ count = tre_dataGridView->RowCount;
+    if (Convert::ToInt32(count) == 0) {
+        tre_lbl_count->Text = "0";
+    }
+    else {
+        tre_lbl_count->Text = Convert::ToString(tre_dataGridView->RowCount - 1);
+    }
+}
+
+/*
+ * Tre_CheckAuth
+ * Show Data Depend on Authority
+ * @param None
+ * @return None
+ */
+Void WeAlumni::MainWindow::Tre_CheckAuth() {
+    if (_Auth.Equals(PublicUserInfo::Auth::Level_5)) {
+        Tre_UpdateDataGridView(TRE_LEVEL5);
+    }
+    else {
+        String^ cmd = TRE_Normal + Convert::ToString(_pui->GetId()) + " ORDER BY Treasury.Id ASC;";
+        Tre_UpdateDataGridView(cmd);
+    }
+}
+
+
+/*
+ * Tre_CheckDB()
+ * Check threasury Data base
+ * @param None
+ * @return None
+ */
+void WeAlumni::MainWindow::Tre_CheckDB() {
+    if (DatabasePrecheck::TrePrecheck()) {
+        _TreDB = gcnew Database(Database::DatabaseType::Treasury);
+        Tre_CheckAuth();
+    }
+    else {
+        tre_lbl_error->Text = "é”™è¯¯ï¼šæ— æ³•è¯»å–æ•°æ®åº“ï¼Œè¯·é‡æ–°å¯¼å…¥æ•°æ®åº“æˆ–é€€å‡º.";
+        tre_lbl_error->ForeColor = System::Drawing::Color::Red;
+
+    }
 }
