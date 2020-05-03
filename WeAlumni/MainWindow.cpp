@@ -284,13 +284,14 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
     String^ Name = stf_txt_Name->Text;
     String^ Dept = stf_cmb_Dept->Text;
     String^ Auth = stf_cmb_Auth->Text;
+
     String^ command = "SELECT Staff.MemId    AS 'ID', " +
         "Member.Name    As '姓名', " +
-        "Member.Gender  AS 'Gender', " +
+        "Member.Gender  AS '性别', " +
         "Member.Email   AS 'Email', " +
-        "Staff.Dept     As 'Department', " +
-        "Staff.Position As 'Position', " +
-        "Staff.Auth     As 'Auth' " +
+        "Staff.Dept     As '所在部门', " +
+        "Staff.Position As '职位职务', " +
+        "Staff.Auth     As '权限等级' " +
         "FROM   Member, Staff " +
         "WHERE Staff.MemId = Member.Id AND ";
     BindingSource^ bSource = gcnew BindingSource();
@@ -305,7 +306,7 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
         mem_UpdateDataGridView(STF_SELECT_ALL);
         stf_dataGridView->DataSource = nullptr;
         stf_lbl_Error->Visible = true;
-        stf_lbl_Error->Text = "CANNOT FIND STAFF";
+        stf_lbl_Error->Text = "找不到数据";
         return;
     }
 
@@ -313,7 +314,7 @@ Void WeAlumni::MainWindow::stf_btn_Search_Click(System::Object^ sender, System::
     for (auto i : vec) {
         if (vec.size() != 1 && flag) cmd2 += " AND ";
         switch (i) {
-        case 0: cmd2 += "Staff.MemId = " + Convert::ToInt32(Id); break;
+        case 0: cmd2 += "Staff.MemId = '" + Id + "' "; break;
         case 1: cmd2 += "Member.Name = '" + Name + "' "; break;
         case 2: cmd2 += "Staff.Dept = '" + Dept + "' "; break;
         case 3: cmd2 += "Staff.Auth = '" + Auth + "' "; break;
@@ -386,7 +387,7 @@ Void WeAlumni::MainWindow::stf_GeneralInformation() {
         stf_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
     }
     else {
-        stf_lbl_Error->Text = "Can't find the data";
+        stf_lbl_Error->Text = "找不到数据";
         stf_lbl_Error->Visible = true;
     }
     database->dataReader->Close();
@@ -420,7 +421,7 @@ Void WeAlumni::MainWindow::stf_UpdateDataGridView(String^ command) {
         stf_dataGridView->DataSource = nullptr;
         stf_lbl_Error->Visible = true;
         stf_lbl_Error->ForeColor = System::Drawing::Color::Red;
-        stf_lbl_Error->Text = "CANNOT FIND STAFF";
+        stf_lbl_Error->Text = "找不到数据";
     }
 }
 
@@ -601,7 +602,7 @@ Void WeAlumni::MainWindow::ord_GeneralInformation() {
 /*
  *  Record
  */
- 
+
  /*
   * Rec_CheckAuth()
   * Check order Auth. If Level == 1 2, 3, user can't see the record mainWindow.
@@ -614,12 +615,12 @@ Void WeAlumni::MainWindow::Rec_CheckAuth() {
         pan_record->Visible = false;
     }
 }
- /*
- * Rec_btn_Search_Click
- *
- * This method will try to search from Record table for the record of this record
- * Then update record to rec_DataGridView
- */
+/*
+* Rec_btn_Search_Click
+*
+* This method will try to search from Record table for the record of this record
+* Then update record to rec_DataGridView
+*/
 Void WeAlumni::MainWindow::Rec_btn_Search_Click(System::Object^ sender, System::EventArgs^ e) {
     String^ recId = Rec_txt_RecId->Text;
     String^ stfId = Rec_txt_StfId->Text;
@@ -680,7 +681,7 @@ Void WeAlumni::MainWindow::Rec_btn_Clear_Click(System::Object^ sender, System::E
  * by double clicking specific row of recc_dataGridView, a corresponding RecInfoPage will show up.
  */
 Void WeAlumni::MainWindow::Rec_dataGridView_CellContentClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-    RecInfoPage^ rip = gcnew RecInfoPage(Convert::ToInt32(Rec_dataGridView->CurrentRow->Cells[0]->Value),_pui);
+    RecInfoPage^ rip = gcnew RecInfoPage(Convert::ToInt32(Rec_dataGridView->CurrentRow->Cells[0]->Value), _pui);
     rip->ShowDialog();
     Rec_UpdateDataGridView(REC_SELECT_ALL);
     Rec_GeneralInformation();
@@ -801,16 +802,16 @@ Void WeAlumni::MainWindow::OPT_btn_Search_Click(System::Object^ sender, System::
     String^ CardNumber = OPT_txt_CardNumber->Text;
 
     String^ command = "SELECT OPT.Id                                                        AS 'OPT编号', " +
-                             "OPT.Status                                                    AS '状态', " +
-                             "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS '成员姓名', " +
-                             "(SELECT Member.Name FROM Member " +
-                             "INNER JOIN Staff INNER JOIN OPT " +
-                             "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS '员工姓名', " +
-                             "OPT.StartDate                                                 AS '开始日期', " +
-                             "OPT.EndDate                                                   AS '结束日期', " +
-                             "OPT.Title                                                     AS '头衔', " +
-                             "OPT.Position                                                  AS '职位' " +
-                      "FROM OPT INNER JOIN Member WHERE ";
+        "OPT.Status                                                    AS '状态', " +
+        "(SELECT Member.Name FROM Member WHERE Member.Id = OPT.MemId)  AS '成员姓名', " +
+        "(SELECT Member.Name FROM Member " +
+        "INNER JOIN Staff INNER JOIN OPT " +
+        "WHERE Member.Id = Staff.MemId AND Staff.MemId = OPT.StfId)    AS '员工姓名', " +
+        "OPT.StartDate                                                 AS '开始日期', " +
+        "OPT.EndDate                                                   AS '结束日期', " +
+        "OPT.Title                                                     AS '头衔', " +
+        "OPT.Position                                                  AS '职位' " +
+        "FROM OPT INNER JOIN Member WHERE ";
     String^ command2 = "";
 
     std::vector<int> vec;
@@ -906,6 +907,8 @@ Void WeAlumni::MainWindow::OPT_GeneralInformation() {
 }
 
 /*
+<<<<<<< HEAD
+=======
  * OPT_CheckAuth()
  * Check auth of current user
  * @param None
@@ -919,6 +922,7 @@ Void WeAlumni::MainWindow::OPT_CheckAuth() {
 }
 
 /*
+>>>>>>> a683c45b1dcc9c9aa910360d7978338217ec720e
  *  System
  */
 
@@ -1020,7 +1024,7 @@ Void WeAlumni::MainWindow::Tre_btn_Search_Click(System::Object^ sender, System::
         }
         flag = true;
     }
-    
+
     if (!_Auth.Equals(PublicUserInfo::Auth::Level_5)) {
         command2 += " AND Treasury.StfId = " + Convert::ToString(_pui->GetId());
     }
