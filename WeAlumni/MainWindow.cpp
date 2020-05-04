@@ -1,4 +1,4 @@
-﻿#include "MainWindow.h"
+#include "MainWindow.h"
 #include <vector>
 /*
  * MainWindow.h
@@ -86,9 +86,9 @@ Void WeAlumni::MainWindow::mem_btn_Search_Click(System::Object^ sender, System::
     String^ careerStatus = mem_cmb_CareerStatus->Text;
     String^ major = mem_txt_Major->Text;
     String^ searchAuth = mem_cmb_SearchAuth->Text;
-    String^ cmd = "SELECT Member.Id AS 'MemberId', Member.Status AS 'MemberStatus'," +
-        " Member.Type AS 'MemberType'," + " Member.Name AS 'MemberName'," +
-        " Member.Gender AS 'MemberGender'," + "Member.Email AS 'MemberEmail'" +
+    String^ cmd = "SELECT Member.Id AS '成员编号', Member.Status AS '成员状态'," +
+        " Member.Type AS '成员类型'," + " Member.Name AS '姓名'," +
+        " Member.Gender AS '性别'," + "Member.Email AS 'Email'" +
         "FROM Member WHERE ";
     String^ cmd2 = "";
 
@@ -217,7 +217,7 @@ Void WeAlumni::MainWindow::mem_UpdateDataGridView(String^ command) {
     }
     else {
         mem_lbl_error->ForeColor = System::Drawing::Color::Red;
-        mem_lbl_error->Text = "CANNOT FIND MEMBER";
+        mem_lbl_error->Text = "查无此人";
         mem_lbl_error->Visible = true;
         mem_dataGridView1->DataSource = nullptr;
     }
@@ -246,7 +246,7 @@ Void WeAlumni::MainWindow::mem_GeneralInformation() {
         mem_lbl_Count->Text = database->dataReader->GetInt32(0).ToString();
     }
     else {
-        mem_lbl_error->Text = "Can't find data";
+        mem_lbl_error->Text = "无法查找数据";
         mem_lbl_error->Visible = true;
     }
     database->dataReader->Close();

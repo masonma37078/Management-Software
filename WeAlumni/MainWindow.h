@@ -14,7 +14,7 @@
 #include "TreInfoPage.h"
 #include "TreAddPage.h"
 #include "DatabasePrecheck.h"
-#define MEM_SELECT_ALL "SELECT Member.Id AS 'MemberId', Member.Status AS 'MemberStatus', Member.Type AS 'MemberType', Member.Name AS 'MemberName', Member.Gender AS 'MemberGender', Member.Email AS 'MemberEmail' FROM Member ORDER BY Id ASC"
+#define MEM_SELECT_ALL "SELECT Member.Id AS '成员编号', Member.Status AS '成员状态', Member.Type AS '成员类型', Member.Name AS '姓名', Member.Gender AS '性别', Member.Email AS 'Email' FROM Member ORDER BY Id ASC"
 #define STF_SELECT_ALL "SELECT Staff.MemId AS 'ID', Member.Name As '姓名', Member.Gender AS '性别', Member.Email AS 'Email', Staff.Dept As '所在部门', Staff.Position As '职位职务', Staff.Auth As '权限等级' FROM Member, Staff WHERE Staff.MemId = Member.Id ORDER BY Staff.MemId ASC"
 #define ORD_SELECT_ALL "SELECT Orders.Id AS 'ID', Orders.Status As '订单状态', Orders.Time AS '提交时间', Member.Name AS '成员姓名', Member.Email As 'Email', Item.Name As '商品名称', Orders.Amount As '数量', Item.Price As '单价', Orders.Comment As '备注' FROM Orders, Member, Item WHERE Orders.MemId = Member.Id AND Orders.ItemId = Item.Id ORDER BY Orders.Id ASC"
 #define REC_SELECT_ALL "SELECT Record.Id AS 'ID', Record.Time AS '登记时间', Record.StfId AS '员工编号', Record.Memname AS '员工姓名', Staff.Dept AS '所在部门', Staff.Position AS '职位职务', Record.Action AS '操作内容' FROM Record, Staff WHERE Staff.MemId = Record.StfId"
