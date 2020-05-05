@@ -10,6 +10,7 @@
  *          4/4/20 Lock btn when record not found. No message if show data successfully
  *          4/12/20 Add tre DB check, authority and public user info
  *          4/20/20 fix the bug of unable to showing Chinese. Modify language and UI.
+ *          5/2/20 Add Record, and handle database exception
  *
  */
 
@@ -207,38 +208,49 @@ System::Void WeAlumni::TreInfoPage::SetButtonStatus(bool ModifyStatus) {
  */
 System::Void WeAlumni::TreInfoPage::btn_Accpet_Click(System::Object^ sender, System::EventArgs^ e) {
     int Status = -1;
-    if (UpdateOutsideInfo(txt_StfId->Text) > 0) {
-        try {
-            String^ cmd = "UPDATE Treasury "
-                          "SET StfId = " + txt_StfId->Text + ", "
-                              "Time = '" + txt_Time->Text + "', "
-                              "Type = '" + txt_Type->Text + "', "
-                              "Amount = '" + txt_Amount->Text + "', "
-                              "Comment = '" + txt_Comment->Text + "' "
-                          "WHERE Id = " + OrderId + ";";
-            Status = _TreDB->UpdateData(cmd);
-        }
-        catch (Exception^ exception) {
-            lbl_Error->Text = exception->Message;
-            lbl_Error->ForeColor = System::Drawing::Color::Red;
-            return;
-        }
-        if (Status > 0) {
-            UpdateInfo(OrderId);
-            SetShowLabelStatus(true);
-            SetTextStatus(false);
-            SetButtonStatus(false);
-            lbl_Error->Text = "成功：更改已接受.";
-            lbl_Error->ForeColor = System::Drawing::Color::Green;
-
-            _TreDB->Log(UserInfo->GetId(), L"更改财务记录 " + OrderId);
-
-        }
-        else {
-            lbl_Error->Text = "错误：更改失败.";
-            lbl_Error->ForeColor = System::Drawing::Color::Red;
-        }
+    try {
+        String^ cmd = "UPDATE Treasury "
+            "SET StfId = " + txt_StfId->Text + ", "
+            "Time = '" + txt_Time->Text + "', "
+            "Type = '" + txt_Type->Text + "', "
+            "Amount = '" + txt_Amount->Text + "', "
+            "Comment = '" + txt_Comment->Text + "' "
+            "WHERE Id = " + OrderId + ";";
+        Status = _TreDB->UpdateData(cmd);
     }
+    catch (Exception^ exception) {
+        lbl_Error->Text = "Treasury数据库错误：" + exception->Message;
+        lbl_Error->ForeColor = System::Drawing::Color::Red;
+        return;
+    }
+    if (Status > 0) {
+        UpdateInfo(OrderId);
+        SetShowLabelStatus(true);
+        SetTextStatus(false);
+        SetButtonStatus(false);
+        lbl_Error->Text = "成功：更改已接受.";
+        lbl_Error->ForeColor = System::Drawing::Color::Green;
+        
+        String^ actionRecord = "更改财务信息，编号 " + OrderId;
+        if (AddNewRecord(actionRecord)) {
+            try {
+
+                _TreDB->Log(UserInfo->GetId(), actionRecord);
+            }
+            catch (Exception^ exception) {
+                lbl_Error->Text = "Log数据库错误:" + exception->Message;
+                lbl_Error->ForeColor = System::Drawing::Color::Red;
+                return;
+            }
+        }
+        
+
+    }
+    else {
+        lbl_Error->Text = "错误：更改失败.";
+        lbl_Error->ForeColor = System::Drawing::Color::Red;
+    }
+ 
 }
 /*
  * btn_Delete_Click
@@ -262,8 +274,18 @@ System::Void WeAlumni::TreInfoPage::btn_Delete_Click(System::Object^ sender, Sys
         this->Close();
         lbl_Error->Text = "成功：删除成功.";
         lbl_Error->ForeColor = System::Drawing::Color::Green;
-        
-        _TreDB->Log(UserInfo->GetId(), "删除财务记录 "+OrderId);
+        String^ actionRecord = "删除财务记录 " + OrderId;
+        if (AddNewRecord(actionRecord)) {
+            try {
+
+                _TreDB->Log(UserInfo->GetId(), actionRecord);
+            }
+            catch (Exception^ exception) {
+                lbl_Error->Text = "Log数据库错误:" + exception->Message;
+                lbl_Error->ForeColor = System::Drawing::Color::Red;
+                return;
+            }
+        }
     }
     else {
         lbl_Error->Text = "错误：删除失败.";
@@ -314,5 +336,54 @@ void WeAlumni::TreInfoPage::CheckDB(String^ OrderId) {
         lbl_Error->ForeColor = System::Drawing::Color::Red;
         UnableAllBtn();
     }
+}
+
+
+/*
+ * AddNewRecord(String^)
+ * Add new recoding data to Record table.
+ * @param String^ Action
+ * @return None
+ */
+
+bool WeAlumni::TreInfoPage::AddNewRecord(String^ action) {
+    _DataDB = gcnew Database(Database::DatabaseType::Data);
+    int status = -1;
+    bool result;
+    int RecordId = _DataDB->GetNextId(Database::DatabaseTable::Record);
+    String^ StaffId = Convert::ToString(UserInfo->GetId());
+    String^ Name = UserInfo->GetName();
+    String^ time = _DataDB->GetSystemTime();
+    String^ command = "INSERT INTO Record VALUES(" + RecordId + "," +
+        StaffId + "," +
+        StaffId + ", '" +
+        Name + "', '" +
+        time + "', '" +
+        action + "');";
+    try {
+        status = _DataDB->InsertData(command);
+    }
+    catch (Exception^ exception) {
+        lbl_Error->Text = "Record错误: " + exception->Message;
+        lbl_Error->ForeColor = Color::Red;
+        if (_DataDB) {
+            _DataDB->~Database();
+        }
+        return false;
+    }
+
+    if (status > 0) {
+        lbl_Error->Text = "成功：更改已接受.";
+        result = true;
+    }
+    else {
+        lbl_Error->Text = "Record错误，更新失败";
+        lbl_Error->ForeColor = Color::Red;
+        result = false;
+    }
+    if (_DataDB) {
+        _DataDB->~Database();
+    }
+    return result;
 }
 

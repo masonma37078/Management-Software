@@ -9,6 +9,7 @@
  * @author: Hang Yuan
  * Revised: 3/22/20 Add new database commands
  *          3/21/20 Init
+ *          4/28/20 Add StfName to Treasury table
  *
  */
 
@@ -31,6 +32,6 @@
 #define CREATE_LOG_TBL "CREATE TABLE IF NOT EXISTS Log ( Id INT PRIMARY KEY, Time TEXT, StfId INT, Action TEXT );"
 #define CREATE_ITEM_TBL "CREATE TABLE IF NOT EXISTS Item ( Id INT PRIMARY KEY, Status TEXT, Name TEXT, Comment TEXT, Price TEXT );"
 #define CREATE_ORDERS_TBL "CREATE TABLE IF NOT EXISTS Orders( Id INT PRIMARY KEY, Status TEXT, Time TEXT, MemId INT, StfId INT, ItemId INT, Amount INT, Price INT, Comment TEXT, FOREIGN KEY(MemId) REFERENCES Member(Id), FOREIGN KEY(StfId) REFERENCES Member(Id), FOREIGN KEY(ItemId) REFERENCES Item(Id));"
-#define CREATE_TREASURY_TBL "CREATE TABLE IF NOT EXISTS Treasury ( Id INT PRIMARY KEY, StfId INT NOT NULL, Time TEXT, Type TEXT, Amount INT, Comment TEXT );"
+#define CREATE_TREASURY_TBL "CREATE TABLE IF NOT EXISTS Treasury ( Id INT PRIMARY KEY, StfId INT NOT NULL, StfName TEXT, Time TEXT, Type TEXT, Amount INT, Comment TEXT );"
 
 #endif

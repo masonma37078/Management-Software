@@ -13,6 +13,8 @@
  *          4/4/20 Change input to int, lock the size of window and lock the position of infos
   *         4/12/20 Add public user info as input
  *          4/20/20 fix the bug of unable to showing Chinese. Modify language and UI.
+ *          4/30/20 Add Staff name to addpage
+ *          5/2/20 Add Record, and handle database exception
  *
  */
 
@@ -32,6 +34,7 @@ namespace WeAlumni {
 			InitializeComponent();
 			UserInfo = UI;
 			StaffId = Convert::ToString(UserInfo->GetId());
+			StaffName = UserInfo->GetName();
 			UpdateInfo(StaffId);
 		}
 
@@ -45,6 +48,10 @@ namespace WeAlumni {
 			if (_TreDB) {
 				_TreDB->~Database();
 			}
+			if (_DataDB) {
+				_DataDB->~Database();
+			}
+
 		}
 	private: System::Windows::Forms::Label^ lbl_Prompt_Title;
 	private: System::Windows::Forms::Label^ lbl_Prompt_Time;
@@ -66,6 +73,10 @@ namespace WeAlumni {
 	private: System::Windows::Forms::Label^ lbl_Id;
 	private: System::Windows::Forms::Label^ lbl_Error;
 	private: System::Windows::Forms::Label^ lbl_StfId;
+	private: System::Windows::Forms::Label^ lbl_StfName;
+
+	private: System::Windows::Forms::Label^ lbl_Prompt_StfName;
+
 
 	private:
 		System::ComponentModel::Container ^components;
@@ -93,6 +104,8 @@ namespace WeAlumni {
 			this->btn_Confirm = (gcnew System::Windows::Forms::Button());
 			this->btn_Cancel = (gcnew System::Windows::Forms::Button());
 			this->lbl_Error = (gcnew System::Windows::Forms::Label());
+			this->lbl_StfName = (gcnew System::Windows::Forms::Label());
+			this->lbl_Prompt_StfName = (gcnew System::Windows::Forms::Label());
 			this->SuspendLayout();
 			// 
 			// lbl_Prompt_Title
@@ -173,7 +186,7 @@ namespace WeAlumni {
 			this->lbl_Prompt_StfId->AutoSize = true;
 			this->lbl_Prompt_StfId->Font = (gcnew System::Drawing::Font(L"黑体", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lbl_Prompt_StfId->Location = System::Drawing::Point(828, 151);
+			this->lbl_Prompt_StfId->Location = System::Drawing::Point(598, 152);
 			this->lbl_Prompt_StfId->Name = L"lbl_Prompt_StfId";
 			this->lbl_Prompt_StfId->Size = System::Drawing::Size(186, 42);
 			this->lbl_Prompt_StfId->TabIndex = 7;
@@ -197,7 +210,7 @@ namespace WeAlumni {
 			this->lbl_StfId->AutoSize = true;
 			this->lbl_StfId->Font = (gcnew System::Drawing::Font(L"黑体", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lbl_StfId->Location = System::Drawing::Point(1046, 151);
+			this->lbl_StfId->Location = System::Drawing::Point(816, 152);
 			this->lbl_StfId->Name = L"lbl_StfId";
 			this->lbl_StfId->Size = System::Drawing::Size(69, 36);
 			this->lbl_StfId->TabIndex = 11;
@@ -209,7 +222,7 @@ namespace WeAlumni {
 			this->cmb_Type->Font = (gcnew System::Drawing::Font(L"黑体", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->cmb_Type->FormattingEnabled = true;
-			this->cmb_Type->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Donation ", L"Selling ", L"Purchase ", L"Other" });
+			this->cmb_Type->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"Donation", L"Selling", L"Purchase", L"Other" });
 			this->cmb_Type->Location = System::Drawing::Point(417, 403);
 			this->cmb_Type->Name = L"cmb_Type";
 			this->cmb_Type->Size = System::Drawing::Size(340, 44);
@@ -283,11 +296,37 @@ namespace WeAlumni {
 			this->lbl_Error->Size = System::Drawing::Size(0, 36);
 			this->lbl_Error->TabIndex = 19;
 			// 
+			// lbl_StfName
+			// 
+			this->lbl_StfName->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->lbl_StfName->AutoSize = true;
+			this->lbl_StfName->Font = (gcnew System::Drawing::Font(L"黑体", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lbl_StfName->Location = System::Drawing::Point(1195, 147);
+			this->lbl_StfName->Name = L"lbl_StfName";
+			this->lbl_StfName->Size = System::Drawing::Size(69, 36);
+			this->lbl_StfName->TabIndex = 21;
+			this->lbl_StfName->Text = L"N/A";
+			// 
+			// lbl_Prompt_StfName
+			// 
+			this->lbl_Prompt_StfName->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->lbl_Prompt_StfName->AutoSize = true;
+			this->lbl_Prompt_StfName->Font = (gcnew System::Drawing::Font(L"黑体", 14, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->lbl_Prompt_StfName->Location = System::Drawing::Point(977, 147);
+			this->lbl_Prompt_StfName->Name = L"lbl_Prompt_StfName";
+			this->lbl_Prompt_StfName->Size = System::Drawing::Size(186, 42);
+			this->lbl_Prompt_StfName->TabIndex = 20;
+			this->lbl_Prompt_StfName->Text = L"员工姓名";
+			// 
 			// TreAddPage
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(14, 29);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(1412, 932);
+			this->Controls->Add(this->lbl_StfName);
+			this->Controls->Add(this->lbl_Prompt_StfName);
 			this->Controls->Add(this->lbl_Error);
 			this->Controls->Add(this->btn_Cancel);
 			this->Controls->Add(this->btn_Confirm);
@@ -320,8 +359,10 @@ namespace WeAlumni {
 	private:
 		String^ StaffId;
 		String^ OrderId;
+		String^ StaffName;
 		PublicUserInfo^ UserInfo;
 		Database^ _TreDB = gcnew Database(Database::DatabaseType::Treasury);
+		Database^ _DataDB;
 
 	// Btn Click function
 	private: 
@@ -331,6 +372,7 @@ namespace WeAlumni {
 	// Other help function
 	private:
 		Void SetBoxReadOnly();
-
-	};
+		String^ GetUserName;
+		bool AddNewRecord(String^);
+};
 }
