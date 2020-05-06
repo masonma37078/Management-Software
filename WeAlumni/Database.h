@@ -58,11 +58,18 @@ namespace WeAlumni {
     protected:
         ~Database()
         {
-            if (dataReader) dataReader->Close();
-            if (database) database->Close();
-            delete (IDisposable^)dataReader;
-            delete (IDisposable^)dataAdapter;
-            delete (IDisposable^)database;
+            try {
+                if (dataReader) dataReader->Close();
+                if (database) database->Close();
+                if (dataReader) delete (IDisposable^)dataReader;
+                if (dataAdapter) delete (IDisposable^)dataAdapter;
+                if (database) {
+                    database->Close();
+                    delete (IDisposable^)database;
+                }
+            }
+            catch (Exception^) {
+            }
         }
 
     public:

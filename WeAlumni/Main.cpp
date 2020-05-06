@@ -1,6 +1,5 @@
-
-#include "StartPage2.h"
 #include "LoginPage.h"
+#include "MainWindow.h"
 
 /*
  * Main.cpp
@@ -20,6 +19,9 @@ System::Void Main(array<System::String^>^ args)
     System::Windows::Forms::Application::EnableVisualStyles();
     System::Windows::Forms::Application::SetCompatibleTextRenderingDefault(false);
 
-    WeAlumni::LoginPage start_page;
-    System::Windows::Forms::Application::Run(% start_page);
+    WeAlumni::LoginPage^ login = gcnew WeAlumni::LoginPage();
+    login->ShowDialog();
+    WeAlumni::MainWindow mainWindow(login->GetPublicUserInfo());
+    login->Close();
+    System::Windows::Forms::Application::Run(% mainWindow);
 }
