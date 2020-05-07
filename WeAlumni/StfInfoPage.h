@@ -144,7 +144,9 @@ namespace WeAlumni {
 			// 
 			// dgv_Staff
 			// 
-			this->dgv_Staff->Anchor = System::Windows::Forms::AnchorStyles::Top;
+			this->dgv_Staff->Anchor = static_cast<System::Windows::Forms::AnchorStyles>((((System::Windows::Forms::AnchorStyles::Top | System::Windows::Forms::AnchorStyles::Bottom)
+				| System::Windows::Forms::AnchorStyles::Left)
+				| System::Windows::Forms::AnchorStyles::Right));
 			this->dgv_Staff->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
 			this->dgv_Staff->Location = System::Drawing::Point(0, 607);
 			this->dgv_Staff->Name = L"dgv_Staff";
@@ -170,8 +172,8 @@ namespace WeAlumni {
 			this->cmb_Auth->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->cmb_Auth->FormattingEnabled = true;
 			this->cmb_Auth->Items->AddRange(gcnew cli::array< System::Object^  >(5) {
-				L"Level 1", L"Level 2", L"Level 3", L"Level 4",
-					L"Level 5"
+				L"Level-1", L"Level-2", L"Level-3", L"Level-4",
+					L"Level-5"
 			});
 			this->cmb_Auth->Location = System::Drawing::Point(273, 338);
 			this->cmb_Auth->Name = L"cmb_Auth";

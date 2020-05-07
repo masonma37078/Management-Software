@@ -10,6 +10,8 @@
  *          4/4/20 Time textbox show current date and time.Provide exit btn after add new info
  *          4/12/20 Add public user info as input
  *          4/20/20 fix the bug of unable to showing Chinese. Modify language and UI.
+ *          4/30/20 Add Staff name to addpage
+ *          5/2/20 Add Record, and handle database exception
  *
  */
 
@@ -22,7 +24,7 @@
 System::Void WeAlumni::TreAddPage::UpdateInfo(String^ SId) {
     OrderId = Convert::ToString(_TreDB->GetNextId(Database::DatabaseTable::Treasury));
     lbl_Id->Text = OrderId;
-     
+    lbl_StfName->Text = StaffName;
     lbl_StfId->Text = SId;
     txt_Time->Text = _TreDB->GetSystemTime();
 }
@@ -34,9 +36,10 @@ System::Void WeAlumni::TreAddPage::UpdateInfo(String^ SId) {
  * @return None
  */
 System::Void WeAlumni::TreAddPage::btn_Confirm_Click(System::Object^ sender, System::EventArgs^ e) {
-    String^ cmd = "INSERT INTO Treasury (ID, StfId, Time, Type, Amount, Comment) " +
+    String^ cmd = "INSERT INTO Treasury (ID, StfId, StfName, Time, Type, Amount, Comment) " +
                   "VALUES ('" + lbl_Id->Text + "', " +
                                 Convert::ToInt32(lbl_StfId->Text) + "," +
+                          "'" + lbl_StfName->Text + "'," +
                           "'" + txt_Time->Text + "'," +
                           "'" + cmb_Type->Text + "'," +
                           "'" + txt_Amount->Text + "'," +
@@ -46,7 +49,7 @@ System::Void WeAlumni::TreAddPage::btn_Confirm_Click(System::Object^ sender, Sys
         status = _TreDB->InsertData(cmd);
     }
     catch (Exception^ exception) {
-        lbl_Error->Text = exception->Message;
+        lbl_Error->Text = "Treasury数据库错误："+exception->Message;
         lbl_Error->ForeColor = Color::Red;
         lbl_Error->Visible = true;
         return;
@@ -62,7 +65,19 @@ System::Void WeAlumni::TreAddPage::btn_Confirm_Click(System::Object^ sender, Sys
         lbl_Error->ForeColor = Color::Green;
         lbl_Error->Visible = true;
 
-        _TreDB->Log(UserInfo->GetId(), "添加新财务记录 "+OrderId);
+        String^ actionRecord = "添加新财务信息，编号 " + OrderId;
+        if (AddNewRecord(actionRecord)) {
+            try {
+
+                _TreDB->Log(UserInfo->GetId(), "添加新财务记录 " + OrderId);
+            }
+            catch (Exception^ exception) {
+                lbl_Error->Text = "Log数据库错误:" + exception->Message;
+                lbl_Error->ForeColor = System::Drawing::Color::Red;
+                return;
+            }
+        }
+        
 
         btn_Confirm->Enabled = false;
         btn_Cancel->Text = "Exit";
@@ -92,5 +107,55 @@ System::Void WeAlumni::TreAddPage::SetBoxReadOnly() {
     txt_Amount->Enabled = false;
     txt_Comment->Enabled = false;
 }
+
+
+
+/*
+ * AddNewRecord(String^)
+ * Add new recoding data to Record table.
+ * @param String^ Action
+ * @return None
+ */
+
+bool WeAlumni::TreAddPage::AddNewRecord(String^ action) {
+    _DataDB = gcnew Database(Database::DatabaseType::Data);
+    int status = -1;
+    bool result;
+    int RecordId = _DataDB->GetNextId(Database::DatabaseTable::Record);
+    String^ Name = StaffName;
+    String^ time = _DataDB->GetSystemTime();
+    String^ command = "INSERT INTO Record VALUES(" + RecordId + "," +
+        StaffId + "," +
+        StaffId + ", '" +
+        Name + "', '" +
+        time + "', '" +
+        action + "');";
+    try {
+        status = _DataDB->InsertData(command);
+    }
+    catch (Exception^ exception) {
+        lbl_Error->Text = "Record错误: "+ exception->Message;
+        lbl_Error->ForeColor = Color::Red;
+        if (_DataDB) {
+            _DataDB->~Database();
+        }
+        return false;
+    }
+
+    if (status > 0) {
+        lbl_Error->Text = "更新成功";
+        result = true;
+    }
+    else {
+        lbl_Error->Text = "Record错误，更新失败";
+        lbl_Error->ForeColor = Color::Red;
+        result = false;
+    }
+    if (_DataDB) {
+        _DataDB->~Database();
+    }
+    return result;
+}
+
 
 

@@ -186,8 +186,10 @@ private: System::Windows::Forms::ComboBox^ cmb_搜索授权;
 
 private: System::Windows::Forms::ComboBox^ cmb_成员状态;
 private: System::Windows::Forms::Label^ lbl_Prompt_操作记录;
-private: System::Windows::Forms::Splitter^ splitter3;
+
 private: System::Windows::Forms::Splitter^ splitter2;
+private: System::Windows::Forms::Panel^ panel1;
+private: System::Windows::Forms::Panel^ panel2;
 
 
 
@@ -289,9 +291,12 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			this->cmb_搜索授权 = (gcnew System::Windows::Forms::ComboBox());
 			this->cmb_成员状态 = (gcnew System::Windows::Forms::ComboBox());
 			this->lbl_Prompt_操作记录 = (gcnew System::Windows::Forms::Label());
-			this->splitter3 = (gcnew System::Windows::Forms::Splitter());
 			this->splitter2 = (gcnew System::Windows::Forms::Splitter());
+			this->panel1 = (gcnew System::Windows::Forms::Panel());
+			this->panel2 = (gcnew System::Windows::Forms::Panel());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->BeginInit();
+			this->panel1->SuspendLayout();
+			this->panel2->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// lbl_Prompt_成员信息
@@ -384,7 +389,7 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			// txt_性别
 			// 
 			this->txt_性别->Anchor = System::Windows::Forms::AnchorStyles::Top;
-			this->txt_性别->Location = System::Drawing::Point(547, 85);
+			this->txt_性别->Location = System::Drawing::Point(547, 84);
 			this->txt_性别->Name = L"txt_性别";
 			this->txt_性别->Size = System::Drawing::Size(209, 20);
 			this->txt_性别->TabIndex = 4;
@@ -406,7 +411,7 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			// txt_出生日期
 			// 
 			this->txt_出生日期->Anchor = System::Windows::Forms::AnchorStyles::Top;
-			this->txt_出生日期->Location = System::Drawing::Point(121, 109);
+			this->txt_出生日期->Location = System::Drawing::Point(122, 109);
 			this->txt_出生日期->Name = L"txt_出生日期";
 			this->txt_出生日期->Size = System::Drawing::Size(200, 20);
 			this->txt_出生日期->TabIndex = 4;
@@ -472,7 +477,7 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			// txt_微信号
 			// 
 			this->txt_微信号->Anchor = System::Windows::Forms::AnchorStyles::Top;
-			this->txt_微信号->Location = System::Drawing::Point(547, 135);
+			this->txt_微信号->Location = System::Drawing::Point(548, 135);
 			this->txt_微信号->Name = L"txt_微信号";
 			this->txt_微信号->Size = System::Drawing::Size(209, 20);
 			this->txt_微信号->TabIndex = 4;
@@ -821,7 +826,7 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			this->lbl_姓名->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_姓名->AutoSize = true;
 			this->lbl_姓名->BackColor = System::Drawing::SystemColors::ActiveCaption;
-			this->lbl_姓名->Location = System::Drawing::Point(118, 86);
+			this->lbl_姓名->Location = System::Drawing::Point(121, 88);
 			this->lbl_姓名->Name = L"lbl_姓名";
 			this->lbl_姓名->Size = System::Drawing::Size(10, 13);
 			this->lbl_姓名->TabIndex = 31;
@@ -832,7 +837,7 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			this->lbl_性别->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->lbl_性别->AutoSize = true;
 			this->lbl_性别->BackColor = System::Drawing::SystemColors::ActiveCaption;
-			this->lbl_性别->Location = System::Drawing::Point(558, 86);
+			this->lbl_性别->Location = System::Drawing::Point(558, 88);
 			this->lbl_性别->Name = L"lbl_性别";
 			this->lbl_性别->Size = System::Drawing::Size(10, 13);
 			this->lbl_性别->TabIndex = 34;
@@ -1098,10 +1103,10 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			// dataGridView1
 			// 
 			this->dataGridView1->ColumnHeadersHeightSizeMode = System::Windows::Forms::DataGridViewColumnHeadersHeightSizeMode::AutoSize;
-			this->dataGridView1->Dock = System::Windows::Forms::DockStyle::Bottom;
-			this->dataGridView1->Location = System::Drawing::Point(0, 534);
+			this->dataGridView1->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->dataGridView1->Location = System::Drawing::Point(0, 0);
 			this->dataGridView1->Name = L"dataGridView1";
-			this->dataGridView1->Size = System::Drawing::Size(839, 236);
+			this->dataGridView1->Size = System::Drawing::Size(836, 231);
 			this->dataGridView1->TabIndex = 61;
 			this->dataGridView1->CellContentClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &MemInfoPage::dataGridView1_CellDoubleClick);
 			// 
@@ -1218,42 +1223,48 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			this->lbl_Prompt_操作记录->BackColor = System::Drawing::SystemColors::ActiveCaption;
 			this->lbl_Prompt_操作记录->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 10, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
-			this->lbl_Prompt_操作记录->Location = System::Drawing::Point(393, 506);
+			this->lbl_Prompt_操作记录->Location = System::Drawing::Point(390, 19);
 			this->lbl_Prompt_操作记录->Name = L"lbl_Prompt_操作记录";
 			this->lbl_Prompt_操作记录->Size = System::Drawing::Size(68, 17);
 			this->lbl_Prompt_操作记录->TabIndex = 73;
 			this->lbl_Prompt_操作记录->Text = L"操作记录";
 			// 
-			// splitter3
-			// 
-			this->splitter3->BackColor = System::Drawing::SystemColors::InactiveCaption;
-			this->splitter3->Cursor = System::Windows::Forms::Cursors::HSplit;
-			this->splitter3->Dock = System::Windows::Forms::DockStyle::Top;
-			this->splitter3->Enabled = false;
-			this->splitter3->Location = System::Drawing::Point(3, 488);
-			this->splitter3->Margin = System::Windows::Forms::Padding(2, 3, 2, 3);
-			this->splitter3->Name = L"splitter3";
-			this->splitter3->Size = System::Drawing::Size(836, 48);
-			this->splitter3->TabIndex = 74;
-			this->splitter3->TabStop = false;
-			// 
 			// splitter2
 			// 
 			this->splitter2->Location = System::Drawing::Point(0, 488);
 			this->splitter2->Name = L"splitter2";
-			this->splitter2->Size = System::Drawing::Size(3, 46);
+			this->splitter2->Size = System::Drawing::Size(3, 282);
 			this->splitter2->TabIndex = 75;
 			this->splitter2->TabStop = false;
+			// 
+			// panel1
+			// 
+			this->panel1->Controls->Add(this->lbl_Prompt_操作记录);
+			this->panel1->Dock = System::Windows::Forms::DockStyle::Top;
+			this->panel1->ForeColor = System::Drawing::SystemColors::ControlText;
+			this->panel1->Location = System::Drawing::Point(3, 488);
+			this->panel1->Name = L"panel1";
+			this->panel1->Size = System::Drawing::Size(836, 51);
+			this->panel1->TabIndex = 76;
+			// 
+			// panel2
+			// 
+			this->panel2->Controls->Add(this->dataGridView1);
+			this->panel2->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->panel2->Location = System::Drawing::Point(3, 539);
+			this->panel2->Name = L"panel2";
+			this->panel2->Size = System::Drawing::Size(836, 231);
+			this->panel2->TabIndex = 77;
 			// 
 			// MemInfoPage
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(839, 770);
+			this->Controls->Add(this->panel2);
+			this->Controls->Add(this->panel1);
 			this->Controls->Add(this->lbl_error);
-			this->Controls->Add(this->lbl_Prompt_操作记录);
 			this->Controls->Add(this->lbl_Prompt_成员信息);
-			this->Controls->Add(this->splitter3);
 			this->Controls->Add(this->splitter2);
 			this->Controls->Add(this->txt_专业一);
 			this->Controls->Add(this->cmb_成员状态);
@@ -1333,10 +1344,12 @@ private: System::Windows::Forms::Splitter^ splitter2;
 			this->Controls->Add(this->lbl_Prompt_成员状态);
 			this->Controls->Add(this->lbl_Prompt_成员编号);
 			this->Controls->Add(this->splitter1);
-			this->Controls->Add(this->dataGridView1);
 			this->Name = L"MemInfoPage";
 			this->Text = L"成员信息";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dataGridView1))->EndInit();
+			this->panel1->ResumeLayout(false);
+			this->panel1->PerformLayout();
+			this->panel2->ResumeLayout(false);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 

@@ -51,6 +51,14 @@ namespace WeAlumni {
         int GetId() { return _id; }
         String^ GetName() { return _name; }
         Auth GetAuth() { return _auth; }
+        String^ GetAuthName() {
+            if (_auth == Auth::Level_1) return "Level-1";
+            if (_auth == Auth::Level_2) return "Level-2";
+            if (_auth == Auth::Level_3) return "Level-3";
+            if (_auth == Auth::Level_4) return "Level-4";
+            if (_auth == Auth::Level_5) return "Level-5";
+            return "Î´ÖªÈ¨ÏÞ";
+        };
         void SetId(int id) { _id = id; }
         void SetName(String^ name) { _name = name; }
         void SetAuth(Auth auth) { _auth = auth; }

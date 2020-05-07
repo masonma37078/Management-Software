@@ -11,6 +11,7 @@
  * Revised: 4/4/20
  *          4/15/20 use PublicUserInfo
  *			4/18/20 change English text to Chinese
+ *          5/2/20 change insert function (can't add the same staff now)
  *
  */
 
@@ -116,7 +117,7 @@ namespace WeAlumni {
 			this->txt_MemId->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->txt_MemId->Location = System::Drawing::Point(249, 120);
 			this->txt_MemId->Name = L"txt_MemId";
-			this->txt_MemId->Size = System::Drawing::Size(95, 25);
+			this->txt_MemId->Size = System::Drawing::Size(158, 25);
 			this->txt_MemId->TabIndex = 2;
 			// 
 			// lbl_Prompt_MemId
@@ -125,7 +126,7 @@ namespace WeAlumni {
 			this->lbl_Prompt_MemId->AutoSize = true;
 			this->lbl_Prompt_MemId->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(134)));
-			this->lbl_Prompt_MemId->Location = System::Drawing::Point(120, 121);
+			this->lbl_Prompt_MemId->Location = System::Drawing::Point(120, 120);
 			this->lbl_Prompt_MemId->Name = L"lbl_Prompt_MemId";
 			this->lbl_Prompt_MemId->Size = System::Drawing::Size(89, 19);
 			this->lbl_Prompt_MemId->TabIndex = 3;
@@ -137,7 +138,7 @@ namespace WeAlumni {
 			this->lbl_Prompt_Name->AutoSize = true;
 			this->lbl_Prompt_Name->Font = (gcnew System::Drawing::Font(L"SimSun", 10.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(134)));
-			this->lbl_Prompt_Name->Location = System::Drawing::Point(394, 121);
+			this->lbl_Prompt_Name->Location = System::Drawing::Point(435, 120);
 			this->lbl_Prompt_Name->Name = L"lbl_Prompt_Name";
 			this->lbl_Prompt_Name->Size = System::Drawing::Size(89, 19);
 			this->lbl_Prompt_Name->TabIndex = 4;
@@ -148,7 +149,7 @@ namespace WeAlumni {
 			this->txt_Name->Anchor = System::Windows::Forms::AnchorStyles::Top;
 			this->txt_Name->Location = System::Drawing::Point(557, 120);
 			this->txt_Name->Name = L"txt_Name";
-			this->txt_Name->Size = System::Drawing::Size(100, 25);
+			this->txt_Name->Size = System::Drawing::Size(158, 25);
 			this->txt_Name->TabIndex = 5;
 			// 
 			// lbl_Prompt_Dept
@@ -218,8 +219,8 @@ namespace WeAlumni {
 			this->cmb_Auth->Enabled = false;
 			this->cmb_Auth->FormattingEnabled = true;
 			this->cmb_Auth->Items->AddRange(gcnew cli::array< System::Object^  >(5) {
-				L"Level 1", L"Level 2", L"Level 3", L"Level 4",
-					L"Level 5"
+				L"Level-1", L"Level-2", L"Level-3", L"Level-4",
+					L"Level-5"
 			});
 			this->cmb_Auth->Location = System::Drawing::Point(249, 278);
 			this->cmb_Auth->Name = L"cmb_Auth";
@@ -302,7 +303,7 @@ namespace WeAlumni {
 			this->Controls->Add(this->txt_MemId);
 			this->Controls->Add(this->lbl_Prompt_StfAddPage);
 			this->Name = L"StfAddPage";
-			this->Text = L"StfAddPage";
+			this->Text = L"Ìí¼ÓÔ±¹¤";
 			this->ResumeLayout(false);
 			this->PerformLayout();
 

@@ -9,6 +9,7 @@
  * Revised: 4/4/20
  *          4/15/20 use PublicUserInfo
  *          4/18/20 change English text to Chinese
+ *          5/2/20 change insert function (can't add the same staff now)
  */
 
 using namespace System;
@@ -134,10 +135,15 @@ Void WeAlumni::StfAddPage::Confirm_Click(System::Object^ sender, System::EventAr
     String^ Dept = cmb_Dept->Text;
     String^ Posi = cmb_Posi->Text;
     String^ Auth = cmb_Auth->Text;
-    String^ command = "INSERT INTO Staff VALUES(" + MemId2 + ", '" +
+    String^ command = "INSERT INTO Staff(MemId, Dept, Position, Auth) " +
+        "SELECT " + MemId2 + ", '" +
         Dept + "', '" +
         Posi + "', '" +
-        Auth + "');";
+        Auth + "' " +
+        "WHERE NOT EXISTS (" +
+        "SELECT * " +
+        "FROM Staff " +
+        "WHERE MemId = " + MemId2 + ");";
     try {
         status = _database->InsertData(command);
     }
@@ -158,8 +164,10 @@ Void WeAlumni::StfAddPage::Confirm_Click(System::Object^ sender, System::EventAr
         btn_Cancel->Text = "关闭";
     }
     else {
-        lbl_Error->Text = "错误，添加失败";
+        lbl_Error->Text = "添加失败，员工已存在";
         lbl_Error->ForeColor = Color::Red;
+        btn_Cancel->Text = "关闭";
+        btn_Confirm->Visible = false;
     }
 }
 

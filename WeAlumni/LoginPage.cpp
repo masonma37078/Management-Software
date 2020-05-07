@@ -153,7 +153,7 @@ Void WeAlumni::LoginPage::JumpToMain() {
         lbl_DBError->Visible = true;
     }
 
-    PublicUserInfo^ pui = gcnew PublicUserInfo(Convert::ToInt32(_database->dataReader[2]->ToString()), 
+    pui = gcnew PublicUserInfo(Convert::ToInt32(_database->dataReader[2]->ToString()), 
                                                _databaseData->dataReader[0]->ToString(),
                                                PublicUserInfo::Auth(Convert::ToInt32(_database->dataReader[3]->ToString())));
     if (cbox_Remember->Checked) {
@@ -163,8 +163,7 @@ Void WeAlumni::LoginPage::JumpToMain() {
     else {
         Clear_User();
     }
-    MainWindow^ mw = gcnew MainWindow(pui);
-    mw->Show();
+    this->Hide();
 }
 
 /*

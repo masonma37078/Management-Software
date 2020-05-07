@@ -190,9 +190,12 @@ namespace WeAlumni {
 
 		}
 #pragma endregion
+	public:
+		PublicUserInfo^ GetPublicUserInfo() { return pui; };
 	private:
 		Database^ _database;
 		int^ _stfId;
+		PublicUserInfo^ pui;
 	private:
 		System::Void Initialize();
 		Void WeAlumni::LoginPage::ShowDefault();

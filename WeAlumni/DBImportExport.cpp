@@ -69,6 +69,7 @@ bool WeAlumni::DBImportExport::ImportDatabase(PublicUserInfo^) {
 
 		try {
 			UnZipDB(ofd->FileName);
+			return true;
 		}
 		catch (Exception^ exception) {
 			throw exception;

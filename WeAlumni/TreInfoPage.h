@@ -14,6 +14,7 @@
  *          4/04/20 Change input to int, lock the size of window and lock the position of infos
  *          4/12/20 Add tre DB check, authority and public user info
  *          4/20/20 fix the bug of unable to showing Chinese. Modify language and UI.
+ *          5/2/20 Add Record, and handle database exception
  *
  */
 
@@ -51,6 +52,10 @@ namespace WeAlumni {
 			
 			if (_TreDB) {
 				_TreDB->~Database();
+			}
+
+			if (_DataDB) {
+				_DataDB->~Database();
 			}
 		}
 	private: System::Windows::Forms::Label^ lbl_Prompt_Title;
@@ -564,7 +569,6 @@ namespace WeAlumni {
 			this->FormBorderStyle = System::Windows::Forms::FormBorderStyle::FixedDialog;
 			this->Name = L"TreInfoPage";
 			this->Text = L"TreInfoPage";
-			this->Load += gcnew System::EventHandler(this, &TreInfoPage::TreInfoPage_Load);
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
@@ -600,8 +604,8 @@ namespace WeAlumni {
 		System::Void WeAlumni::TreInfoPage::SetShowToText(bool);
 		System::Void WeAlumni::TreInfoPage::SetButtonStatus(bool);
 		System::Void WeAlumni::TreInfoPage::UnableAllBtn();
+		bool AddNewRecord(String^);
 
-	private: System::Void TreInfoPage_Load(System::Object^ sender, System::EventArgs^ e) {
-	}
+
 };
 }
